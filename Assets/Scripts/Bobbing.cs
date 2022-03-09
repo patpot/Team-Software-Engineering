@@ -15,7 +15,6 @@ public class Bobbing : MonoBehaviour
     private void Start()
     {
         _startY = transform.localPosition.y;
-        Debug.Log(_startY);
     }
 
     void Update()

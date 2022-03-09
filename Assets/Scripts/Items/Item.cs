@@ -11,9 +11,9 @@ namespace Assets.Scripts
     {
         // all the statistics of the items
         public int Id;
-        public string Name;
+        public string Name => this.name;
         public string Description;
-        public int ItemCount;
+        public float ItemCount;
         public Sprite Icon;
     }
 }
