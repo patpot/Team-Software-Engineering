@@ -6,8 +6,8 @@ using UnityEngine;
 public class BasicMachine : MonoBehaviour
 {
     // Our required inputs and outputs for this machine to function. If no inputs are required the machine will constantly be producing outputs
-    public Dictionary<Item, float> Inputs = new Dictionary<Item, float> ();
-    public Dictionary<Item, float> Outputs = new Dictionary<Item, float> ();
+    public Dictionary<ItemData, float> Inputs = new Dictionary<ItemData, float> ();
+    public Dictionary<ItemData, float> Outputs = new Dictionary<ItemData, float> ();
 
     [System.NonSerialized] // We set TimeToProduce in script ONLY
     public float TimeToProduce;
@@ -15,7 +15,10 @@ public class BasicMachine : MonoBehaviour
     private bool _isProducing;
 
     // Our current amount of items that the player has input
-    private Dictionary<Item, float> _currentInputs = new Dictionary<Item, float>();
+    private Dictionary<ItemData, float> _currentInputs = new Dictionary<ItemData, float>();
+
+    public List<Inventory> InputInventories = new List<Inventory>();
+    public List<Inventory> OutputInventories = new List<Inventory>();
 
     // This NEEDS to be kept at Start as all derived classes use Awake to assign their inputs and we need to execute those first
     private void Start()
@@ -25,7 +28,7 @@ public class BasicMachine : MonoBehaviour
             _currentInputs.Add(requiredItem.Key, 0f);
     }
 
-    public void InputItem(Item item, float quantity)
+    public void InputItem(ItemData item, float quantity)
     {
         // We assume this function is only called with valid values, if an error is thrown here something was setup wrong outside of this function.
         _currentInputs[item] += quantity;
@@ -54,9 +57,17 @@ public class BasicMachine : MonoBehaviour
             _productionTimer += Time.deltaTime;
             if (_productionTimer > TimeToProduce)
             {
-                // It's been enough time to produce an item, actually produce it
+                // It's been enough time to produce an item, actually produce it and try deposit it to a target inventory
                 foreach (var item in Outputs)
-                    item.Key.ItemCount += item.Value;
+                    foreach (var inventory in OutputInventories)
+                        if (inventory.TryDepositItem(item.Key, item.Value))
+                            break;
+                        else
+                        {
+                            // TODO: Handle overflow, for now we just void the resources if it doesnt fit in the first inventory c:
+                            break;
+                        }
+                //item.Key.ItemCount += item.Value;
 
                 // Reset our values
                 _productionTimer = 0f;

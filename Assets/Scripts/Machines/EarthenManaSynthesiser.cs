@@ -7,9 +7,9 @@ public class EarthenManaSynthesiser : BasicMachine
 {
     void Awake()
     {
-        Item earthMana = ItemManager.GetItem("Earth Mana");
+        ItemData earthMana = ItemManager.GetItemData("Earth Mana");
         Outputs.Add(earthMana, 1f);
 
-        TimeToProduce = 5f;
+        TimeToProduce = 1f;
     }
 }

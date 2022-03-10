@@ -31,6 +31,7 @@ public class GameObjectPool : MonoBehaviour
         if (!_pool.Contains(go))
             Debug.LogError("ERROR! Tried to return an object to a GameObjectPool that wasn't originally part of it!");
 
+        // Actually do the returning back to the pool and set it to be inactive in case the script that uses this didn't already
         go.transform.SetParent(transform, false);
         go.SetActive(false);
     }
