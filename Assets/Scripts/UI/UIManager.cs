@@ -8,6 +8,7 @@ public class UIManager : MonoBehaviour
     public static UIManager Instance;
     // Keep this private to tell other classes to use our publicly exposed helper functions
     private static Dictionary<string, GameObject> _prefabs = new Dictionary<string, GameObject>();
+    public Transform MainCanvas;
 
     // Inventory Fields
     public GameObjectPool InventorySlotPool;

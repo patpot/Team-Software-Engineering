@@ -7,6 +7,7 @@ public class EarthenManaSynthesiser : BasicMachine
 {
     void Awake()
     {
+        MachineName = "Earthen Mana Synthesiser";
         ItemData earthMana = ItemManager.GetItemData("Earth Mana");
         Outputs.Add(earthMana, 1f);
 
