@@ -9,7 +9,7 @@ public class Inventory : MonoBehaviour
 {
     public float SlotSize;
     public int SlotCount;
-    public List<InventorySlot> InventorySlots = new List<InventorySlot>();
+    public List<InventorySlotData> InventorySlotData = new List<InventorySlotData>();
 
     public const int MAX_COLUMNS = 10;
 
@@ -17,7 +17,7 @@ public class Inventory : MonoBehaviour
     {
         // TODO: Load inventory from some kind of save system
         for (int i = 0; i < SlotCount; i++)
-            InventorySlots.Add(new InventorySlot());
+            InventorySlotData.Add(new InventorySlotData());
     }
 
     /// <summary>
@@ -28,9 +28,9 @@ public class Inventory : MonoBehaviour
     public bool TryDepositItem(ItemData item, float itemCount)
     {
         // Check first if there's any stacks we can add these items onto
-        List<InventorySlot> matchingSlotsWithSpace = new List<InventorySlot>();
+        List<InventorySlotData> matchingSlotsWithSpace = new List<InventorySlotData>();
         float spareSlotCount = 0f;
-        foreach (var slot in InventorySlots)
+        foreach (var slot in InventorySlotData)
         {
             // Matches our item and isn't full
             if (slot.ItemData == item && slot.ItemCount < SlotSize)
@@ -77,7 +77,7 @@ public class Inventory : MonoBehaviour
         // We've gone through all the matching items and couldn't get rid of our deposited amount, check for empty spaces?
         if (itemCount > 0)
         {
-            foreach (var slot in InventorySlots)
+            foreach (var slot in InventorySlotData)
             {
                 // No items assigned meaning it's empty
                 if (slot.ItemData == null)
@@ -100,10 +100,16 @@ public class Inventory : MonoBehaviour
                 }
             }
         }
-
-        // TODO: handle overflow
-        Debug.Log($"Inventory overflow when depositing {itemCount} {item.Name}s");
         return false;
+    }
+
+    public void SwapInventorySlotData(InventorySlotData data1, InventorySlotData data2)
+    {
+        // Swap position in list of two slot datas
+        int data1Index = InventorySlotData.IndexOf(data1);
+        int data2Index = InventorySlotData.IndexOf(data2);
+        InventorySlotData[data1Index] = data2;
+        InventorySlotData[data2Index] = data1;
     }
 
     public void ToggleInventory()
@@ -122,7 +128,7 @@ public class Inventory : MonoBehaviour
     {
         GameObject inventory = UIManager.Instance.InventoryUI;
 
-        int slotCount = InventorySlots.Count;
+        int slotCount = InventorySlotData.Count;
         int columnCount = 0;
         int rowCount = 0;
         // Calculate ideal size
@@ -154,12 +160,19 @@ public class Inventory : MonoBehaviour
 
         GameObjectPool slotPool = UIManager.Instance.InventorySlotPool;
         // Draw our slots
-        foreach (var slot in InventorySlots)
+        foreach (var invSlotData in InventorySlotData)
         {
             GameObject slotObj = slotPool.GetObjectFromPool();
-            slot.InventorySlotObject = slotObj;
-            slot.UpdateSlotUI();
 
+            // Get a reference to our InventorySlot monobehaviour attached to the object and store it in our data class
+            var invSlot = slotObj.GetComponent<InventorySlot>();
+            // Store our slot data and update our UI
+            invSlot.SetInventory(this);
+            invSlot.SetSlotData(invSlotData);
+            invSlot.UpdateSlotUI();
+
+            // Assign all our object values
+            slotObj.GetComponent<InventorySlot>().SetSlotData(invSlotData);
             slotObj.transform.SetParent(gl.transform, false);
             slotObj.SetActive(true);
         }
@@ -175,7 +188,7 @@ public class Inventory : MonoBehaviour
         for (int i = gl.transform.childCount - 1; i >= 0; i--)
             slotPool.ReturnToPool(gl.transform.GetChild(i).gameObject);
 
-        foreach (var slot in InventorySlots)
-            slot.InventorySlotObject = null;
+        foreach (var slot in InventorySlotData)
+            slot.InventorySlot = null;
     }
 }
