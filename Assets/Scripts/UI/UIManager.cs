@@ -25,10 +25,12 @@ public class UIManager : MonoBehaviour
             _prefabs.Add(prefab.name, prefab as GameObject);
     }
 
-    public static GameObject GetPrefab(string itemName)
+    public static GameObject CreatePrefab(string prefabName)
+        => Instantiate(GetPrefab(prefabName));
+    public static GameObject GetPrefab(string prefabName)
     {
-        if (_prefabs.ContainsKey(itemName))
-            return _prefabs[itemName];
+        if (_prefabs.ContainsKey(prefabName))
+            return _prefabs[prefabName];
         else
         {
             Debug.Log("Error! Tried to get prefab that doesn't exist! Check for typos in your script as this is a developer error!");
