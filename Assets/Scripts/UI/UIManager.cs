@@ -14,7 +14,7 @@ public class UIManager : MonoBehaviour
     public GameObjectPool InventorySlotPool;
     public GameObject InventoryUI;
     public Sprite BlankInventorySprite;
-    public static bool CanRenderUI = true;
+    public static bool UIActive = false;
 
     void Awake()
     {

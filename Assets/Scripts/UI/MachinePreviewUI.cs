@@ -31,6 +31,8 @@ public class MachinePreviewUI : MonoBehaviour
 
     public void OnMouseEnter()
     {
+        if (UIManager.UIActive) return;
+        UIManager.UIActive = true;
         // We construct our UI when we hover over the object and slightly fade it in for a bit more juice
         _previewUi = UIManager.CreatePrefab("MachinePreviewUI");
         // Assign this object to the canvas
@@ -87,6 +89,9 @@ public class MachinePreviewUI : MonoBehaviour
 
     public void OnMouseExit()
     {
+        if (_previewUi != null)
+            UIManager.UIActive = false;
+        else return; // UI Manager wasn't rendering our UI, move on
         // Make sure we dispose of all of our tweens
         foreach (var image in _previewUi.GetComponentsInChildren<Image>())
             image.DOKill();

@@ -114,9 +114,8 @@ public class Inventory : MonoBehaviour
 
     public void ToggleInventory()
     {
-        if (!UIManager.CanRenderUI) return;
-
         GameObject inventory = UIManager.Instance.InventoryUI;
+        if (!inventory.activeSelf && UIManager.UIActive) return; // Don't draw any new UI if we have UI active
         inventory.SetActive(!inventory.activeSelf);
         if (inventory.activeSelf)
             _drawInventory();
@@ -126,6 +125,7 @@ public class Inventory : MonoBehaviour
 
     private void _drawInventory()
     {
+        UIManager.UIActive = true;
         GameObject inventory = UIManager.Instance.InventoryUI;
 
         int slotCount = InventorySlotData.Count;
@@ -153,10 +153,21 @@ public class Inventory : MonoBehaviour
         GridLayoutGroup gl = inventory.GetComponentInChildren<GridLayoutGroup>();
         gl.constraintCount = columnCount;
         // Set correct height and width for our objects before we add any slots
-        float inventoryWidth = 10 + (columnCount * 10) + (96 * columnCount); // 10 is spacing, 96 is slot width
-        float inventoryHeight = 10 + (rowCount * 10) + (96 * rowCount); // 10 is spacing from sides, 10 is spacing between slots, 96 is height
-        inventory.GetComponent<RectTransform>().sizeDelta = new Vector2(inventoryWidth, inventoryHeight);
-        gl.GetComponent<RectTransform>().sizeDelta = new Vector2(inventoryWidth, inventoryHeight);
+        float inventoryBackgroundWidth = 100 + (columnCount * 105); // 100 is default size, we then add on 105 for each column
+        float inventoryTopBarWidth = inventoryBackgroundWidth + 55 + (3f * columnCount);
+        float inventoryBackgroundHeight = 180 + ((rowCount-1) * 120) - (rowCount * 2); // 180 is default, 120 per 2 but -2 each extra row
+
+        float inventoryXAdjustment = (inventoryBackgroundWidth - 600) / 2f;
+        float inventoryYAdjustment = (inventoryBackgroundHeight -400) / 2f;
+        inventory.transform.localPosition = new Vector3(-325f, 200f) - new Vector3(inventoryXAdjustment, inventoryYAdjustment);
+
+        RectTransform background = inventory.GetComponentsInChildren<RectTransform>()[1];
+        background.sizeDelta = new Vector2(inventoryBackgroundWidth, inventoryBackgroundHeight);
+        RectTransform topBar = inventory.GetComponentsInChildren<RectTransform>()[2];
+        topBar.sizeDelta = new Vector2(inventoryTopBarWidth, topBar.sizeDelta.y);
+
+        RectTransform slotHolder = inventory.GetComponentsInChildren<RectTransform>()[4];
+        slotHolder.anchoredPosition = new Vector3(-270 + 2.5f * columnCount, 153.5f + 0f); // -270 and 153.5 are starting values, we use them as our start point
 
         GameObjectPool slotPool = UIManager.Instance.InventorySlotPool;
         // Draw our slots
@@ -180,6 +191,7 @@ public class Inventory : MonoBehaviour
 
     private void _closeInventory()
     {
+        UIManager.UIActive = false;
         GameObject inventory = UIManager.Instance.InventoryUI;
         GridLayoutGroup gl = inventory.GetComponentInChildren<GridLayoutGroup>();
         GameObjectPool slotPool = UIManager.Instance.InventorySlotPool;
