@@ -1,0 +1,12 @@
+# Blender MTL File: 'Earth-Mana.blend'
+# Material Count: 1
+
+newmtl Material.001
+Ns 110.250015
+Ka 0.050000 0.050000 0.050000
+Kd 0.010373 0.456426 0.000000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 18.049999
+d 0.918182
+illum 6

@@ -1,0 +1,12 @@
+# Blender MTL File: 'Earth-Crystal.blend'
+# Material Count: 1
+
+newmtl Material.001
+Ns 470.101235
+Ka 1.000000 1.000000 1.000000
+Kd 0.056697 0.800000 0.030734
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
