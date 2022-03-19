@@ -24,6 +24,8 @@ public class InventorySlot : MonoBehaviour, IPointerUpHandler, IPointerDownHandl
     private GameObject _draggableObj;
     public void OnPointerDown(PointerEventData eventData)
     {
+        if (eventData.button != PointerEventData.InputButton.Left) return;
+
         // Start dragging, highlight this object
         this.GetComponentInChildren<Image>().color = Color.yellow;
 
@@ -34,6 +36,8 @@ public class InventorySlot : MonoBehaviour, IPointerUpHandler, IPointerDownHandl
     }
     public void OnPointerUp(PointerEventData eventData)
     {
+        if (eventData.button != PointerEventData.InputButton.Left) return;
+
         this.GetComponentInChildren<Image>().color = Color.white;
 
         if (_draggableObj != null)
