@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using DG.Tweening;
 
 public class Inventory : MonoBehaviour
 {
+    public string InventoryName;
     public float SlotSize;
     public int SlotCount;
     public List<InventorySlotData> InventorySlotData = new List<InventorySlotData>();
@@ -127,6 +129,8 @@ public class Inventory : MonoBehaviour
     {
         UIManager.UIActive = true;
         GameObject inventory = UIManager.Instance.InventoryUI;
+        // Change title text
+        inventory.GetComponentInChildren<TextMeshProUGUI>().text = InventoryName + " Inventory";
 
         int slotCount = InventorySlotData.Count;
         int columnCount = 0;
@@ -158,8 +162,7 @@ public class Inventory : MonoBehaviour
         float inventoryBackgroundHeight = 180 + ((rowCount-1) * 120) - (rowCount * 2); // 180 is default, 120 per 2 but -2 each extra row
 
         float inventoryXAdjustment = (inventoryBackgroundWidth - 600) / 2f;
-        float inventoryYAdjustment = (inventoryBackgroundHeight -400) / 2f;
-        inventory.transform.localPosition = new Vector3(-325f, 200f) - new Vector3(inventoryXAdjustment, inventoryYAdjustment);
+        inventory.transform.localPosition = new Vector3(-325f, 200f) - new Vector3(inventoryXAdjustment, 0);
 
         RectTransform background = inventory.GetComponentsInChildren<RectTransform>()[1];
         background.sizeDelta = new Vector2(inventoryBackgroundWidth, inventoryBackgroundHeight);
@@ -186,6 +189,13 @@ public class Inventory : MonoBehaviour
             slotObj.GetComponent<InventorySlot>().SetSlotData(invSlotData);
             slotObj.transform.SetParent(gl.transform, false);
             slotObj.SetActive(true);
+        }
+
+        // Create a tween fading in all the images
+        foreach (var image in inventory.GetComponentsInChildren<Image>())
+        {
+            image.color = new Color(1, 1, 1, 0);
+            image.DOColor(new Color(1, 1, 1, 1), 0.4f);
         }
     }
 

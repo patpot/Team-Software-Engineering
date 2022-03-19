@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class BasicChest : Inventory
 {
-
+    private void Awake()
+    {
+        InventoryName = "Basic Chest";
+    }
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.L))
