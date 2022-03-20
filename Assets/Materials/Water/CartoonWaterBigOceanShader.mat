@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: CartoonWaterBigOceanShader
+  m_Shader: {fileID: -6465566751694194690, guid: 6fcdd55092ed3134d952ec595ea21b0b, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - Vector1_080deed1e24b41ab8bbed9b27430decb: 5
+    - Vector1_409585a952984e87834d3746e780510d: 0.6
+    - Vector1_4abf3c42a4db46beae35ac1d34b96340: 2
+    - Vector1_6c9ee5773a904c61ad45d84f166209d5: 50
+    - Vector1_70974a23a731462187c77dbdd343b1cb: 25
+    - Vector1_a97c0a2a17c9409b81ca45f72e5bd91c: 2
+    - Vector1_b3e30c9edf0d495ab76fde1b5a2e47eb: 1
+    - Vector1_d2d9348830234077bdd31202318af49e: 2
+    - Vector1_d774df0576e047bc870ee9fc7fb8b508: 2
+    - Vector1_f72f385f59414dffb1f03c3429b322cb: 0.2
+    m_Colors:
+    - Color_847b8a0662364f8eb72efcf624267853: {r: 1, g: 1, b: 1, a: 1}
+    - Color_95f1e3ada6c74f9c9e893aeae5d2fb6b: {r: 0.8160377, g: 0.9964696, b: 1, a: 1}
+    - Color_e68cf94d087c47989bc0ddabdfe64ab3: {r: 0.03337486, g: 0.4716981, b: 0.058602642, a: 0}
+    - Color_fd628b6e66a44a2e86399ccb26d3dee3: {r: 0.20910466, g: 0.3490566, b: 0.28906626, a: 0}
+  m_BuildTextureStacks: []
