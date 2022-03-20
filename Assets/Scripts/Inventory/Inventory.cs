@@ -108,10 +108,12 @@ public class Inventory : MonoBehaviour
     public void SwapInventorySlotData(InventorySlotData data1, InventorySlotData data2)
     {
         // Swap position in list of two slot datas
-        int data1Index = InventorySlotData.IndexOf(data1);
-        int data2Index = InventorySlotData.IndexOf(data2);
-        InventorySlotData[data1Index] = data2;
-        InventorySlotData[data2Index] = data1;
+        Inventory inv1 = data1.InventorySlot.GetInventory();
+        Inventory inv2 = data2.InventorySlot.GetInventory();
+        int data1Index = inv1.InventorySlotData.IndexOf(data1);
+        int data2Index = inv2.InventorySlotData.IndexOf(data2);
+        inv1.InventorySlotData[data1Index] = data2;
+        inv2.InventorySlotData[data2Index] = data1;
     }
 
     public void ToggleInventory()
@@ -180,27 +182,30 @@ public class Inventory : MonoBehaviour
 
             // Get a reference to our InventorySlot monobehaviour attached to the object and store it in our data class
             var invSlot = slotObj.GetComponent<InventorySlot>();
+
+            // Assign all our object values
+            slotObj.transform.SetParent(gl.transform, false);
+            slotObj.SetActive(true);
+
             // Store our slot data and update our UI
             invSlot.SetInventory(this);
             invSlot.SetSlotData(invSlotData);
             invSlot.UpdateSlotUI();
-
-            // Assign all our object values
-            slotObj.GetComponent<InventorySlot>().SetSlotData(invSlotData);
-            slotObj.transform.SetParent(gl.transform, false);
-            slotObj.SetActive(true);
         }
 
         // Create a tween fading in all the images
-        foreach (var image in inventory.GetComponentsInChildren<Image>())
+        Utils.FadeInUI(inventory);
+
+        if (this != PlayerInventory.Instance)
         {
-            image.color = new Color(1, 1, 1, 0);
-            image.DOColor(new Color(1, 1, 1, 1), 0.4f);
+            // Adjust the player tab if we arent opening the player's inventory
+            PlayerInventory.Instance.OpenFakeInventory();
         }
     }
 
     private void _closeInventory()
     {
+        UIManager.Instance.FakePlayerInventory.SetActive(false);
         UIManager.UIActive = false;
         GameObject inventory = UIManager.Instance.InventoryUI;
         GridLayoutGroup gl = inventory.GetComponentInChildren<GridLayoutGroup>();

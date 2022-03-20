@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assets.Scripts
 {
@@ -79,6 +80,16 @@ namespace Assets.Scripts
         public static Color WithOpacity(this Color c, float a)
         {
             return new Color(c.r, c.g, c.b, a);
+        }
+
+        // DOTween auto-fade in for all images in a game object
+        public static void FadeInUI(GameObject go)
+        {
+            foreach (var image in go.GetComponentsInChildren<Image>())
+            {
+                image.color = new Color(1, 1, 1, 0);
+                image.DOColor(new Color(1, 1, 1, 1), 0.4f);
+            }
         }
     }
 }

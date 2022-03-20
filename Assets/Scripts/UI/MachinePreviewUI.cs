@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Assets.Scripts;
 
 public class MachinePreviewUI : MonoBehaviour
 {
@@ -18,7 +19,7 @@ public class MachinePreviewUI : MonoBehaviour
     public float TimeToProduce;
     public string MachineName;
 
-    public void SetValues(string machineName, float timeToProduce,  List<Sprite> inputIcons, List<Sprite> outputIcons)
+    public void SetValues(string machineName, float timeToProduce, List<Sprite> inputIcons, List<Sprite> outputIcons)
     {
         InputIcons = inputIcons;
         OutputIcons = outputIcons;
@@ -29,7 +30,7 @@ public class MachinePreviewUI : MonoBehaviour
             gameObject.AddComponent<MeshCollider>();
     }
 
-    public void OnMouseEnter()
+    public void OnMouseDown()
     {
         if (UIManager.UIActive) return;
         UIManager.UIActive = true;
@@ -74,17 +75,13 @@ public class MachinePreviewUI : MonoBehaviour
                 outputIcon.SetActive(false);
 
         }
-        
+
         // Set position to be the mouse position and tween up a bit
         _previewUi.transform.position = Input.mousePosition;
         _previewUi.transform.DOMoveY(Input.mousePosition.y + 40f, 0.4f);
 
         // Create a tween fading in all the images
-        foreach (var image in _previewUi.GetComponentsInChildren<Image>())
-        {
-            image.color = new Color(1, 1, 1, 0);
-            image.DOColor(new Color(1, 1, 1, 1), 0.4f);
-        }
+        Utils.FadeInUI(_previewUi);
     }
 
     public void OnMouseExit()

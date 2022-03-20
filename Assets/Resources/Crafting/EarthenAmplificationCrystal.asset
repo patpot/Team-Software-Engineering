@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da738923b65467045a1ad5a75b1fffa8, type: 3}
+  m_Name: EarthenAmplificationCrystal
+  m_EditorClassIdentifier: 
+  Inputs:
+  - {fileID: 11400000, guid: a1e78ae063c7e6c4c878f1e4de8fa827, type: 2}
+  - {fileID: 11400000, guid: a1e78ae063c7e6c4c878f1e4de8fa827, type: 2}
+  - {fileID: 11400000, guid: a1e78ae063c7e6c4c878f1e4de8fa827, type: 2}
+  - {fileID: 11400000, guid: a1e78ae063c7e6c4c878f1e4de8fa827, type: 2}
+  Output: {fileID: 11400000, guid: 5dd910b7b0a044646b3104aac9a4a1da, type: 2}
+  Quantity: 1

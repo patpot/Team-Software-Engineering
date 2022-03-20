@@ -51,18 +51,69 @@ public class InventorySlot : MonoBehaviour, IPointerUpHandler, IPointerDownHandl
             EventSystem.current.RaycastAll(pointerData, results);
             foreach (var result in results)
             {
-                var invSlot = result.gameObject.GetComponent<InventorySlot>();
-                if (invSlot != null && invSlot != this)
+                var targetInvSlot = result.gameObject.GetComponent<InventorySlot>();
+                if (targetInvSlot != null && targetInvSlot != this)
                 {
-                    // We ended our drag over another inventory slot, swap our data!
-                    InventorySlotData tempData = this._slotData;
-                    this.SetSlotData(invSlot.GetSlotData());
-                    invSlot.SetSlotData(tempData);
-                    // Now that we've swapped data, force a UI refresh
+                    // We ended our drag over another inventory slot, figure out what to do next
+                    InventorySlotData targetInvSlotData = targetInvSlot.GetSlotData();
+                    Inventory targetInventory = targetInvSlot.GetInventory();
+                    float itemCountTotal = _slotData.ItemCount + targetInvSlotData.ItemCount;
+                    float targetInventorySlotSize = targetInventory.SlotSize;
+
+                    if (_slotData.ItemData == targetInvSlotData.ItemData)
+                    {
+                        // Our items match, let's try and add them together!
+                        if (itemCountTotal <= targetInventorySlotSize)
+                        {
+                            // We can take all the items, so take them all and nullify the slot we just took from
+                            targetInvSlotData.ItemCount += _slotData.ItemCount;
+                            _slotData.ItemData = null;
+                            _slotData.ItemCount = 0;
+                        }
+                        else if (itemCountTotal > targetInventorySlotSize && targetInvSlotData.ItemCount != targetInventorySlotSize)
+                        {
+                            // Too many items, fill in however many we can and then update both slots
+                            float diff = targetInventorySlotSize - targetInvSlotData.ItemCount;
+                            targetInvSlotData.ItemCount += diff;
+                            _slotData.ItemCount -= diff;
+                        }
+                        else if (targetInvSlotData.ItemCount == targetInventorySlotSize && _slotData.ItemCount < targetInventorySlotSize)
+                        {
+                            // One of the slots is full, but not both. Just swap their data.
+
+                            // Before we override any values make sure we change our positions in our respective inventories first
+                            _inventory.SwapInventorySlotData(_slotData, targetInvSlotData);
+                            // Swap our actually slot data
+                            InventorySlotData tempData = this._slotData;
+                            this.SetSlotData(targetInvSlotData);
+                            targetInvSlot.SetSlotData(tempData);
+                        }
+                    }
+                    else
+                    {
+                        // ItemData didn't match, try swap the items
+                        if (_slotData.ItemCount > targetInventorySlotSize)
+                        {
+                            // We can't fully swap, if the slot is blank override it if not do nothing
+                            if (targetInvSlot._slotData.ItemData != null) return;
+
+                            targetInvSlotData.ItemData = _slotData.ItemData;
+                            targetInvSlotData.ItemCount = targetInventorySlotSize;
+                            _slotData.ItemCount -= targetInventorySlotSize;
+                        }
+                        else
+                        {
+                            // Before we override any values make sure we change our positions in our respective inventories first
+                            _inventory.SwapInventorySlotData(_slotData, targetInvSlotData);
+                            // Swap our actually slot data
+                            InventorySlotData tempData = this._slotData;
+                            this.SetSlotData(targetInvSlotData);
+                            targetInvSlot.SetSlotData(tempData);
+                        }
+                    }
+                    // Finally force a UI refresh
                     this.UpdateSlotUI();
-                    invSlot.UpdateSlotUI();
-                    // Finally, update the main Inventory script's list to be in the new order
-                    _inventory.SwapInventorySlotData(this.GetSlotData(), invSlot.GetSlotData());
+                    targetInvSlot.UpdateSlotUI();
                 }
             }
             // Destroy our temporary draggable preview
@@ -71,6 +122,8 @@ public class InventorySlot : MonoBehaviour, IPointerUpHandler, IPointerDownHandl
     }
     public void SetInventory(Inventory inventory)
         => _inventory = inventory;
+    public Inventory GetInventory()
+        => _inventory;
     public void SetSlotData(InventorySlotData slotData)
     {
         _slotData = slotData;

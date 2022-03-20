@@ -19,6 +19,9 @@ public class InventorySlotData
         set
         {
             _itemCount = value;
+            if (_itemCount == 0)
+                ItemData = null;
+
             if (InventorySlot != null)
                 InventorySlot.UpdateSlotUI();
         }

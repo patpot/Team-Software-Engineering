@@ -13,7 +13,8 @@ public class UIManager : MonoBehaviour
     // Inventory Fields
     public GameObjectPool InventorySlotPool;
     public GameObject InventoryUI;
-    public Sprite BlankInventorySprite;
+    public GameObject FakePlayerInventory;
+    public Sprite BlankInventorySprite = null;
     public static bool UIActive = false;
 
     void Awake()
