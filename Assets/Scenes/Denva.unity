@@ -1916,7 +1916,7 @@ GameObject:
   m_Component:
   - component: {fileID: 225028814}
   - component: {fileID: 225028815}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: BuildingGhost
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1935,7 +1935,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &225028815
 MonoBehaviour:
@@ -6794,7 +6794,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &696299594
 MonoBehaviour:
@@ -11316,8 +11316,8 @@ MonoBehaviour:
   _fastSpeed: 1
   _movementSpeed: 1
   _movementTime: 5
-  _minPosition: -50
-  _maxPosition: 50
+  _minPosition: -100
+  _maxPosition: 100
   _rotationAmount: 0.2
   _zoomAmount: {x: 0, y: -0.25, z: 0.25}
   _mouseZoomAmount: {x: 0, y: -10, z: 10}
@@ -11327,6 +11327,7 @@ MonoBehaviour:
   _newRotation: {x: 0, y: 0, z: 0, w: 0}
   _newZoom: {x: 0, y: 0, z: 0}
   _startPosition: {x: 0, y: 0, z: 0}
+  _Player: {fileID: 2041289233}
   _dragStartPosition: {x: 0, y: 0, z: 0}
   _dragCurrentPosition: {x: 0, y: 0, z: 0}
   _rotateStartPosition: {x: 0, y: 0, z: 0}
@@ -11338,13 +11339,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1210645456}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 50, y: 10, z: 50}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 10, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 686869103}
-  m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_Father: {fileID: 2041289236}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1222766965
 GameObject:
@@ -11628,7 +11629,7 @@ Transform:
   m_GameObject: {fileID: 1235382463}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 50, y: 0, z: 50}
-  m_LocalScale: {x: 20, y: 1, z: 20}
+  m_LocalScale: {x: 100, y: 1, z: 100}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2
@@ -17909,6 +17910,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 164481615}
+  - {fileID: 1210645458}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -17927,6 +17929,7 @@ MonoBehaviour:
   _fpsCam: {fileID: 164481612}
   _topDownCam: {fileID: 1210645456}
   _gridBuildingSystem: {fileID: 696299592}
+  _BuildingGhost: {fileID: 225028813}
   _fpsCanvas: {fileID: 906047885}
   _topDownCanvas: {fileID: 638229517}
 --- !u!1 &2048755728

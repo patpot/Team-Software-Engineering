@@ -27,6 +27,7 @@ public class CameraController : MonoBehaviour
     [SerializeField] private Quaternion _newRotation;
     [SerializeField] private Vector3 _newZoom;
     [SerializeField] private Vector3 _startPosition;
+    [SerializeField] private GameObject _Player;
 
     [Header("Mouse Variables")]
     [SerializeField] private Vector3 _dragStartPosition;
@@ -36,7 +37,7 @@ public class CameraController : MonoBehaviour
 
     void Start()
     {
-        _startPosition = transform.position;
+        _startPosition = _Player.transform.position;
         _newPosition = transform.position;
         _newRotation = transform.rotation;
         _newZoom = cameraTransform.localPosition;
@@ -44,6 +45,7 @@ public class CameraController : MonoBehaviour
 
     void LateUpdate()
     {
+        _startPosition = _Player.transform.position;
         HandleMouseInput();
         HandleMovementInput();
     }

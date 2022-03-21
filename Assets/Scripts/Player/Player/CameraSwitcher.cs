@@ -8,6 +8,7 @@ public class CameraSwitcher : MonoBehaviour
     [SerializeField] private GameObject _fpsCam;
     [SerializeField] private GameObject _topDownCam;
     [SerializeField] private GameObject _gridBuildingSystem;
+    [SerializeField] private GameObject _BuildingGhost;
 
     [SerializeField] private Canvas _fpsCanvas;
     [SerializeField] private Canvas _topDownCanvas;
@@ -25,6 +26,7 @@ public class CameraSwitcher : MonoBehaviour
         _fpsController.enabled = true;
 
         _gridBuildingSystem.SetActive(false);
+        _BuildingGhost.SetActive(false);
 
         _topDownCam.SetActive(false);
         _topDownCanvas.enabled = false;
@@ -40,8 +42,9 @@ public class CameraSwitcher : MonoBehaviour
             _fpsController.enabled = false;
 
             _gridBuildingSystem.SetActive(true);
+            _BuildingGhost.SetActive(true);
 
-            _topDownCam.SetActive(true);
+           _topDownCam.SetActive(true);
             _topDownCanvas.enabled = true;
 
         }
@@ -52,6 +55,7 @@ public class CameraSwitcher : MonoBehaviour
             _fpsController.enabled = true;
 
             _gridBuildingSystem.SetActive(false);
+            _BuildingGhost.SetActive(false);
 
             _topDownCam.SetActive(false);
             _topDownCanvas.enabled = false;
