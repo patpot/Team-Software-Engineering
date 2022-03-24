@@ -22,10 +22,10 @@ public class GridBuildingSystem : MonoBehaviour
     {
         Instance = this;
 
-        int gridWidth = 20;
-        int gridHeight = 20;
-        float cellSize = 10f;
-        _grid = new GridSystem<GridObject>(gridWidth, gridHeight, cellSize, Vector3.zero, (GridSystem<GridObject> g, int x, int z) => new GridObject(g, x, z));
+        int gridWidth = 15;
+        int gridHeight = 25;
+        float cellSize = 5f;
+        _grid = new GridSystem<GridObject>(gridWidth, gridHeight, cellSize, new Vector3(-25,0,-60), (GridSystem<GridObject> g, int x, int z) => new GridObject(g, x, z));
 
         _placedObjectTypeSO = _placedObjectTypeSOList[0];
     }
@@ -150,6 +150,7 @@ public class GridBuildingSystem : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Alpha1)) { _placedObjectTypeSO = _placedObjectTypeSOList[0]; RefreshSelectedObjectType(); }
         if (Input.GetKeyDown(KeyCode.Alpha2)) { _placedObjectTypeSO = _placedObjectTypeSOList[1]; RefreshSelectedObjectType(); }
+        if (Input.GetKeyDown(KeyCode.Alpha3)) { _placedObjectTypeSO = _placedObjectTypeSOList[2]; RefreshSelectedObjectType(); }
 
         if (Input.GetKeyDown(KeyCode.Alpha0)) { DeselectObjectType(); }
     }

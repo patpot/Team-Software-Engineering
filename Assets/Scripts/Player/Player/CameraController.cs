@@ -45,7 +45,7 @@ public class CameraController : MonoBehaviour
 
     void LateUpdate()
     {
-        _startPosition = _Player.transform.position;
+        //_startPosition = _Player.transform.position;
         HandleMouseInput();
         HandleMovementInput();
     }

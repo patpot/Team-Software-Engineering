@@ -30,6 +30,9 @@ public class CameraSwitcher : MonoBehaviour
 
         _topDownCam.SetActive(false);
         _topDownCanvas.enabled = false;
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     // Update is called once per frame
@@ -44,8 +47,11 @@ public class CameraSwitcher : MonoBehaviour
             _gridBuildingSystem.SetActive(true);
             _BuildingGhost.SetActive(true);
 
-           _topDownCam.SetActive(true);
+            _topDownCam.SetActive(true);
             _topDownCanvas.enabled = true;
+
+            Cursor.lockState = CursorLockMode.Confined;
+            Cursor.visible = true;
 
         }
         else if (Input.GetKeyUp(KeyCode.C) && _topDownCam.activeInHierarchy)
@@ -59,6 +65,9 @@ public class CameraSwitcher : MonoBehaviour
 
             _topDownCam.SetActive(false);
             _topDownCanvas.enabled = false;
+
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
         }
     }
 }
