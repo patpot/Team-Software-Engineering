@@ -52,7 +52,7 @@ public class MachinePreviewUI : MonoBehaviour
             if (i < InputIcons.Count)
             {
                 inputIcon.SetActive(true);
-                Image icon = inputIcon.GetComponentInChildren<Image>();
+                Image icon = inputIcon.GetComponentsInChildren<Image>()[1];
                 icon.sprite = InputIcons[i];
             }
             else // If not, don't render it
