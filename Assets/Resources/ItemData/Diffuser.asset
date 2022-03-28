@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5738d8c7941d065449591326a69e4736, type: 3}
-  m_Name: Earth Mana
+  m_Name: Diffuser
   m_EditorClassIdentifier: 
   Id: 0
   Description: 
-  Icon: {fileID: 21300000, guid: efbe94b107bf3414791f2114f9c83ed8, type: 3}
+  Icon: {fileID: 21300000, guid: a6c90a35cd2f40148a04154c03943a88, type: 3}
