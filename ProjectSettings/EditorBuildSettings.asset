@@ -5,7 +5,13 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: d1c3109bdb54ad54c8a2b2838528e640
+  - enabled: 1
+    path: Assets/Scenes/JordanMainmenu.unity
+    guid: 88e75cbbf777e644380ece99c79c1f70
+  - enabled: 1
+    path: Assets/Scenes/Forest (Denva Test Scene).unity
+    guid: 8451e18f087ca35428856534db19895e
   m_configObjects: {}
