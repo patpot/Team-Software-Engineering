@@ -38,7 +38,7 @@ public class CameraSwitcher : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyUp(KeyCode.C) && _fpsCam.activeInHierarchy)
+        if (Input.GetKeyUp(KeyCode.B) && _fpsCam.activeInHierarchy)
         {
             _fpsCam.SetActive(false);
             _fpsCanvas.enabled = false;
@@ -54,7 +54,7 @@ public class CameraSwitcher : MonoBehaviour
             Cursor.visible = true;
 
         }
-        else if (Input.GetKeyUp(KeyCode.C) && _topDownCam.activeInHierarchy)
+        else if (Input.GetKeyUp(KeyCode.B) && _topDownCam.activeInHierarchy)
         {
             _fpsCam.SetActive(true);
             _fpsCanvas.enabled = true;

@@ -6,7 +6,9 @@ using CodeMonkey.Utils;
 
 public class GridBuildingSystem : MonoBehaviour
 {
-    public static GridBuildingSystem Instance { get; private set; }
+    [SerializeField] private LayerMask otherLayers = new LayerMask();
+
+public static GridBuildingSystem Instance { get; private set; }
 
     public event EventHandler OnSelectedChanged;
     //public event EventHandler OnObjectPlaced;

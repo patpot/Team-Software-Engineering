@@ -45,7 +45,7 @@ public class CameraController : MonoBehaviour
 
     void LateUpdate()
     {
-        //_startPosition = _Player.transform.position;
+        _startPosition = _Player.transform.position;
         HandleMouseInput();
         HandleMovementInput();
     }
@@ -100,6 +100,10 @@ public class CameraController : MonoBehaviour
 
     void HandleMovementInput()
     {
+        if (Input.GetKeyUp(KeyCode.C))
+        {
+            _newPosition = _startPosition;
+        }
         if (Input.GetKey(KeyCode.LeftShift))
             _movementSpeed = _fastSpeed;
         else
