@@ -6,7 +6,7 @@ using CodeMonkey.Utils;
 
 public class GridBuildingSystem : MonoBehaviour
 {
-    [SerializeField] private LayerMask otherLayers = new LayerMask();
+    //[SerializeField] private LayerMask otherLayers = new LayerMask();
 
 public static GridBuildingSystem Instance { get; private set; }
 

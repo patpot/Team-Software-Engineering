@@ -11,7 +11,7 @@ public class FirstPersonController : MonoBehaviour
     private bool shouldCrouch => Input.GetKeyDown(crouchKey) && !duringCrouchAnimation && characterController.isGrounded;
 
     [Header("Functional Options")]
-    [SerializeField] private bool CanLook = true;
+    public bool CanLook = true;
     [SerializeField] private bool canSprint = true;
     [SerializeField] private bool canJump = true;
     [SerializeField] private bool canCrouch = true;
@@ -23,7 +23,7 @@ public class FirstPersonController : MonoBehaviour
     [SerializeField] private bool UseStamina = true;
 
     [Header("Controls")]
-    [SerializeField] private KeyCode craftingMenuKey = KeyCode.C;
+    //[SerializeField] private KeyCode craftingMenuKey = KeyCode.C;
     [SerializeField] private KeyCode sprintKey = KeyCode.LeftShift;
     [SerializeField] private KeyCode jumpKey = KeyCode.Space;
     [SerializeField] private KeyCode crouchKey = KeyCode.LeftControl;
@@ -169,7 +169,7 @@ public class FirstPersonController : MonoBehaviour
         {
             HandleMovementInput();
 
-            ChangeLookOff();
+            //ChangeLookOff();
 
             if (CanLook)
             {
@@ -205,7 +205,7 @@ public class FirstPersonController : MonoBehaviour
         }
     }
 
-    private void ChangeLookOff()
+    /*private void ChangeLookOff()
     {
         if (Input.GetKeyUp(craftingMenuKey) && CanLook == true)
         {
@@ -215,7 +215,7 @@ public class FirstPersonController : MonoBehaviour
         {
             CanLook = true;
         }
-    }
+    }*/
 
     private void HandleMovementInput()
     {
