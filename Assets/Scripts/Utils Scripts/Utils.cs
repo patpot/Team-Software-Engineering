@@ -87,8 +87,9 @@ namespace Assets.Scripts
         {
             foreach (var image in go.GetComponentsInChildren<Image>())
             {
-                image.color = new Color(1, 1, 1, 0);
-                image.DOColor(new Color(1, 1, 1, 1), 0.4f);
+                Color tempColor = image.color;
+                image.color = new Color(image.color.r, image.color.g, image.color.b, 0);
+                image.DOColor(tempColor, 0.4f);
             }
         }
     }
