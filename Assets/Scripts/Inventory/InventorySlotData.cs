@@ -12,6 +12,7 @@ public class InventorySlotData
 {
     public ItemData ItemData;
     public bool ContainsItem => ItemData != null;
+    public bool Locked = false;
     private float _itemCount;
     public float ItemCount
     {
@@ -19,7 +20,7 @@ public class InventorySlotData
         set
         {
             _itemCount = value;
-            if (_itemCount == 0)
+            if (!Locked && _itemCount == 0)
                 ItemData = null;
 
             if (InventorySlot != null)

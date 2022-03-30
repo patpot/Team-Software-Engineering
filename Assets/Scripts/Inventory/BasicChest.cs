@@ -16,7 +16,7 @@ public class BasicChest : Inventory
     }
     public void OnMouseOver()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && !UIManager.UIActive)
             ToggleInventory();
     }
 }

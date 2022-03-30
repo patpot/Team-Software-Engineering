@@ -8,30 +8,29 @@ using System;
 
 public class BasicMachine : MonoBehaviour
 {
-    // Used for UI
-    [NonSerialized]
-    public string MachineName;
+    [NonSerialized] public string MachineName; // Used for UI
+    [NonSerialized] public float TimeToProduce; // We set TimeToProduce in script ONLY
+
     // Our required inputs and outputs for this machine to function. If no inputs are required the machine will constantly be producing outputs
     public Dictionary<ItemData, float> Inputs = new Dictionary<ItemData, float> ();
     public Dictionary<ItemData, float> Outputs = new Dictionary<ItemData, float> ();
 
-    [NonSerialized] // We set TimeToProduce in script ONLY
-    public float TimeToProduce;
     private float _productionTimer;
     private bool _isProducing;
 
-    // Our current amount of items that the player has input
-    private Dictionary<ItemData, float> _currentInputs = new Dictionary<ItemData, float>();
-
-    public List<Inventory> InputInventories = new List<Inventory>();
-    public List<Inventory> OutputInventories = new List<Inventory>();
+    public Inventory InputInventory;
+    public HashSet<Inventory> OutputInventories = new HashSet<Inventory>();
 
     // This NEEDS to be kept at Start as all derived classes use Awake to assign their inputs and we need to execute those first
     private void Start()
     {
-        // Initialise the _currentInputs dictionary to have all the required inputs items, but no values
-        foreach (var requiredItem in Inputs)
-            _currentInputs.Add(requiredItem.Key, 0f);
+        // Instead of making in-world input chests we store them in the machine, we create an inventory, lock all the slots to an item type and allow a max of 20 to be stored at a time
+        InputInventory = gameObject.AddComponent<Inventory>();
+        InputInventory.SlotCount = Inputs.Count;
+        InputInventory.SlotSize = 20;
+        InputInventory.LockSlots();
+        foreach (var item in Inputs)
+            InputInventory.TryDepositItem(item.Key, 0f);
 
         List<Sprite> inputIcons = new List<Sprite>();
         foreach (var input in Inputs)
@@ -44,25 +43,25 @@ public class BasicMachine : MonoBehaviour
             mesh.gameObject.AddComponent<MachinePreviewUI>().SetValues(MachineName, TimeToProduce, inputIcons, outputIcons);
     }
 
-    public void InputItem(ItemData item, float quantity)
-    {
-        // We assume this function is only called with valid values, if an error is thrown here something was setup wrong outside of this function.
-        _currentInputs[item] += quantity;
-    }
+    //public void InputItem(ItemData item, float quantity)
+    //{
+    //    // We assume this function is only called with valid values, if an error is thrown here something was setup wrong outside of this function.
+    //    _currentInputs[item] += quantity;
+    //    foreach (var inventory in InputInventories)
+    //    {
+    //        inventory.TryDepositItem(item, quantity);
+    //    }
+    //}
 
     public bool CheckForProduction()
     {
-        bool canProduce = true;
-        // The condition we need to meet here is that ALL inputs have the current quantity available
-        foreach (var requiredInput in Inputs)
-            if (_currentInputs[requiredInput.Key] < requiredInput.Value)
-                canProduce = false;
+        // Check if our internal input inventory contains our required inputs
+        (Dictionary<InventorySlotData, float> slotsToChange, int leftoverQuantity) matchingInvData = InputInventory.ContainsItems(Inputs);
+        if (matchingInvData.leftoverQuantity == 0) // We can change all these slots with no leftovers, so let's do that
+            foreach (var slot in matchingInvData.slotsToChange)
+                slot.Key.ItemCount -= slot.Value;
 
-        // If we are going to start production then take away the player's input items.
-        if (canProduce)
-            foreach (var requiredInput in Inputs)
-                _currentInputs[requiredInput.Key] -= requiredInput.Value;
-        return canProduce;
+        return matchingInvData.leftoverQuantity == 0;
     }
 
     protected virtual void Update()
@@ -75,16 +74,16 @@ public class BasicMachine : MonoBehaviour
             {
                 // It's been enough time to produce an item, actually produce it and try deposit it to a target inventory
                 foreach (var item in Outputs)
+                {
+                    ItemData itemData = item.Key;
+                    float itemCount = item.Value;
                     foreach (var inventory in OutputInventories)
-                        if (inventory.TryDepositItem(item.Key, item.Value))
+                    {
+                        itemCount = inventory.TryDepositItem(itemData, itemCount);
+                        if (itemCount == 0f)
                             break;
-                        else
-                        {
-                            // TODO: Handle overflow, for now we just void the resources if it doesnt fit in the first inventory c:
-                            break;
-                        }
-                //item.Key.ItemCount += item.Value;
-
+                    }
+                }
                 // Reset our values
                 _productionTimer = 0f;
                 _isProducing = false;

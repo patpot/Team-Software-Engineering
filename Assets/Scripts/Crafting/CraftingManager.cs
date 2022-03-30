@@ -55,10 +55,14 @@ namespace Assets.Scripts
         {
             if (!CraftingUI.activeSelf && UIManager.UIActive) return; // Don't draw any new UI if we have UI active
             CraftingUI.SetActive(!CraftingUI.activeSelf);
+
+            // If the main crafting UI was deactivated, deactivate our side menu and fake player inventory as well
             if (!CraftingUI.activeSelf)
             {
-                SideMenu.SetActive(false); // If the main crafting UI was deactivated, deactivate our side menu and fake player inventory as well
+                SideMenu.SetActive(false);
                 UIManager.Instance.FakePlayerInventory.SetActive(false);
+                UIManager.Instance.UnlockCamera();
+                UIManager.Instance.LockCursor();
             }
 
             UIManager.UIActive = CraftingUI.activeSelf; // If the UI was activated tell our UI manager we can't render other UI, if deactivated vice versa
@@ -66,6 +70,8 @@ namespace Assets.Scripts
             if (CraftingUI.activeSelf)
             {
                 Utils.FadeInUI(CraftingUI);
+                UIManager.Instance.LockCamera();
+                UIManager.Instance.UnlockCursor();
 
                 // Draw the player's fake inventory
                 PlayerInventory.Instance.OpenFakeInventory();
@@ -82,6 +88,9 @@ namespace Assets.Scripts
             // Find our recipe and split it into a dictionary of item data mapped to quantity
             CraftingRecipe recipe = _recipes[recipeName];
             Dictionary<ItemData, float> inputsByItem = RecipesToQuantities(recipe);
+
+            // Display the name of our recipe output
+            SideMenu.GetComponentInChildren<TextMeshProUGUI>().text = recipeName;
 
             // Put together our UI elements
             foreach (var input in inputsByItem)

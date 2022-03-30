@@ -9,6 +9,7 @@ public class UIManager : MonoBehaviour
     // Keep this private to tell other classes to use our publicly exposed helper functions
     private static Dictionary<string, GameObject> _prefabs = new Dictionary<string, GameObject>();
     public Transform MainCanvas;
+    public FirstPersonController FPSController;
 
     // Inventory Fields
     public GameObjectPool InventorySlotPool;
@@ -25,6 +26,27 @@ public class UIManager : MonoBehaviour
         Object[] prefabs = Resources.LoadAll("Prefabs/UI", typeof(GameObject));
         foreach (var prefab in prefabs)
             _prefabs.Add(prefab.name, prefab as GameObject);
+    }
+    public void LockCamera()
+    {
+        FPSController.CanLook = false;
+        FPSController.CanMove = false;
+    }
+    public void UnlockCamera()
+    { 
+        FPSController.CanLook = true;
+        FPSController.CanMove = true;
+    }
+
+    public void UnlockCursor()
+    {
+        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.visible = true;
+    }
+    public void LockCursor()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     public static GameObject CreatePrefab(string prefabName)

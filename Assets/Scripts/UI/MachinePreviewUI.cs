@@ -32,6 +32,7 @@ public class MachinePreviewUI : MonoBehaviour
 
     public void OnMouseDown()
     {
+        if (SpellbookToggle.SpellbookActive) return;
         if (UIManager.UIActive) return;
         UIManager.UIActive = true;
         // We construct our UI when we hover over the object and slightly fade it in for a bit more juice

@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using DG.Tweening;
+using System.Linq;
 
 public class Inventory : MonoBehaviour
 {
@@ -23,11 +24,11 @@ public class Inventory : MonoBehaviour
     }
 
     /// <summary>
-    /// Function to deposit an item into an inventory, returns true/false if successful
+    /// Function to deposit an item into an inventory, returns amount of leftover items
     /// </summary>
     /// <param name="item"> Data of the item to deposit</param>
     /// <param name="itemCount"> Amount of item being deposited</param>
-    public bool TryDepositItem(ItemData item, float itemCount)
+    public float TryDepositItem(ItemData item, float itemCount)
     {
         // Check first if there's any stacks we can add these items onto
         List<InventorySlotData> matchingSlotsWithSpace = new List<InventorySlotData>();
@@ -42,7 +43,7 @@ public class Inventory : MonoBehaviour
                 {
                     // There's enough room to just add on the deposited amount
                     slot.ItemCount += itemCount;
-                    return true;
+                    return 0f;
                 }
                 else
                 {
@@ -66,7 +67,7 @@ public class Inventory : MonoBehaviour
             {
                 // There's enough space in here to take the deposited amount, simply add it on and return
                 slot.ItemCount += itemCount;
-                return true;
+                return 0f;
             }
             else
             {
@@ -77,7 +78,7 @@ public class Inventory : MonoBehaviour
         }
 
         // We've gone through all the matching items and couldn't get rid of our deposited amount, check for empty spaces?
-        if (itemCount > 0)
+        if (itemCount > 0f)
         {
             foreach (var slot in InventorySlotData)
             {
@@ -97,12 +98,12 @@ public class Inventory : MonoBehaviour
                         slot.ItemData = item;
                         slot.ItemCount = itemCount;
 
-                        return true;
+                        return 0f;
                     }
                 }
             }
         }
-        return false;
+        return itemCount;
     }
 
     public void SwapInventorySlotData(InventorySlotData data1, InventorySlotData data2)
@@ -116,8 +117,53 @@ public class Inventory : MonoBehaviour
         inv2.InventorySlotData[data2Index] = data1;
     }
 
+    // Returns a dictionary mapping slots to how much needs to be removed from them and and int equal to how much leftover quantity there will be
+    public (Dictionary<InventorySlotData, float>, int) ContainsItems(Dictionary<ItemData, float> requiredInputs)
+    {
+        List<ItemData> inputsLeft = requiredInputs.Keys.ToList();
+        Dictionary<InventorySlotData, float> slotsToChange = new Dictionary<InventorySlotData, float>();
+
+        // Loop through every inventory slot and check if we have the matching items
+        foreach (var input in requiredInputs)
+        {
+            ItemData itemData = input.Key;
+            float requiredQuantity = input.Value;
+            foreach (var slot in InventorySlotData)
+            {
+                // The item in this slot matches the required one, check quantities
+                if (slot.ItemData == itemData)
+                {
+                    // If there's enough items to satisfy the requirement straight up, just add this slot
+                    if (slot.ItemCount >= requiredQuantity)
+                    {
+                        slotsToChange.Add(slot, requiredQuantity);
+                        inputsLeft.Remove(itemData);
+                        // We're done without needing to fully iterate, break out
+                        if (inputsLeft.Count == 0)
+                            break;
+                    }
+                    else
+                    {
+                        // Wasn't enough to complete the recipe, deduct whatever we took out and move on
+                        slotsToChange.Add(slot, slot.ItemCount);
+                        requiredQuantity -= slot.ItemCount;
+                    }
+                }
+            }
+            // We're done without needing to fully iterate, break out
+            if (inputsLeft.Count == 0)
+                break;
+        }
+
+        return (slotsToChange, inputsLeft.Count);
+    }
+
+    public void LockSlots()
+        => InventorySlotData.ForEach(slot => slot.Locked = true);
+
     public void ToggleInventory()
     {
+        if (SpellbookToggle.SpellbookActive) return;
         GameObject inventory = UIManager.Instance.InventoryUI;
         if (!inventory.activeSelf && UIManager.UIActive) return; // Don't draw any new UI if we have UI active
         inventory.SetActive(!inventory.activeSelf);
@@ -130,6 +176,8 @@ public class Inventory : MonoBehaviour
     private void _drawInventory()
     {
         UIManager.UIActive = true;
+        UIManager.Instance.LockCamera();
+        UIManager.Instance.UnlockCursor();
         GameObject inventory = UIManager.Instance.InventoryUI;
         // Change title text
         inventory.GetComponentInChildren<TextMeshProUGUI>().text = InventoryName + " Inventory";
@@ -207,6 +255,9 @@ public class Inventory : MonoBehaviour
     {
         UIManager.Instance.FakePlayerInventory.SetActive(false);
         UIManager.UIActive = false;
+        UIManager.Instance.UnlockCamera();
+        UIManager.Instance.LockCursor();
+
         GameObject inventory = UIManager.Instance.InventoryUI;
         GridLayoutGroup gl = inventory.GetComponentInChildren<GridLayoutGroup>();
         GameObjectPool slotPool = UIManager.Instance.InventorySlotPool;

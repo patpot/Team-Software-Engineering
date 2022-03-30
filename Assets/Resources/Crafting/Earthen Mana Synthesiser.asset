@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: da738923b65467045a1ad5a75b1fffa8, type: 3}
-  m_Name: Crusher
+  m_Name: Earthen Mana Synthesiser
   m_EditorClassIdentifier: 
   Inputs:
   - {fileID: 11400000, guid: 5dd910b7b0a044646b3104aac9a4a1da, type: 2}
@@ -18,5 +18,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: cb8daf68aa0c6d44b8bf4173f8dbb8d6, type: 2}
   - {fileID: 11400000, guid: cb8daf68aa0c6d44b8bf4173f8dbb8d6, type: 2}
   - {fileID: 11400000, guid: cb8daf68aa0c6d44b8bf4173f8dbb8d6, type: 2}
-  Output: {fileID: 11400000, guid: 79b65663fd1e6c142a91352932dcc806, type: 2}
+  - {fileID: 11400000, guid: d57d6cbb25b6c59428a8c1b342ce8281, type: 2}
+  - {fileID: 11400000, guid: d57d6cbb25b6c59428a8c1b342ce8281, type: 2}
+  - {fileID: 11400000, guid: d57d6cbb25b6c59428a8c1b342ce8281, type: 2}
+  - {fileID: 11400000, guid: d57d6cbb25b6c59428a8c1b342ce8281, type: 2}
+  Output: {fileID: 11400000, guid: 125560ad3d505504193685cb1c74606a, type: 2}
   OutputQuantity: 1
