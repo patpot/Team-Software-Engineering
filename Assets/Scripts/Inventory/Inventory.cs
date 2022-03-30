@@ -23,12 +23,19 @@ public class Inventory : MonoBehaviour
             InventorySlotData.Add(new InventorySlotData());
     }
 
+    public void ForceLoadSlots()
+    {
+        // TODO: Load inventory from some kind of save system
+        for (int i = 0; i < SlotCount; i++)
+            InventorySlotData.Add(new InventorySlotData());
+    }
+
     /// <summary>
     /// Function to deposit an item into an inventory, returns amount of leftover items
     /// </summary>
     /// <param name="item"> Data of the item to deposit</param>
     /// <param name="itemCount"> Amount of item being deposited</param>
-    public float TryDepositItem(ItemData item, float itemCount)
+    public float TryDepositItem(ItemData item, float itemCount, bool allowZeroValue = false)
     {
         // Check first if there's any stacks we can add these items onto
         List<InventorySlotData> matchingSlotsWithSpace = new List<InventorySlotData>();
@@ -78,7 +85,7 @@ public class Inventory : MonoBehaviour
         }
 
         // We've gone through all the matching items and couldn't get rid of our deposited amount, check for empty spaces?
-        if (itemCount > 0f)
+        if (itemCount > 0f || (allowZeroValue && itemCount == 0))
         {
             foreach (var slot in InventorySlotData)
             {

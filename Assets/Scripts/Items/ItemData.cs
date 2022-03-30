@@ -14,5 +14,6 @@ namespace Assets.Scripts
         public string Name => this.name;
         public string Description;
         public Sprite Icon;
+        public GameObject Model;
     }
 }

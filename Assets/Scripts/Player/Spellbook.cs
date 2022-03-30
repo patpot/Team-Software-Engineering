@@ -38,6 +38,7 @@ public class Spellbook : MonoBehaviour
                 // Check if we hit another machine/inventory
                 if (_checkForMachineCollision(hit)) return;
                 if (_checkForInventoryCollision(hit)) return;
+                if (_checkForItemCollision(hit)) return;
             }
             else if (_selectedMachine != null)
             {
@@ -68,7 +69,8 @@ public class Spellbook : MonoBehaviour
                 // Change the clones material to be our glowing fade out material
                 go.GetComponent<MeshRenderer>().material = GlowingFade;
                 // Add on script that controls the material fading
-                go.AddComponent<KillTree>();
+                MagicFade mf = go.AddComponent<MagicFade>();
+                mf.ItemName = "Wood Log";
                 // Destroy original
                 Destroy(hit.transform.gameObject);
 
@@ -123,6 +125,28 @@ public class Spellbook : MonoBehaviour
             return true;
         }
 
+        return false;
+    }
+
+    private bool _checkForItemCollision(RaycastHit hit)
+    {
+        // Any item use cases are very specific, so we hardcode :c
+        if (hit.transform.parent.name == "Wood Log")
+        {
+            hit.transform.parent.name = "Fading Log";
+            hit.transform.gameObject.GetComponent<MeshRenderer>().material = GlowingFade;
+            // Add on script that controls the material fading
+            MagicFade mf = hit.transform.gameObject.AddComponent<MagicFade>();
+            mf.ItemName = "Earth Mana";
+            // Add in our visual effect that drops particles to the floor
+            var treeVFX = Instantiate(TreeBreakVFX);
+            treeVFX.transform.position = hit.transform.position;
+            treeVFX.transform.rotation = hit.transform.rotation;
+            treeVFX.transform.localScale = hit.transform.localScale;
+            treeVFX.name = "Fake Fading Log";
+
+            treeVFX.GetComponent<VisualEffect>().SetTexture("PointCachePosition", _pointCacheNameToPosition["Wood Log"]);
+        }
         return false;
     }
 }

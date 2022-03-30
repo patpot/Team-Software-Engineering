@@ -28,9 +28,10 @@ public class BasicMachine : MonoBehaviour
         InputInventory = gameObject.AddComponent<Inventory>();
         InputInventory.SlotCount = Inputs.Count;
         InputInventory.SlotSize = 20;
+        InputInventory.ForceLoadSlots();
         InputInventory.LockSlots();
         foreach (var item in Inputs)
-            InputInventory.TryDepositItem(item.Key, 0f);
+            InputInventory.TryDepositItem(item.Key, 0f, true);
 
         List<Sprite> inputIcons = new List<Sprite>();
         foreach (var input in Inputs)
@@ -40,7 +41,7 @@ public class BasicMachine : MonoBehaviour
             outputIcons.Add(output.Key.Icon);
 
         foreach (var mesh in GetComponentsInChildren<MeshRenderer>())
-            mesh.gameObject.AddComponent<MachinePreviewUI>().SetValues(MachineName, TimeToProduce, inputIcons, outputIcons);
+            mesh.gameObject.AddComponent<MachinePreviewUI>().SetValues(MachineName, TimeToProduce, inputIcons, outputIcons, InputInventory);
     }
 
     //public void InputItem(ItemData item, float quantity)

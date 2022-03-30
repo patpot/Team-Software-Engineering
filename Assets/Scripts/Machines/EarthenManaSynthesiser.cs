@@ -11,6 +11,6 @@ public class EarthenManaSynthesiser : BasicMachine
         ItemData earthMana = ItemManager.GetItemData("Earth Mana");
         Outputs.Add(earthMana, 1f);
 
-        TimeToProduce = 1f;
+        TimeToProduce = 0.5f;
     }
 }

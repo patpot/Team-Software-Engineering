@@ -25,6 +25,7 @@ public class InventorySlot : MonoBehaviour, IPointerUpHandler, IPointerDownHandl
     public void OnPointerDown(PointerEventData eventData)
     {
         if (eventData.button != PointerEventData.InputButton.Left) return;
+        if (_slotData.ItemCount == 0) return;
 
         // Start dragging, highlight this object
         this.GetComponentInChildren<Image>().color = Color.yellow;
@@ -49,11 +50,13 @@ public class InventorySlot : MonoBehaviour, IPointerUpHandler, IPointerDownHandl
             // Raycast on the end position of our drag and iterate through the results to find another inventory slot
             List<RaycastResult> results = new List<RaycastResult>();
             EventSystem.current.RaycastAll(pointerData, results);
+            bool dropObject = true;
             foreach (var result in results)
             {
                 var targetInvSlot = result.gameObject.GetComponent<InventorySlot>();
                 if (targetInvSlot != null && targetInvSlot != this)
                 {
+                    dropObject = false;
                     // We ended our drag over another inventory slot, figure out what to do next
                     InventorySlotData targetInvSlotData = targetInvSlot.GetSlotData();
                     Inventory targetInventory = targetInvSlot.GetInventory();
@@ -118,6 +121,25 @@ public class InventorySlot : MonoBehaviour, IPointerUpHandler, IPointerDownHandl
             }
             // Destroy our temporary draggable preview
             Destroy(_draggableObj);
+
+            if (dropObject)
+            {
+                if (_slotData.ItemData?.Model == null) return; // Item doesn't have a model so we can't place it in world
+
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
+                if (Physics.Raycast(ray, out hit, 6))
+                {
+                    if (hit.point.y > 1) return; // Don't want anything being put too high up
+
+                    GameObject droppedObject = Instantiate(_slotData.ItemData.Model);
+                    droppedObject.name = _slotData.ItemData.Name;
+                    droppedObject.transform.position = hit.point;
+
+                    _slotData.ItemCount--;
+                    this.UpdateSlotUI();
+                }
+            }
         }
     }
     public void SetInventory(Inventory inventory)
