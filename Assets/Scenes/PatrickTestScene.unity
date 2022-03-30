@@ -4937,9 +4937,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc8580838bc431c469e96c2143e147dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  InputInventories: []
-  OutputInventories:
-  - {fileID: 815492408}
+  InputInventory: {fileID: 0}
 --- !u!4 &1188653728
 Transform:
   m_ObjectHideFlags: 0
@@ -11243,9 +11241,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc8580838bc431c469e96c2143e147dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  InputInventories: []
-  OutputInventories:
-  - {fileID: 1804411027}
+  InputInventory: {fileID: 0}
 --- !u!4 &5394923108121380848
 Transform:
   m_ObjectHideFlags: 0
