@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &5012359434702456333
+--- !u!1 &4087022672376684290
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,9 +8,9 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 5012359434702456332}
-  - component: {fileID: 5012359434702456335}
-  - component: {fileID: 5012359434702456334}
+  - component: {fileID: 4087022672376684291}
+  - component: {fileID: 4087022672376684288}
+  - component: {fileID: 4087022672376684289}
   m_Layer: 0
   m_Name: GridBuildingSystem
   m_TagString: Untagged
@@ -18,42 +18,54 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &5012359434702456332
+--- !u!4 &4087022672376684291
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5012359434702456333}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_GameObject: {fileID: 4087022672376684290}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5012359434702456335
+--- !u!114 &4087022672376684288
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5012359434702456333}
+  m_GameObject: {fileID: 4087022672376684290}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c21e5eb1431ef4149b51fb1c16c846c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  crusherButton: {fileID: 0}
+  crystalliserButton: {fileID: 0}
+  synthesiserButton: {fileID: 0}
+  replicatorButton: {fileID: 0}
+  diffuserButton: {fileID: 0}
+  clearButton: {fileID: 0}
+  crusherConfirm: {fileID: 0}
+  crystalliserConfirm: {fileID: 0}
+  synthesiserConfirm: {fileID: 0}
+  replicatorConfirm: {fileID: 0}
+  diffuserConfirm: {fileID: 0}
   _placedObjectTypeSOList:
+  - {fileID: 11400000, guid: 7ff9b5ef0ff421b459763aaf21ad21d7, type: 2}
   - {fileID: 11400000, guid: 221e4ec9ab6ffd648b7b191d2a24e433, type: 2}
   - {fileID: 11400000, guid: 28259772d020a68418d99d760962d040, type: 2}
---- !u!114 &5012359434702456334
+--- !u!114 &4087022672376684289
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5012359434702456333}
+  m_GameObject: {fileID: 4087022672376684290}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ace1f26baa862724489165483e7d7cd3, type: 3}

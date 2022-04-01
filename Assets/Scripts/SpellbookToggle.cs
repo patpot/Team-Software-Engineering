@@ -7,6 +7,9 @@ public class SpellbookToggle : MonoBehaviour
     private MeshRenderer _mRenderer;
     private Spellbook _spellbook;
 
+    // Denva added this because it was activating during buildmode
+    [SerializeField] private CameraSwitcher _cameraSwitcher;
+
     public static bool SpellbookActive;
     // Start is called before the first frame update
     void Start()
@@ -18,7 +21,7 @@ public class SpellbookToggle : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        if (Input.GetKeyDown(KeyCode.Alpha1) && !_cameraSwitcher.buildMode)
         {
             if (UIManager.UIActive) return;
 

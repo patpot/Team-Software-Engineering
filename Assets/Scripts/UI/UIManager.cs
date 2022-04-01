@@ -29,8 +29,8 @@ public class UIManager : MonoBehaviour
     }
     public void LockCamera()
     {
-        FPSController.CanLook = false;
-        FPSController.CanMove = false;
+         FPSController.CanLook = false;
+         FPSController.CanMove = false;
     }
     public void UnlockCamera()
     { 

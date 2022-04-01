@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d441693815e8154ba640a601a2cb6e5, type: 3}
+  m_Name: Synthesiser
+  m_EditorClassIdentifier: 
+  nameString: Synthesiser
+  prefab: {fileID: 5391642855269369392, guid: 418b2c0d89efca7479922bf972431d55, type: 3}
+  visual: {fileID: 5391642855269369392, guid: f2005f1c8d9eec0419dbecdca525befd, type: 3}
+  width: 1
+  height: 1

@@ -6,6 +6,9 @@ TagManager:
   tags:
   - ground
   - ghost
+  - raycastUpwards
+  - machine
+  - GridBuildingSystem
   layers:
   - Default
   - TransparentFX
@@ -19,7 +22,7 @@ TagManager:
   - 
   - Ground
   - Ghost
-  - 
+  - NotGround
   - 
   - 
   - 

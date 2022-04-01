@@ -11,6 +11,7 @@ public class BuildingGhost : MonoBehaviour {
         RefreshVisual();
 
         GridBuildingSystem.Instance.OnSelectedChanged += Instance_OnSelectedChanged;
+        
     }
 
     private void Instance_OnSelectedChanged(object sender, System.EventArgs e) {

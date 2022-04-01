@@ -5,12 +5,14 @@ using UnityEngine.UI;
 
 public class CameraSwitcher : MonoBehaviour
 {
+    public bool buildMode;
+
     [SerializeField] private GameObject _fpsCam;
     [SerializeField] private GameObject _topDownCam;
     [SerializeField] private GameObject _gridBuildingSystem;
     [SerializeField] private GameObject _BuildingGhost;
 
-    [SerializeField] private Canvas _fpsCanvas;
+    //[SerializeField] private Canvas _fpsCanvas;
     [SerializeField] private Canvas _topDownCanvas;
     
 
@@ -22,7 +24,7 @@ public class CameraSwitcher : MonoBehaviour
         _fpsController = GetComponent<FirstPersonController>();
 
         _fpsCam.SetActive(true);
-        _fpsCanvas.enabled = true;
+        //_fpsCanvas.enabled = true;
         _fpsController.enabled = true;
 
         _gridBuildingSystem.SetActive(false);
@@ -33,7 +35,9 @@ public class CameraSwitcher : MonoBehaviour
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-    }
+
+        buildMode = false;
+}
 
     // Update is called once per frame
     void Update()
@@ -41,7 +45,7 @@ public class CameraSwitcher : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.B) && _fpsCam.activeInHierarchy)
         {
             _fpsCam.SetActive(false);
-            _fpsCanvas.enabled = false;
+            //_fpsCanvas.enabled = false;
             _fpsController.enabled = false;
 
             _gridBuildingSystem.SetActive(true);
@@ -53,11 +57,12 @@ public class CameraSwitcher : MonoBehaviour
             Cursor.lockState = CursorLockMode.Confined;
             Cursor.visible = true;
 
+            buildMode = true;
         }
         else if (Input.GetKeyUp(KeyCode.B) && _topDownCam.activeInHierarchy)
         {
             _fpsCam.SetActive(true);
-            _fpsCanvas.enabled = true;
+            //_fpsCanvas.enabled = true;
             _fpsController.enabled = true;
 
             _gridBuildingSystem.SetActive(false);
@@ -68,6 +73,8 @@ public class CameraSwitcher : MonoBehaviour
 
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
+
+            buildMode = false;
         }
     }
 }
