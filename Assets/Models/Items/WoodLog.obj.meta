@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: a68c3abdf7d9a3642be13180b3f9aba0
+guid: 99e8dce800bb30441a0ec0b7dd698b5f
 ModelImporter:
   serializedVersion: 20200
   internalIDToNameTable: []
@@ -7,7 +7,7 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: LogTexture
+      name: LogTexture.002
     second: {fileID: 2100000, guid: 7aec7f03cddc6d940a8b32ff30ac7e8d, type: 2}
   materials:
     materialImportMode: 2

@@ -7,6 +7,7 @@ public class MagicFade : MonoBehaviour
 {
     public Material GlowingFade;
     public string ItemName;
+    public float ItemCount;
     private float _fadeAmount = 1f;
 
     void Start()
@@ -24,7 +25,7 @@ public class MagicFade : MonoBehaviour
         if (_fadeAmount < 0f)
         {
             GlowingFade.SetFloat("_Alpha", 1f);
-            PlayerInventory.Instance.TryDepositItem(ItemManager.GetItemData(ItemName), 1f);
+            PlayerInventory.Instance.TryDepositItem(ItemManager.GetItemData(ItemName), ItemCount);
             Destroy(gameObject);
         }
     }

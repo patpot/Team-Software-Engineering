@@ -7,6 +7,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using Assets.Scripts.Items;
+using Unity.Mathematics;
 
 public class InventorySlot : MonoBehaviour, IPointerUpHandler, IPointerDownHandler
 {
@@ -134,9 +136,17 @@ public class InventorySlot : MonoBehaviour, IPointerUpHandler, IPointerDownHandl
 
                     GameObject droppedObject = Instantiate(_slotData.ItemData.Model);
                     droppedObject.name = _slotData.ItemData.Name;
-                    droppedObject.transform.position = hit.point;
+                    float yHeight = hit.point.y - hit.transform.position.y; // GroundPosition - mid point of object gets us half height, all objects pivot on 0,0,0 so we add this on
+                    droppedObject.transform.position = hit.point + new Vector3(0f, yHeight);
 
-                    _slotData.ItemCount--;
+                    // Drop the item in the world
+                    var itemStack = droppedObject.AddComponent<ItemStack>();
+                    itemStack.ItemData = _slotData.ItemData;
+                    itemStack.ItemCount = _slotData.ItemCount;
+
+                    // Clear the slot data as we've just dropped it
+                    _slotData.ItemData = null;
+                    _slotData.ItemCount = 0f;
                     this.UpdateSlotUI();
                 }
             }

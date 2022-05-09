@@ -28,6 +28,8 @@ public class SpellbookToggle : MonoBehaviour
             _mRenderer.enabled = !_mRenderer.enabled;
             _spellbook.enabled = !_spellbook.enabled;
             SpellbookActive = _spellbook.enabled;
+            if (SpellbookActive)
+                _spellbook.Fader.StartFade();
         }
     }
 }

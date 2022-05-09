@@ -1,10 +1,7 @@
 using Assets.Scripts;
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using DG.Tweening;
-using System;
 
 public class BasicMachine : MonoBehaviour
 {
@@ -18,20 +15,33 @@ public class BasicMachine : MonoBehaviour
     private float _productionTimer;
     private bool _isProducing;
 
-    public Inventory InputInventory;
-    public HashSet<Inventory> OutputInventories = new HashSet<Inventory>();
+    public Inventory InternalInputInventory;
+    public Inventory InternalOutputInventory;
+
+    public List<MachineConnection> MachineConnections = new List<MachineConnection>();
+    private int _connectionIndex;
 
     // This NEEDS to be kept at Start as all derived classes use Awake to assign their inputs and we need to execute those first
     private void Start()
     {
-        // Instead of making in-world input chests we store them in the machine, we create an inventory, lock all the slots to an item type and allow a max of 20 to be stored at a time
-        InputInventory = gameObject.AddComponent<Inventory>();
-        InputInventory.SlotCount = Inputs.Count;
-        InputInventory.SlotSize = 20;
-        InputInventory.ForceLoadSlots();
-        InputInventory.LockSlots();
+        // Instead of making in-world input chests we store them in the machine, we create an internal inventory, lock all the slots to an item type and allow a max of 20 to be stored at a time
+        InternalInputInventory = gameObject.AddComponent<Inventory>();
+        InternalInputInventory.SlotCount = Inputs.Count;
+        InternalInputInventory.SlotSize = 20;
+        InternalInputInventory.ForceLoadSlots();
+        InternalInputInventory.LockSlots();
+        // Now that we've locked our slots we need to assign it item data by faking a deposit
         foreach (var item in Inputs)
-            InputInventory.TryDepositItem(item.Key, 0f, true);
+            InternalInputInventory.TryDepositItem(item.Key, 0f, true);
+
+        InternalOutputInventory = gameObject.AddComponent<Inventory>();
+        InternalOutputInventory.SlotCount = Outputs.Count;
+        InternalOutputInventory.SlotSize = 20;
+        InternalOutputInventory.ForceLoadSlots();
+        InternalOutputInventory.LockSlots();
+        // Now that we've locked our slots we need to assign it item data by faking a deposit
+        foreach (var item in Outputs)
+            InternalOutputInventory.TryDepositItem(item.Key, 0f, true);
 
         List<Sprite> inputIcons = new List<Sprite>();
         foreach (var input in Inputs)
@@ -41,23 +51,13 @@ public class BasicMachine : MonoBehaviour
             outputIcons.Add(output.Key.Icon);
 
         foreach (var mesh in GetComponentsInChildren<MeshRenderer>())
-            mesh.gameObject.AddComponent<MachinePreviewUI>().SetValues(MachineName, TimeToProduce, inputIcons, outputIcons, InputInventory);
+            mesh.gameObject.AddComponent<MachinePreviewUI>().SetValues(MachineName, TimeToProduce, inputIcons, outputIcons, InternalInputInventory, InternalOutputInventory);
     }
-
-    //public void InputItem(ItemData item, float quantity)
-    //{
-    //    // We assume this function is only called with valid values, if an error is thrown here something was setup wrong outside of this function.
-    //    _currentInputs[item] += quantity;
-    //    foreach (var inventory in InputInventories)
-    //    {
-    //        inventory.TryDepositItem(item, quantity);
-    //    }
-    //}
 
     public bool CheckForProduction()
     {
         // Check if our internal input inventory contains our required inputs
-        (Dictionary<InventorySlotData, float> slotsToChange, int leftoverQuantity) matchingInvData = InputInventory.ContainsItems(Inputs);
+        (Dictionary<InventorySlotData, float> slotsToChange, int leftoverQuantity) matchingInvData = InternalInputInventory.ContainsItems(Inputs);
         if (matchingInvData.leftoverQuantity == 0) // We can change all these slots with no leftovers, so let's do that
             foreach (var slot in matchingInvData.slotsToChange)
                 slot.Key.ItemCount -= slot.Value;
@@ -74,17 +74,7 @@ public class BasicMachine : MonoBehaviour
             if (_productionTimer > TimeToProduce)
             {
                 // It's been enough time to produce an item, actually produce it and try deposit it to a target inventory
-                foreach (var item in Outputs)
-                {
-                    ItemData itemData = item.Key;
-                    float itemCount = item.Value;
-                    foreach (var inventory in OutputInventories)
-                    {
-                        itemCount = inventory.TryDepositItem(itemData, itemCount);
-                        if (itemCount == 0f)
-                            break;
-                    }
-                }
+                OutputItems();
                 // Reset our values
                 _productionTimer = 0f;
                 _isProducing = false;
@@ -93,6 +83,36 @@ public class BasicMachine : MonoBehaviour
         else
         {
             _isProducing = CheckForProduction();
+        }
+    }
+
+    public void RemoveConnection(MachineConnection connection)
+    {
+        MachineConnections.Remove(connection);
+        _connectionIndex = MachineConnections.Count == 0 ? 0 : _connectionIndex %= MachineConnections.Count;
+    }
+
+    public void OutputItems()
+    {
+        foreach (var item in Outputs)
+        {
+            ItemData itemData = item.Key;
+            float itemCount = item.Value;
+            // No registered connections, use our local inventory
+            if (MachineConnections.Count == 0)
+            {
+                InternalOutputInventory.TryDepositItem(itemData, itemCount);
+                continue;
+            }
+
+            MachineConnections[_connectionIndex].SendItemStack(itemData, itemCount);
+        }
+
+        // Round robin through our connections
+        if (MachineConnections.Count > 0)
+        {
+            _connectionIndex++;
+            _connectionIndex %= MachineConnections.Count;
         }
     }
 }

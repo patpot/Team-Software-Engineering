@@ -23,19 +23,21 @@ public class MachinePreviewUI : MonoBehaviour
     public string MachineName;
 
     public Inventory InputInventory;
+    public Inventory OutputInventory;
 
     private void Awake()
     {
         _cameraSwitcher = GameObject.FindGameObjectWithTag("Player").GetComponent<CameraSwitcher>();
     }
 
-    public void SetValues(string machineName, float timeToProduce, List<Sprite> inputIcons, List<Sprite> outputIcons, Inventory inputInventory)
+    public void SetValues(string machineName, float timeToProduce, List<Sprite> inputIcons, List<Sprite> outputIcons, Inventory inputInventory, Inventory outputInventory)
     {
         InputIcons = inputIcons;
         OutputIcons = outputIcons;
         TimeToProduce = timeToProduce;
         MachineName = machineName;
         InputInventory = inputInventory;
+        OutputInventory = outputInventory;
 
         if (this.GetComponent<MeshCollider>() == null)
             gameObject.AddComponent<MeshCollider>();
@@ -45,6 +47,7 @@ public class MachinePreviewUI : MonoBehaviour
     {
         if (SpellbookToggle.SpellbookActive) return;
         if (UIManager.UIActive) return;
+        if (Vector3.Distance(transform.position, Camera.main.transform.position) > 5f) return;
 
         if (_previewUi == null && !_cameraSwitcher.buildMode)
         {
@@ -112,16 +115,22 @@ public class MachinePreviewUI : MonoBehaviour
             }
 
             // Set output inventory icons
-            //var outputInventoryParent = _previewUi.GetComponentsInChildren<GridLayoutGroup>()[3].transform;
-            //for (int i = 0; i < outputInventoryParent.childCount; i++)
-            //{
-            //    GameObject outputSlot = inputInventoryParent.transform.GetChild(i).gameObject;
-            //    var invSlot = outputSlot.GetComponent<InventorySlot>();
-            //    // Store our slot data and update our UI
-            //    invSlot.SetInventory(InputInventory);
-            //    invSlot.SetSlotData(InputInventory.InventorySlotData[i]);
-            //    invSlot.UpdateSlotUI();
-            //}
+            var outputInventoryParent = _previewUi.GetComponentsInChildren<GridLayoutGroup>()[3].transform;
+            for (int i = 0; i < outputInventoryParent.childCount; i++)
+            {
+                GameObject outputSlot = outputInventoryParent.transform.GetChild(i).gameObject;
+                if (i > OutputInventory.SlotCount - 1)
+                {
+                    outputSlot.SetActive(false);
+                    continue;
+                }
+                outputSlot.SetActive(true);
+                var invSlot = outputSlot.GetComponent<InventorySlot>();
+                // Store our slot data and update our UI
+                invSlot.SetInventory(OutputInventory);
+                invSlot.SetSlotData(OutputInventory.InventorySlotData[i]);
+                invSlot.UpdateSlotUI();
+            }
 
             // Set position to be the mouse position and tween up a bit
             _previewUi.transform.position = Input.mousePosition;
