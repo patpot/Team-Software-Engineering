@@ -3790,6 +3790,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GlowingFade: {fileID: 2100000, guid: 1eaec69bfdde2e34bb3e163653951420, type: 2}
+  ItemName: 
+  ItemCount: 0
 --- !u!1 &1013050709
 GameObject:
   m_ObjectHideFlags: 0
@@ -4937,7 +4939,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc8580838bc431c469e96c2143e147dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  InputInventory: {fileID: 0}
+  InternalInputInventory: {fileID: 0}
+  InternalOutputInventory: {fileID: 0}
+  MachineConnections: []
 --- !u!4 &1188653728
 Transform:
   m_ObjectHideFlags: 0
@@ -6291,8 +6295,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39407cd667cb39548aea29970c07d142, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 1.5
-  _height: 0.5
+  Speed: 2.5
+  Height: 0.1
 --- !u!1 &1409420806
 GameObject:
   m_ObjectHideFlags: 0
@@ -7605,6 +7609,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3c01a1af64c84a4ca7a32ad2c3b4595, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _cameraSwitcher: {fileID: 0}
   CraftingUI: {fileID: 1013050709}
   RecipeHolder: {fileID: 705796829}
   SideMenu: {fileID: 1680548157}
@@ -11113,8 +11118,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39407cd667cb39548aea29970c07d142, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 1.5
-  _height: 0.5
+  Speed: 2.5
+  Height: 0.1
 --- !u!4 &1151388027830975819
 Transform:
   m_ObjectHideFlags: 0
@@ -11241,7 +11246,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc8580838bc431c469e96c2143e147dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  InputInventory: {fileID: 0}
+  InternalInputInventory: {fileID: 0}
+  InternalOutputInventory: {fileID: 0}
+  MachineConnections: []
 --- !u!4 &5394923108121380848
 Transform:
   m_ObjectHideFlags: 0
