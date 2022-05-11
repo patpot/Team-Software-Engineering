@@ -7,6 +7,8 @@ public class CameraSwitcher : MonoBehaviour
 {
     public bool buildMode;
 
+    public MachinesInInventory MachinesInv;
+
     [SerializeField] private GameObject _fpsCam;
     [SerializeField] private GameObject _topDownCam;
     [SerializeField] private GameObject _gridBuildingSystem;
@@ -56,6 +58,8 @@ public class CameraSwitcher : MonoBehaviour
 
             Cursor.lockState = CursorLockMode.Confined;
             Cursor.visible = true;
+
+            MachinesInv.UpdateUI();
 
             buildMode = true;
         }

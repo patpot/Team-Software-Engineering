@@ -20,7 +20,17 @@ public class PlayerInventory : Inventory
         foreach (var invSlot in UIManager.Instance.FakePlayerInventory.GetComponentsInChildren<InventorySlot>())
             invSlot.SetInventory(this);
     }
-
+    public void Start()/// GET RID OF
+    {
+        // TODO: Load inventory from some kind of save system
+        for (int i = 0; i < SlotCount; i++)
+            InventorySlotData.Add(new InventorySlotData());
+        TryDepositItem(ItemManager.GetItemData("Crusher"), 1f);/// GET RID OF
+        TryDepositItem(ItemManager.GetItemData("Crystalliser"), 1f);
+        TryDepositItem(ItemManager.GetItemData("Earthen Mana Synthesiser"), 1f);
+        TryDepositItem(ItemManager.GetItemData("Replicator"), 1f);
+        TryDepositItem(ItemManager.GetItemData("Diffuser"), 1f);
+    }
     public void Update()
     {
         if (Input.GetKeyDown(KeyCode.E))

@@ -207,6 +207,7 @@ GameObject:
   - component: {fileID: 8149594293654127407}
   - component: {fileID: 8149594293654127406}
   - component: {fileID: -9056588989877845238}
+  - component: {fileID: 120108476506423677}
   m_Layer: 0
   m_Name: Crusher
   m_TagString: Untagged
@@ -262,7 +263,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06b3641c3363e664f93514f0ff1ae4f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  InputInventory: {fileID: 0}
+  InternalInputInventory: {fileID: 0}
+  InternalOutputInventory: {fileID: 0}
+  MachineConnections: []
 --- !u!114 &-9056588989877845238
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -275,6 +278,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ded94dbdff7aa1240ae1673649b5d77d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!65 &120108476506423677
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9068073739450975551}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 4, y: 6, z: 4}
+  m_Center: {x: 2.5, y: 2.5, z: 2.5}
 --- !u!1001 &4394694485227440927
 PrefabInstance:
   m_ObjectHideFlags: 0

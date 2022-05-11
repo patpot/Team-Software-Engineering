@@ -8,19 +8,21 @@ using CodeMonkey.Utils;
 
 public class GridBuildingSystem : MonoBehaviour
 {
-    [SerializeField] private RaycastUpwards raycastUpwards;
+    public static GridBuildingSystem Instance { get; private set; }
 
-    public Button crusherButton, crystalliserButton, synthesiserButton, replicatorButton, diffuserButton, clearButton;
-    public GameObject crusherConfirm, crystalliserConfirm, synthesiserConfirm, replicatorConfirm, diffuserConfirm;
+    public Button CrusherButton, CrystalliserButton, SynthesiserButton, ReplicatorButton, DiffuserButton, ClearButton;
+    public GameObject CrusherConfirm, CrystalliserConfirm, SynthesiserConfirm, ReplicatorConfirm, DiffuserConfirm;
 
+    public MachinesInInventory MachinesInv;
 
-public static GridBuildingSystem Instance { get; private set; }
 
     public event EventHandler OnSelectedChanged;
     //public event EventHandler OnObjectPlaced;
 
 
     [SerializeField] private List<PlacedObjectTypeSO> _placedObjectTypeSOList;
+    [SerializeField] private List<float> _placedObjectsOffsets;
+    [SerializeField] private Dictionary<string,float> _objectsToOffsets;
     private PlacedObjectTypeSO _placedObjectTypeSO;
 
     private GridSystem<GridObject> _grid;
@@ -29,26 +31,27 @@ public static GridBuildingSystem Instance { get; private set; }
     private void Awake()
     {
         Instance = this;
+        _objectsToOffsets = new Dictionary<string, float>();
+        for (int i = 0; i < _placedObjectTypeSOList.Count; i++)
+            _objectsToOffsets[_placedObjectTypeSOList[i].name] = _placedObjectsOffsets[i];
 
         int gridWidth = 17;
         int gridHeight = 25;
         float cellSize = 5f;
         _grid = new GridSystem<GridObject>(gridWidth, gridHeight, cellSize, new Vector3(-40,0,-70), (GridSystem<GridObject> g, int x, int z) => new GridObject(g, x, z));
 
-        crusherConfirm.SetActive(false);
-        crystalliserConfirm.SetActive(false);
-        synthesiserConfirm.SetActive(false);
-        replicatorConfirm.SetActive(false);
-        diffuserConfirm.SetActive(false);
+        CrusherConfirm.SetActive(false);
+        CrystalliserConfirm.SetActive(false);
+        SynthesiserConfirm.SetActive(false);
+        ReplicatorConfirm.SetActive(false);
+        DiffuserConfirm.SetActive(false);
 
-        crusherButton.onClick.AddListener(selectCrusher);
-        crystalliserButton.onClick.AddListener(selectCrystalliser);
-        synthesiserButton.onClick.AddListener(selectSynthesiser);
-        replicatorButton.onClick.AddListener(selectReplicator);
-        diffuserButton.onClick.AddListener(selectDiffuser);
-        clearButton.onClick.AddListener(selectClear);
-
-
+        CrusherButton.onClick.AddListener(selectCrusher);
+        CrystalliserButton.onClick.AddListener(selectCrystalliser);
+        SynthesiserButton.onClick.AddListener(selectSynthesiser);
+        ReplicatorButton.onClick.AddListener(selectReplicator);
+        DiffuserButton.onClick.AddListener(selectDiffuser);
+        ClearButton.onClick.AddListener(selectClear);
     }
 
     public class GridObject
@@ -96,11 +99,6 @@ public static GridBuildingSystem Instance { get; private set; }
 
     private void Update()
     {
-        if (raycastUpwards.SomethingInWay())
-        {
-            Debug.Log("Something should definetely not be in the way");
-            //canBuild = false;
-        }
 
         if (Input.GetMouseButtonDown(0) && _placedObjectTypeSO != null && !EventSystem.current.IsPointerOverGameObject())
         {
@@ -133,6 +131,11 @@ public static GridBuildingSystem Instance { get; private set; }
                 }
             }
 
+            if (BuildingCollisionCheck.CannotBuild)
+            {
+                canBuild = false;
+            }
+
             if (canBuild)
             {
                 Vector2Int rotationOffset = _placedObjectTypeSO.GetRotationOffset(_dir);
@@ -144,6 +147,9 @@ public static GridBuildingSystem Instance { get; private set; }
                 {
                     _grid.GetGridObject(gridPosition.x, gridPosition.y).SetPlacedObject(placedObject);
                 }
+                placedObject.transform.position = placedObject.transform.position + new Vector3(0f, _objectsToOffsets[_placedObjectTypeSO.name]);
+                PlayerInventory.Instance.TryRemoveFromInventory(_placedObjectTypeSO.name,1f);
+                MachinesInv.UpdateUI();
             }
             else
             {
@@ -189,69 +195,69 @@ public static GridBuildingSystem Instance { get; private set; }
         _placedObjectTypeSO = _placedObjectTypeSOList[0];
         RefreshSelectedObjectType();
 
-        crusherConfirm.SetActive(true);
-        crystalliserConfirm.SetActive(false);
-        synthesiserConfirm.SetActive(false);
-        replicatorConfirm.SetActive(false);
-        diffuserConfirm.SetActive(false);
+        CrusherConfirm.SetActive(true);
+        CrystalliserConfirm.SetActive(false);
+        SynthesiserConfirm.SetActive(false);
+        ReplicatorConfirm.SetActive(false);
+        DiffuserConfirm.SetActive(false);
     }
     private void selectCrystalliser()
     {
         _placedObjectTypeSO = _placedObjectTypeSOList[1];
         RefreshSelectedObjectType();
 
-        crusherConfirm.SetActive(false);
-        crystalliserConfirm.SetActive(true);
-        synthesiserConfirm.SetActive(false);
-        replicatorConfirm.SetActive(false);
-        diffuserConfirm.SetActive(false);
+        CrusherConfirm.SetActive(false);
+        CrystalliserConfirm.SetActive(true);
+        SynthesiserConfirm.SetActive(false);
+        ReplicatorConfirm.SetActive(false);
+        DiffuserConfirm.SetActive(false);
     }
     private void selectSynthesiser()
     {
         _placedObjectTypeSO = _placedObjectTypeSOList[2];
         RefreshSelectedObjectType();
 
-        crusherConfirm.SetActive(false);
-        crystalliserConfirm.SetActive(false);
-        synthesiserConfirm.SetActive(true);
-        replicatorConfirm.SetActive(false);
-        diffuserConfirm.SetActive(false);
+        CrusherConfirm.SetActive(false);
+        CrystalliserConfirm.SetActive(false);
+        SynthesiserConfirm.SetActive(true);
+        ReplicatorConfirm.SetActive(false);
+        DiffuserConfirm.SetActive(false);
     }
     private void selectReplicator()
     {
         _placedObjectTypeSO = _placedObjectTypeSOList[3];
         RefreshSelectedObjectType();
 
-        crusherConfirm.SetActive(false);
-        crystalliserConfirm.SetActive(false);
-        synthesiserConfirm.SetActive(false);
-        replicatorConfirm.SetActive(true);
-        diffuserConfirm.SetActive(false);
+        CrusherConfirm.SetActive(false);
+        CrystalliserConfirm.SetActive(false);
+        SynthesiserConfirm.SetActive(false);
+        ReplicatorConfirm.SetActive(true);
+        DiffuserConfirm.SetActive(false);
     }
     private void selectDiffuser()
     {
         _placedObjectTypeSO = _placedObjectTypeSOList[4];
         RefreshSelectedObjectType();
 
-        crusherConfirm.SetActive(false);
-        crystalliserConfirm.SetActive(false);
-        synthesiserConfirm.SetActive(false);
-        replicatorConfirm.SetActive(false);
-        diffuserConfirm.SetActive(true);
+        CrusherConfirm.SetActive(false);
+        CrystalliserConfirm.SetActive(false);
+        SynthesiserConfirm.SetActive(false);
+        ReplicatorConfirm.SetActive(false);
+        DiffuserConfirm.SetActive(true);
     }
 
     private void selectClear()
     {
         DeselectObjectType();
 
-        crusherConfirm.SetActive(false);
-        crystalliserConfirm.SetActive(false);
-        synthesiserConfirm.SetActive(false);
-        replicatorConfirm.SetActive(false);
-        diffuserConfirm.SetActive(false);
+        CrusherConfirm.SetActive(false);
+        CrystalliserConfirm.SetActive(false);
+        SynthesiserConfirm.SetActive(false);
+        ReplicatorConfirm.SetActive(false);
+        DiffuserConfirm.SetActive(false);
     }
 
-    private void DeselectObjectType()
+    public void DeselectObjectType()
     {
         _placedObjectTypeSO = null; RefreshSelectedObjectType();
     }

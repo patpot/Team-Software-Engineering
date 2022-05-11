@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9d441693815e8154ba640a601a2cb6e5, type: 3}
-  m_Name: Synthesiser
+  m_Name: Earthen Mana Synthesiser
   m_EditorClassIdentifier: 
-  nameString: Synthesiser
+  nameString: Earthen Mana Synthesiser
   prefab: {fileID: 5391642855269369392, guid: 418b2c0d89efca7479922bf972431d55, type: 3}
   visual: {fileID: 5391642855269369392, guid: f2005f1c8d9eec0419dbecdca525befd, type: 3}
   width: 1
