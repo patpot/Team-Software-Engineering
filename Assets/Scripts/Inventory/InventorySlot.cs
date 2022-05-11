@@ -142,11 +142,9 @@ public class InventorySlot : MonoBehaviour, IPointerUpHandler, IPointerDownHandl
                     // Drop the item in the world
                     var itemStack = droppedObject.AddComponent<ItemStack>();
                     itemStack.ItemData = _slotData.ItemData;
-                    itemStack.ItemCount = _slotData.ItemCount;
+                    itemStack.ItemCount = 1;
 
-                    // Clear the slot data as we've just dropped it
-                    _slotData.ItemData = null;
-                    _slotData.ItemCount = 0f;
+                    _slotData.ItemCount--;
                     this.UpdateSlotUI();
                 }
             }
