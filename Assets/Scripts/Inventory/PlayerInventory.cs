@@ -31,43 +31,7 @@ public class PlayerInventory : Inventory
     {
         // Get our inputs sorted by quantity and create a place to temporarily store which slots we're going to be changing
         Dictionary<ItemData, float> requiredInputs = CraftingManager.RecipesToQuantities(recipe);
-        //List<ItemData> inputsLeft = requiredInputs.Keys.ToList();
-        //Dictionary<InventorySlotData, float> slotsToChange = new Dictionary<InventorySlotData, float>();
-
         (Dictionary<InventorySlotData, float> slotsToChange, int leftoverQuantity) matchingInvData = ContainsItems(requiredInputs);
-        // Loop through every inventory slot and check if we have the matching items
-
-        //foreach (var input in requiredInputs)
-        //{
-        //    ItemData itemData = input.Key;
-        //    float requiredQuantity = input.Value;
-        //    foreach (var slot in InventorySlotData)
-        //    {
-        //        // The item in this slot matches the required one, check quantities
-        //        if (slot.ItemData == itemData)
-        //        {
-        //            // If there's enough items to satisfy the requirement straight up, just add this slot
-        //            if (slot.ItemCount >= requiredQuantity)
-        //            {
-        //                slotsToChange.Add(slot, requiredQuantity);
-        //                inputsLeft.Remove(itemData);
-        //                // We're done without needing to fully iterate, break out
-        //                if (inputsLeft.Count == 0)
-        //                    break;
-        //            }
-        //            else
-        //            {
-        //                // Wasn't enough to complete the recipe, deduct whatever we took out and move on
-        //                slotsToChange.Add(slot, slot.ItemCount);
-        //                requiredQuantity -= slot.ItemCount;
-        //            }
-        //        }
-        //    }
-        //    // We're done without needing to fully iterate, break out
-        //    if (inputsLeft.Count == 0)
-        //        break;
-        //}
-
 
         bool hasInputs = matchingInvData.leftoverQuantity == 0;
         if (hasInputs)

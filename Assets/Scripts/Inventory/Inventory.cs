@@ -113,6 +113,52 @@ public class Inventory : MonoBehaviour
         return itemCount;
     }
 
+    public void TryRemoveFromInventory(string itemName, float itemCount)
+        => TryRemoveFromInventory(ItemManager.GetItemData(itemName), itemCount);
+    public void TryRemoveFromInventory(ItemData item, float itemCount)
+    {
+        (Dictionary<InventorySlotData, float> slotsToChange, int leftoverQuantity) matchingInvData = ContainsItems(item, itemCount);
+
+        bool hasInputs = matchingInvData.leftoverQuantity == 0;
+        if (hasInputs)
+        {
+            // We definitely have the inputs, now make sure we have enough inventory space
+            bool spareSlot = false;
+            foreach (var slot in InventorySlotData)
+            {
+                if (slot.ItemCount == 0)
+                {
+                    spareSlot = true;
+                    break;
+                }
+            }
+
+            if (!spareSlot)
+            {
+                // We didn't have a spare slot initially, quickly simulate all of the slots that are going to change and check if any of them will be empty
+                foreach (var slot in matchingInvData.slotsToChange)
+                {
+                    if (slot.Key.ItemCount - slot.Value <= 0)
+                    {
+                        spareSlot = true;
+                        break;
+                    }
+                }
+            }
+
+            // Unfortunately we don't have enough inventory space, tell the player this and cancel
+            if (!spareSlot)
+                return;
+
+            // The craft succeeded! We now need to go through all the marked slots and subtract the amount we said we needed to in order to reach this condition.
+            foreach (var slot in matchingInvData.slotsToChange)
+                slot.Key.ItemCount -= slot.Value;
+        }
+        else
+        {
+            return;
+        }
+    }
     public void SwapInventorySlotData(InventorySlotData data1, InventorySlotData data2)
     {
         // Swap position in list of two slot datas
@@ -125,6 +171,8 @@ public class Inventory : MonoBehaviour
     }
 
     // Returns a dictionary mapping slots to how much needs to be removed from them and and int equal to how much leftover quantity there will be
+    public (Dictionary<InventorySlotData, float>, int) ContainsItems(ItemData data, float itemCount)
+        => ContainsItems(new Dictionary<ItemData, float> { { data, itemCount } });
     public (Dictionary<InventorySlotData, float>, int) ContainsItems(Dictionary<ItemData, float> requiredInputs)
     {
         List<ItemData> inputsLeft = requiredInputs.Keys.ToList();
