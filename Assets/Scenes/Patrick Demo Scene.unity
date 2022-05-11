@@ -14189,8 +14189,8 @@ MonoBehaviour:
   _rotationAmount: 0.2
   _zoomAmount: {x: 0, y: -0.25, z: 0.25}
   _mouseZoomAmount: {x: 0, y: -10, z: 10}
-  _minZoom: 0
-  _maxZoom: 20
+  _minZoom: -10
+  _maxZoom: 40
   _newPosition: {x: 0, y: 0, z: 0}
   _newRotation: {x: 0, y: 0, z: 0, w: 0}
   _newZoom: {x: 0, y: 0, z: 0}
@@ -34570,7 +34570,7 @@ MonoBehaviour:
   - 0.4
   - 0.7
   - 0.67
-  - 0.08
+  - 0.75
 --- !u!114 &7441987919854862495
 MonoBehaviour:
   m_ObjectHideFlags: 0

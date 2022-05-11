@@ -635,15 +635,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ff937953e4cfeb4c87a8a5b7d47780f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-<<<<<<< Updated upstream
-  _layers:
-    serializedVersion: 2
-    m_Bits: 4096
-=======
   layers:
     serializedVersion: 2
     m_Bits: 0
->>>>>>> Stashed changes
 --- !u!1001 &1124669778500725003
 PrefabInstance:
   m_ObjectHideFlags: 0
