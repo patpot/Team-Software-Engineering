@@ -498,8 +498,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8336772549790229779}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.1258645, z: 0}
-  m_LocalScale: {x: 1.9769613, y: 1.9769613, z: 1.9769613}
+  m_LocalPosition: {x: 0, y: 4.92, z: 0}
+  m_LocalScale: {x: 1.9769613, y: 5, z: 1.9769613}
   m_Children: []
   m_Father: {fileID: 5162689879002185634}
   m_RootOrder: 0
@@ -635,9 +635,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ff937953e4cfeb4c87a8a5b7d47780f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+<<<<<<< Updated upstream
   _layers:
     serializedVersion: 2
     m_Bits: 4096
+=======
+  layers:
+    serializedVersion: 2
+    m_Bits: 0
+>>>>>>> Stashed changes
 --- !u!1001 &1124669778500725003
 PrefabInstance:
   m_ObjectHideFlags: 0
