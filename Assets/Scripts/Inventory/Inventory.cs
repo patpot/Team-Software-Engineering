@@ -35,6 +35,8 @@ public class Inventory : MonoBehaviour
     /// </summary>
     /// <param name="item"> Data of the item to deposit</param>
     /// <param name="itemCount"> Amount of item being deposited</param>
+    public float TryDepositItem(string itemName, float itemCount, bool allowZeroValue = false)
+        => TryDepositItem(ItemManager.GetItemData(itemName), itemCount, allowZeroValue);
     public float TryDepositItem(ItemData item, float itemCount, bool allowZeroValue = false)
     {
         // Check first if there's any stacks we can add these items onto
@@ -118,46 +120,8 @@ public class Inventory : MonoBehaviour
     public void TryRemoveFromInventory(ItemData item, float itemCount)
     {
         (Dictionary<InventorySlotData, float> slotsToChange, int leftoverQuantity) matchingInvData = ContainsItems(item, itemCount);
-
-        bool hasInputs = matchingInvData.leftoverQuantity == 0;
-        if (hasInputs)
-        {
-            // We definitely have the inputs, now make sure we have enough inventory space
-            bool spareSlot = false;
-            foreach (var slot in InventorySlotData)
-            {
-                if (slot.ItemCount == 0)
-                {
-                    spareSlot = true;
-                    break;
-                }
-            }
-
-            if (!spareSlot)
-            {
-                // We didn't have a spare slot initially, quickly simulate all of the slots that are going to change and check if any of them will be empty
-                foreach (var slot in matchingInvData.slotsToChange)
-                {
-                    if (slot.Key.ItemCount - slot.Value <= 0)
-                    {
-                        spareSlot = true;
-                        break;
-                    }
-                }
-            }
-
-            // Unfortunately we don't have enough inventory space, tell the player this and cancel
-            if (!spareSlot)
-                return;
-
-            // The craft succeeded! We now need to go through all the marked slots and subtract the amount we said we needed to in order to reach this condition.
-            foreach (var slot in matchingInvData.slotsToChange)
-                slot.Key.ItemCount -= slot.Value;
-        }
-        else
-        {
-            return;
-        }
+        foreach (var slot in matchingInvData.slotsToChange)
+            slot.Key.ItemCount -= slot.Value;
     }
     public void SwapInventorySlotData(InventorySlotData data1, InventorySlotData data2)
     {
