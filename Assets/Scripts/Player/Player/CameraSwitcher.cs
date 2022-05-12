@@ -47,8 +47,6 @@ public class CameraSwitcher : MonoBehaviour
                 // Lock the cursor again
                 Cursor.lockState = CursorLockMode.Locked;
                 Cursor.visible = false;
-
-                BuildMode = false;
             }
             else
             {
