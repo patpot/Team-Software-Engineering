@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using DG.Tweening;
 
 public class UIScaler : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
@@ -7,7 +8,7 @@ public class UIScaler : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         if (!IsMouseOverUI())
         {
-            LeanTween.scale(gameObject, new Vector3(1f, 1f, 1f), 0.1f);
+            transform.DOScale(new Vector3(1f, 1f, 1f), 0.1f);
         }
     }
     private bool IsMouseOverUI()
@@ -17,11 +18,11 @@ public class UIScaler : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        LeanTween.scale(gameObject, new Vector3(1.5f, 1.5f, 1.5f), 0.1f);
+        transform.DOScale(new Vector3(1.5f, 1.5f, 1.5f), 0.1f);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        LeanTween.scale(gameObject, new Vector3(1f, 1f, 1f), 0.1f);
+        transform.DOScale(new Vector3(1f, 1f, 1f), 0.1f);
     }
 }
