@@ -16,14 +16,15 @@ public class PlacedObject : MonoBehaviour
 
         return placedObject;
     }
-
+    public string Name
+        => _placedObjectTypeSO.name;
     private PlacedObjectTypeSO _placedObjectTypeSO;
     private Vector2Int _origin;
     private PlacedObjectTypeSO.Dir _dir;
 
-    public List<Vector2Int> GetGridPositionList()
+    public Vector2Int GetGridPosition()
     {
-        return _placedObjectTypeSO.GetGridPositionList(_origin, _dir);
+        return _placedObjectTypeSO.GetGridPosition(_origin, _dir);
     }
 
     public void DestroySelf()

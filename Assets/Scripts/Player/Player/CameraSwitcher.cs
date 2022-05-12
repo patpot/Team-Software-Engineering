@@ -5,80 +5,74 @@ using UnityEngine.UI;
 
 public class CameraSwitcher : MonoBehaviour
 {
-    public bool buildMode;
-
+    public static bool BuildMode;
     public MachinesInInventory MachinesInv;
 
     [SerializeField] private GameObject _fpsCam;
     [SerializeField] private GameObject _topDownCam;
     [SerializeField] private GameObject _gridBuildingSystem;
-    [SerializeField] private GameObject _BuildingGhost;
-
-    //[SerializeField] private Canvas _fpsCanvas;
-    [SerializeField] private Canvas _topDownCanvas;
+    [SerializeField] private GameObject _buildingGhost;
+    [SerializeField] private GameObject _topDownCanvas;
+    [SerializeField] private FirstPersonController _fpsController;
     
-
-    private FirstPersonController _fpsController;
-
-    // Start is called before the first frame update
     void Start()
     {
-        _fpsController = GetComponent<FirstPersonController>();
-
-        _fpsCam.SetActive(true);
-        //_fpsCanvas.enabled = true;
-        _fpsController.enabled = true;
-
-        _gridBuildingSystem.SetActive(false);
-        _BuildingGhost.SetActive(false);
-
+        // Set our default values for the scene
         _topDownCam.SetActive(false);
-        _topDownCanvas.enabled = false;
 
+        // Lock the cursor as we are in first person mode
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+    }
 
-        buildMode = false;
-}
-
-    // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyUp(KeyCode.B) && _fpsCam.activeInHierarchy)
+        if (Input.GetKeyUp(KeyCode.B))
         {
-            _fpsCam.SetActive(false);
-            //_fpsCanvas.enabled = false;
-            _fpsController.enabled = false;
+            if (BuildMode)
+            {
+                // Switch to first person mode
+                // Re-enable our FPS camera
+                _fpsCam.SetActive(true);
+                _fpsController.enabled = true;
 
-            _gridBuildingSystem.SetActive(true);
-            _BuildingGhost.SetActive(true);
+                // Disable the grid building system
+                _gridBuildingSystem.SetActive(false);
+                _buildingGhost.SetActive(false);
 
-            _topDownCam.SetActive(true);
-            _topDownCanvas.enabled = true;
+                // Disable our top down camera and UI
+                _topDownCam.SetActive(false);
+                _topDownCanvas.SetActive(false);
 
-            Cursor.lockState = CursorLockMode.Confined;
-            Cursor.visible = true;
+                // Lock the cursor again
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
 
-            MachinesInv.UpdateUI();
+                BuildMode = false;
+            }
+            else
+            {
+                // Switch to build mode
+                // Disable our FPS camera
+                _fpsCam.SetActive(false);
+                _fpsController.enabled = false;
 
-            buildMode = true;
-        }
-        else if (Input.GetKeyUp(KeyCode.B) && _topDownCam.activeInHierarchy)
-        {
-            _fpsCam.SetActive(true);
-            //_fpsCanvas.enabled = true;
-            _fpsController.enabled = true;
+                // Enable our grid building system
+                _gridBuildingSystem.SetActive(true);
+                _buildingGhost.SetActive(true);
 
-            _gridBuildingSystem.SetActive(false);
-            _BuildingGhost.SetActive(false);
+                // Switch to our top town camera
+                _topDownCam.SetActive(true);
+                _topDownCanvas.SetActive(true);
 
-            _topDownCam.SetActive(false);
-            _topDownCanvas.enabled = false;
+                // Unlock the cursor as we are in build mode
+                Cursor.lockState = CursorLockMode.Confined;
+                Cursor.visible = true;
 
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-
-            buildMode = false;
+                // Refresh our UI for the "building inventory" which displays which machines are available to build
+                MachinesInv.UpdateUI();
+            }
+            BuildMode = !BuildMode;
         }
     }
 }

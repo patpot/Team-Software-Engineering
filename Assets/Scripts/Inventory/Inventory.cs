@@ -135,6 +135,8 @@ public class Inventory : MonoBehaviour
     }
 
     // Returns a dictionary mapping slots to how much needs to be removed from them and and int equal to how much leftover quantity there will be
+    public (Dictionary<InventorySlotData, float>, int) ContainsItems(string itemName, float itemCount)
+       => ContainsItems(new Dictionary<ItemData, float> { { ItemManager.GetItemData(itemName), itemCount } });
     public (Dictionary<InventorySlotData, float>, int) ContainsItems(ItemData data, float itemCount)
         => ContainsItems(new Dictionary<ItemData, float> { { data, itemCount } });
     public (Dictionary<InventorySlotData, float>, int) ContainsItems(Dictionary<ItemData, float> requiredInputs)

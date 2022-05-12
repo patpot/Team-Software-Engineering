@@ -9,23 +9,9 @@ public class MachinesInInventory : MonoBehaviour
     [SerializeField] private GameObject _synthesiserUI;
     [SerializeField] private GameObject _replicatorUI;
     [SerializeField] private GameObject _diffuserUI;
-
-    public GridBuildingSystem Grid;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        _crusherUI.SetActive(false);
-        _crystalliserUI.SetActive(false);
-        _synthesiserUI.SetActive(false);
-        _replicatorUI.SetActive(false);
-        _diffuserUI.SetActive(false);
-    }
-
-    // Update is called once per frame
+    
     public void UpdateUI()
     {
-        Grid.DeselectObjectType();
         _crusherUI.SetActive(false);
         _crystalliserUI.SetActive(false);
         _synthesiserUI.SetActive(false);

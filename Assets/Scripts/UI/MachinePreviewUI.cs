@@ -11,11 +11,6 @@ using Assets.Scripts;
 
 public class MachinePreviewUI : MonoBehaviour
 {
-    // Denva added this because it was activating during buildmode
-    private CameraSwitcher _cameraSwitcher;
-
-    private GameObject _previewUi;
-
     public List<Sprite> InputIcons;
     public List<Sprite> OutputIcons;
 
@@ -25,10 +20,7 @@ public class MachinePreviewUI : MonoBehaviour
     public Inventory InputInventory;
     public Inventory OutputInventory;
 
-    private void Awake()
-    {
-        _cameraSwitcher = GameObject.FindGameObjectWithTag("Player").GetComponent<CameraSwitcher>();
-    }
+    private GameObject _previewUi;
 
     public void SetValues(string machineName, float timeToProduce, List<Sprite> inputIcons, List<Sprite> outputIcons, Inventory inputInventory, Inventory outputInventory)
     {
@@ -49,7 +41,7 @@ public class MachinePreviewUI : MonoBehaviour
         if (UIManager.UIActive) return;
         if (Vector3.Distance(transform.position, Camera.main.transform.position) > 5f) return;
 
-        if (_previewUi == null && !_cameraSwitcher.buildMode)
+        if (_previewUi == null && !CameraSwitcher.BuildMode)
         {
             UIManager.UIActive = true;
             UIManager.Instance.LockCamera();

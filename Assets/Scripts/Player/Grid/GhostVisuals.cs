@@ -19,7 +19,7 @@ public class GhostVisuals : MonoBehaviour
         _rotation = Quaternion.identity;
         _matrix = Matrix4x4.TRS(_position, _rotation, _scale);
 
-        if (BuildingCollisionCheck.CannotBuild)
+        if (BuildingCollisionCheck.CanBuild)
         {
             Graphics.DrawMesh(_mesh, _matrix, _cannotBuildMaterial, 0, null, 0);
 
@@ -28,7 +28,7 @@ public class GhostVisuals : MonoBehaviour
                 Graphics.DrawMesh(_mesh, _matrix, _cannotBuildMaterial, 0, null, 1);
             }
         }
-        else if (!BuildingCollisionCheck.CannotBuild)
+        else if (!BuildingCollisionCheck.CanBuild)
         {
             Graphics.DrawMesh(_mesh, _matrix, _canBuildMaterial, 0, null, 0);
 

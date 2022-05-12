@@ -10,19 +10,15 @@ public class GridBuildingSystem : MonoBehaviour
 {
     public static GridBuildingSystem Instance { get; private set; }
 
-    public Button CrusherButton, CrystalliserButton, SynthesiserButton, ReplicatorButton, DiffuserButton, ClearButton;
-    public GameObject CrusherConfirm, CrystalliserConfirm, SynthesiserConfirm, ReplicatorConfirm, DiffuserConfirm;
+    public List<Button> BuildingButtons;
+    private List<GameObject> _buildingButtonConfirms = new List<GameObject>();
 
     public MachinesInInventory MachinesInv;
-
-
-    public event EventHandler OnSelectedChanged;
-    //public event EventHandler OnObjectPlaced;
-
+    public BuildingGhost BuildingGhost;
 
     [SerializeField] private List<PlacedObjectTypeSO> _placedObjectTypeSOList;
     [SerializeField] private List<float> _placedObjectsOffsets;
-    [SerializeField] private Dictionary<string,float> _objectsToOffsets;
+    [SerializeField] private Dictionary<string, float> _objectsToOffsets;
     private PlacedObjectTypeSO _placedObjectTypeSO;
 
     private GridSystem<GridObject> _grid;
@@ -38,20 +34,21 @@ public class GridBuildingSystem : MonoBehaviour
         int gridWidth = 17;
         int gridHeight = 25;
         float cellSize = 5f;
-        _grid = new GridSystem<GridObject>(gridWidth, gridHeight, cellSize, new Vector3(-40,0,-70), (GridSystem<GridObject> g, int x, int z) => new GridObject(g, x, z));
+        _grid = new GridSystem<GridObject>(gridWidth, gridHeight, cellSize, new Vector3(-40, 0, -70), (GridSystem<GridObject> g, int x, int z) => new GridObject(g, x, z));
 
-        CrusherConfirm.SetActive(false);
-        CrystalliserConfirm.SetActive(false);
-        SynthesiserConfirm.SetActive(false);
-        ReplicatorConfirm.SetActive(false);
-        DiffuserConfirm.SetActive(false);
+        for (int i = 0; i < BuildingButtons.Count; i++)
+        {
+            // Assign our on click event to select this machine
+            int index = i;
+            BuildingButtons[i].onClick.AddListener(delegate { _selectMachine(index); });
 
-        CrusherButton.onClick.AddListener(selectCrusher);
-        CrystalliserButton.onClick.AddListener(selectCrystalliser);
-        SynthesiserButton.onClick.AddListener(selectSynthesiser);
-        ReplicatorButton.onClick.AddListener(selectReplicator);
-        DiffuserButton.onClick.AddListener(selectDiffuser);
-        ClearButton.onClick.AddListener(selectClear);
+            // Store reference to our confirm object, then disable it by default
+            GameObject buildingButtonConfirm = BuildingButtons[i].transform.parent.Find("Confirm")?.gameObject;
+            if (buildingButtonConfirm == null) continue;
+
+            _buildingButtonConfirms.Add(buildingButtonConfirm);
+            buildingButtonConfirm.SetActive(false);
+        }
     }
 
     public class GridObject
@@ -76,9 +73,7 @@ public class GridBuildingSystem : MonoBehaviour
         }
 
         public PlacedObject GetPlacedObject()
-        {
-            return _placedObject;
-        }
+            => _placedObject;
 
         public void ClearPlacedObject()
         {
@@ -87,9 +82,7 @@ public class GridBuildingSystem : MonoBehaviour
         }
 
         public bool CanBuild()
-        {
-            return _placedObject == null;
-        }
+            => _placedObject == null;
 
         public override string ToString()
         {
@@ -99,56 +92,39 @@ public class GridBuildingSystem : MonoBehaviour
 
     private void Update()
     {
-
+        // Place an object
         if (Input.GetMouseButtonDown(0) && _placedObjectTypeSO != null && !EventSystem.current.IsPointerOverGameObject())
         {
+            // Get our mouse position in terms of grid position
             Vector3 mousePosition = Mouse3D.GetMouseWorldPosition();
-            _grid.GetXZ(Mouse3D.GetMouseWorldPosition(), out int x, out int z);
+            if (mousePosition == Vector3.zero) return; // If the cursor isn't in a valid position, don't place the object
+
+            _grid.GetXZ(mousePosition, out int x, out int z);
 
             Vector2Int placedObjectOrigin = new Vector2Int(x, z);
             placedObjectOrigin = _grid.ValidateGridPosition(placedObjectOrigin);
+            Vector2Int gridPosition = _placedObjectTypeSO.GetGridPosition(placedObjectOrigin, _dir);
 
-            List<Vector2Int> gridPositionList =  _placedObjectTypeSO.GetGridPositionList(placedObjectOrigin, _dir);
-            
-            bool canBuild = true;
-
-            
-
-            foreach (Vector2Int gridPosition in gridPositionList)
-            {
-                if (_grid.GetGridObject(gridPosition.x, gridPosition.y) != null)
-                {
-                    if (!_grid.GetGridObject(gridPosition.x, gridPosition.y).CanBuild())
-                    {
-                        canBuild = false;
-                        break;
-                    }
-                }
-                else
-                {
-                    canBuild = false;
-                    break;
-                }
-            }
-
-            if (BuildingCollisionCheck.CannotBuild)
-            {
-                canBuild = false;
-            }
+            // Get the grid object at the coordinates we want to build
+            GridObject gridObj = _grid.GetGridObject(gridPosition.x, gridPosition.y);
+            // We can build if the grid object allows it and our collision check allows it
+            bool canBuild = gridObj.CanBuild() && BuildingCollisionCheck.CanBuild;
 
             if (canBuild)
             {
+                // Convert grid position into world position
                 Vector2Int rotationOffset = _placedObjectTypeSO.GetRotationOffset(_dir);
                 Vector3 placedObjectWorldPosition = _grid.GetWorldPosition(placedObjectOrigin.x, placedObjectOrigin.y) + new Vector3(rotationOffset.x, 0, rotationOffset.y) * _grid.GetCellSize();
-
-                PlacedObject placedObject =  PlacedObject.Create(placedObjectWorldPosition, placedObjectOrigin, _dir, _placedObjectTypeSO);
-
-                foreach(Vector2Int gridPosition in gridPositionList)
-                {
-                    _grid.GetGridObject(gridPosition.x, gridPosition.y).SetPlacedObject(placedObject);
-                }
+                
+                // Create our placed object in game
+                PlacedObject placedObject = PlacedObject.Create(placedObjectWorldPosition, placedObjectOrigin, _dir, _placedObjectTypeSO);
+                _grid.GetGridObject(gridPosition.x, gridPosition.y).SetPlacedObject(placedObject);
                 placedObject.transform.position = placedObject.transform.position + new Vector3(0f, _objectsToOffsets[_placedObjectTypeSO.name]);
-                PlayerInventory.Instance.TryRemoveFromInventory(_placedObjectTypeSO.name,1f);
+
+                // Remove this machine from our inventory and update our toolbar UI
+                PlayerInventory.Instance.TryRemoveFromInventory(_placedObjectTypeSO.name, 1f);
+                if (PlayerInventory.Instance.ContainsItems(_placedObjectTypeSO.name, 1f).Item2 == 1f) // If we don't have any more of this machine deselect it
+                    DeselectObjectType();
                 MachinesInv.UpdateUI();
             }
             else
@@ -157,122 +133,59 @@ public class GridBuildingSystem : MonoBehaviour
             }
         }
 
+        // Delete a placed object
         if (Input.GetKeyDown(KeyCode.Return))
         {
+            // Get the object at our mouse position
             Vector3 mousePosition = Mouse3D.GetMouseWorldPosition();
-            if (_grid.GetGridObject(mousePosition) != null)
+            GridObject gridObject = _grid.GetGridObject(mousePosition);
+            if (gridObject  != null)
             {
-                GridObject gridObject = _grid.GetGridObject(Mouse3D.GetMouseWorldPosition());
                 PlacedObject placedObject = gridObject.GetPlacedObject();
                 if (placedObject != null)
                 {
-                    placedObject.DestroySelf();
+                    // Try add this machine back to our inventory
+                    PlayerInventory.Instance.TryDepositItem(placedObject.Name, 1f);
+                    MachinesInv.UpdateUI();
 
-                    List<Vector2Int> gridPositionList = placedObject.GetGridPositionList();
-                    foreach (Vector2Int gridPosition in gridPositionList)
-                    {
-                        _grid.GetGridObject(gridPosition.x, gridPosition.y).ClearPlacedObject();
-                    }
+                    // Destroy the object and clear it from our grid
+                    placedObject.DestroySelf();
+                    gridObject.ClearPlacedObject();
                 }
             }
-            
+
         }
 
-        if (Input.GetKeyDown(KeyCode.T))
-        {
+        // Rotate the machine
+        if (Input.GetKeyDown(KeyCode.R))
             _dir = PlacedObjectTypeSO.GetNextDir(_dir);
+    }
+
+    private void _selectMachine(int buttonIndex)
+    {
+        // Disable all confirm buttons
+        foreach (var btn in _buildingButtonConfirms)
+            btn.SetActive(false);
+
+        bool isClearButton = buttonIndex == BuildingButtons.Count - 1;
+        if (!isClearButton)
+        {
+            // If we're not clicking the clear button enable the confirm object and set this as our object to place
+            _buildingButtonConfirms[buttonIndex].SetActive(true);
+            _placedObjectTypeSO = _placedObjectTypeSOList[buttonIndex];
         }
 
-        /*if (Input.GetKeyDown(KeyCode.Alpha1)) { _placedObjectTypeSO = _placedObjectTypeSOList[0]; RefreshSelectedObjectType(); }
-        if (Input.GetKeyDown(KeyCode.Alpha2)) { _placedObjectTypeSO = _placedObjectTypeSOList[1]; RefreshSelectedObjectType(); }
-        if (Input.GetKeyDown(KeyCode.Alpha3)) { _placedObjectTypeSO = _placedObjectTypeSOList[2]; RefreshSelectedObjectType(); }
-
-        if (Input.GetKeyDown(KeyCode.Alpha0)) { DeselectObjectType(); }*/
-    }
-
-    private void selectCrusher()
-    {
-        _placedObjectTypeSO = _placedObjectTypeSOList[0];
         RefreshSelectedObjectType();
-
-        CrusherConfirm.SetActive(true);
-        CrystalliserConfirm.SetActive(false);
-        SynthesiserConfirm.SetActive(false);
-        ReplicatorConfirm.SetActive(false);
-        DiffuserConfirm.SetActive(false);
-    }
-    private void selectCrystalliser()
-    {
-        _placedObjectTypeSO = _placedObjectTypeSOList[1];
-        RefreshSelectedObjectType();
-
-        CrusherConfirm.SetActive(false);
-        CrystalliserConfirm.SetActive(true);
-        SynthesiserConfirm.SetActive(false);
-        ReplicatorConfirm.SetActive(false);
-        DiffuserConfirm.SetActive(false);
-    }
-    private void selectSynthesiser()
-    {
-        _placedObjectTypeSO = _placedObjectTypeSOList[2];
-        RefreshSelectedObjectType();
-
-        CrusherConfirm.SetActive(false);
-        CrystalliserConfirm.SetActive(false);
-        SynthesiserConfirm.SetActive(true);
-        ReplicatorConfirm.SetActive(false);
-        DiffuserConfirm.SetActive(false);
-    }
-    private void selectReplicator()
-    {
-        _placedObjectTypeSO = _placedObjectTypeSOList[3];
-        RefreshSelectedObjectType();
-
-        CrusherConfirm.SetActive(false);
-        CrystalliserConfirm.SetActive(false);
-        SynthesiserConfirm.SetActive(false);
-        ReplicatorConfirm.SetActive(true);
-        DiffuserConfirm.SetActive(false);
-    }
-    private void selectDiffuser()
-    {
-        _placedObjectTypeSO = _placedObjectTypeSOList[4];
-        RefreshSelectedObjectType();
-
-        CrusherConfirm.SetActive(false);
-        CrystalliserConfirm.SetActive(false);
-        SynthesiserConfirm.SetActive(false);
-        ReplicatorConfirm.SetActive(false);
-        DiffuserConfirm.SetActive(true);
-    }
-
-    private void selectClear()
-    {
-        DeselectObjectType();
-
-        CrusherConfirm.SetActive(false);
-        CrystalliserConfirm.SetActive(false);
-        SynthesiserConfirm.SetActive(false);
-        ReplicatorConfirm.SetActive(false);
-        DiffuserConfirm.SetActive(false);
     }
 
     public void DeselectObjectType()
     {
-        _placedObjectTypeSO = null; RefreshSelectedObjectType();
+        _placedObjectTypeSO = null;
+        RefreshSelectedObjectType();
     }
 
     public void RefreshSelectedObjectType()
-    {
-        OnSelectedChanged?.Invoke(this, EventArgs.Empty);
-    }
-
-
-    public Vector2Int GetGridPosition(Vector3 worldPosition)
-    {
-        _grid.GetXZ(worldPosition, out int x, out int z);
-        return new Vector2Int(x, z);
-    }
+        => BuildingGhost.RefreshVisual();
 
     public Vector3 GetMouseWorldSnappedPosition()
     {
@@ -292,19 +205,8 @@ public class GridBuildingSystem : MonoBehaviour
     }
 
     public Quaternion GetPlacedObjectRotation()
-    {
-        if (_placedObjectTypeSO != null)
-        {
-            return Quaternion.Euler(0, _placedObjectTypeSO.GetRotationAngle(_dir), 0);
-        }
-        else
-        {
-            return Quaternion.identity;
-        }
-    }
+        => _placedObjectTypeSO == null ? Quaternion.identity : Quaternion.Euler(0, _placedObjectTypeSO.GetRotationAngle(_dir), 0);
 
     public PlacedObjectTypeSO GetPlacedObjectTypeSO()
-    {
-        return _placedObjectTypeSO;
-    }
+        => _placedObjectTypeSO;
 }

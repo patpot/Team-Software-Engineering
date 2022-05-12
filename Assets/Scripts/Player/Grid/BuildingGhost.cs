@@ -2,52 +2,50 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BuildingGhost : MonoBehaviour {
+public class BuildingGhost : MonoBehaviour
+{
+    private Transform _visual;
+    private const int GHOST_LAYER = 11;
 
-    private Transform visual;
-    private PlacedObjectTypeSO placedObjectTypeSO;
-
-    private void Start() {
-        RefreshVisual();
-
-        GridBuildingSystem.Instance.OnSelectedChanged += Instance_OnSelectedChanged;
-        
-    }
-
-    private void Instance_OnSelectedChanged(object sender, System.EventArgs e) {
+    private void Start()
+    {
         RefreshVisual();
     }
-
-    private void LateUpdate() {
+    
+    private void LateUpdate()
+    {
+        // Get our mouse position and move the ghost to that position
         Vector3 targetPosition = GridBuildingSystem.Instance.GetMouseWorldSnappedPosition();
+        if (targetPosition == Vector3.zero) return; // If the cursor wasn't in a valid position, don't move the ghost
+
         targetPosition.y = 1f;
         transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * 15f);
-
         transform.rotation = Quaternion.Lerp(transform.rotation, GridBuildingSystem.Instance.GetPlacedObjectRotation(), Time.deltaTime * 15f);
     }
 
-    private void RefreshVisual() {
-        if (visual != null) {
-            Destroy(visual.gameObject);
-            visual = null;
-        }
+    public void RefreshVisual()
+    {
+        // If we had a preview visual before, destroy it
+        if (_visual)
+            Destroy(_visual.gameObject);
 
+        // FInd out which object we're going to be placing
         PlacedObjectTypeSO placedObjectTypeSO = GridBuildingSystem.Instance.GetPlacedObjectTypeSO();
-
-        if (placedObjectTypeSO != null) {
-            visual = Instantiate(placedObjectTypeSO.visual, Vector3.zero, Quaternion.identity);
-            visual.parent = transform;
-            visual.localPosition = Vector3.zero;
-            visual.localEulerAngles = Vector3.zero;
-            SetLayerRecursive(visual.gameObject, 11);
+        if (placedObjectTypeSO != null)
+        {
+            // Create a new preview version of this object
+            _visual = Instantiate(placedObjectTypeSO.visual, transform, false);
+            // Assign this object and all its children to the ghost layer
+            _setLayerRecursive(_visual.gameObject, GHOST_LAYER);
         }
     }
 
-    private void SetLayerRecursive(GameObject targetGameObject, int layer) {
+    private void _setLayerRecursive(GameObject targetGameObject, int layer)
+    {
+        // Recursively iterate through our children and set their layers
         targetGameObject.layer = layer;
-        foreach (Transform child in targetGameObject.transform) {
-            SetLayerRecursive(child.gameObject, layer);
-        }
+        foreach (Transform child in targetGameObject.transform)
+            _setLayerRecursive(child.gameObject, layer);
     }
 }
 

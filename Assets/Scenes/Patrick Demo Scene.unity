@@ -17726,13 +17726,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71a7e34c7ac041d45b961505013aa632, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buildMode: 0
+  BuildMode: 0
   MachinesInv: {fileID: 1322314498721325673}
   _fpsCam: {fileID: 994369553}
   _topDownCam: {fileID: 1019454229}
   _gridBuildingSystem: {fileID: 7441987919854862492}
-  _BuildingGhost: {fileID: 1421117354164768027}
-  _topDownCanvas: {fileID: 456713999642136618}
+  _buildingGhost: {fileID: 1421117354164768027}
+  _topDownCanvas: {fileID: 456713999642136621}
+  _fpsController: {fileID: 1354796634}
 --- !u!143 &1354796636
 CharacterController:
   m_ObjectHideFlags: 0
@@ -28209,6 +28210,7 @@ RectTransform:
   - {fileID: 720902772}
   - {fileID: 1967938169}
   - {fileID: 772134057}
+  - {fileID: 1943740582}
   m_Father: {fileID: 0}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -30421,6 +30423,41 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4810718612843848, guid: 6b08b22e01997b64287471d7f3b33935, type: 3}
   m_PrefabInstance: {fileID: 1942805009}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1943740581
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1943740582}
+  m_Layer: 5
+  m_Name: Dialogue
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1943740582
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1943740581}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1801963565}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!4 &1943788347 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 444698, guid: a1f656c69d2080948aa8bcd6456962b9, type: 3}
@@ -33782,12 +33819,12 @@ GameObject:
   - component: {fileID: 456713999642136619}
   - component: {fileID: 456713999642136620}
   m_Layer: 5
-  m_Name: Top Down Canvas (1)
+  m_Name: Top Down Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!23 &610361813610730455
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -33983,7 +34020,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1872039054878916433
 Transform:
   m_ObjectHideFlags: 0
@@ -34520,7 +34557,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7441987919854862493
 Transform:
   m_ObjectHideFlags: 0
@@ -34547,18 +34584,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c21e5eb1431ef4149b51fb1c16c846c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CrusherButton: {fileID: 8096443365272087862}
-  CrystalliserButton: {fileID: 8096443366814184115}
-  SynthesiserButton: {fileID: 8096443366716616028}
-  ReplicatorButton: {fileID: 8096443366331725092}
-  DiffuserButton: {fileID: 8096443365444288700}
-  ClearButton: {fileID: 8096443366814978350}
-  CrusherConfirm: {fileID: 8096443365850737078}
-  CrystalliserConfirm: {fileID: 8096443366009276813}
-  SynthesiserConfirm: {fileID: 8096443367102774501}
-  ReplicatorConfirm: {fileID: 8096443365410815120}
-  DiffuserConfirm: {fileID: 8096443366622287951}
+  BuildingButtons:
+  - {fileID: 8096443365272087862}
+  - {fileID: 8096443366814184115}
+  - {fileID: 8096443366716616028}
+  - {fileID: 8096443366331725092}
+  - {fileID: 8096443365444288700}
+  - {fileID: 8096443366814978350}
   MachinesInv: {fileID: 1322314498721325673}
+  BuildingGhost: {fileID: 1421117354164768025}
   _placedObjectTypeSOList:
   - {fileID: 11400000, guid: 7ff9b5ef0ff421b459763aaf21ad21d7, type: 2}
   - {fileID: 11400000, guid: 18ad504cfac1c634184bba41d0fc3a84, type: 2}
@@ -34718,7 +34752,7 @@ GameObject:
   - component: {fileID: 8096443365272087863}
   - component: {fileID: 8096443365272087862}
   m_Layer: 5
-  m_Name: Image
+  m_Name: CrusherButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -34792,12 +34826,12 @@ GameObject:
   - component: {fileID: 8096443365410815133}
   - component: {fileID: 8096443365410815134}
   m_Layer: 5
-  m_Name: Image (3)
+  m_Name: Confirm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!222 &8096443365410815133
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -34888,7 +34922,7 @@ GameObject:
   - component: {fileID: 8096443365444288701}
   - component: {fileID: 8096443365444288700}
   m_Layer: 5
-  m_Name: Image
+  m_Name: DiffuserButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -35269,12 +35303,12 @@ GameObject:
   - component: {fileID: 8096443365850737075}
   - component: {fileID: 8096443365850737076}
   m_Layer: 5
-  m_Name: Image
+  m_Name: Confirm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &8096443365865978912
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35395,7 +35429,7 @@ GameObject:
   - component: {fileID: 8096443365865978927}
   - component: {fileID: 8096443365865978912}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: Clear
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -35687,12 +35721,12 @@ GameObject:
   - component: {fileID: 8096443366009276810}
   - component: {fileID: 8096443366009276811}
   m_Layer: 5
-  m_Name: Image (1)
+  m_Name: Confirm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!222 &8096443366067275688
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -36107,7 +36141,7 @@ GameObject:
   - component: {fileID: 8096443366331725093}
   - component: {fileID: 8096443366331725092}
   m_Layer: 5
-  m_Name: Image
+  m_Name: ReplicatorButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -36316,12 +36350,12 @@ GameObject:
   - component: {fileID: 8096443366622287949}
   - component: {fileID: 8096443366622287950}
   m_Layer: 5
-  m_Name: Image (4)
+  m_Name: Confirm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &8096443366638018440
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36430,7 +36464,7 @@ GameObject:
   - component: {fileID: 8096443366716616029}
   - component: {fileID: 8096443366716616028}
   m_Layer: 5
-  m_Name: Image
+  m_Name: SynthesiserButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -36583,7 +36617,7 @@ GameObject:
   - component: {fileID: 8096443366814184116}
   - component: {fileID: 8096443366814184115}
   m_Layer: 5
-  m_Name: Image
+  m_Name: CrystalliserButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -36816,7 +36850,7 @@ GameObject:
   - component: {fileID: 8096443366814978349}
   - component: {fileID: 8096443366814978350}
   m_Layer: 5
-  m_Name: Image
+  m_Name: ClearButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -37137,12 +37171,12 @@ GameObject:
   - component: {fileID: 8096443367102774498}
   - component: {fileID: 8096443367102774499}
   m_Layer: 5
-  m_Name: Image (2)
+  m_Name: Confirm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8096443367186236816
 RectTransform:
   m_ObjectHideFlags: 0

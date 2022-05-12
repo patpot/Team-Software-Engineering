@@ -19,13 +19,14 @@ public class MagicFade : MonoBehaviour
 
     void Update()
     {
+        // Fade the material's alpha over time to make it disappear
         _fadeAmount -= Time.deltaTime;
         GlowingFade.SetFloat("_Alpha", _fadeAmount);
 
         if (_fadeAmount < 0f)
         {
             GlowingFade.SetFloat("_Alpha", 1f);
-            PlayerInventory.Instance.TryDepositItem(ItemManager.GetItemData(ItemName), ItemCount);
+            PlayerInventory.Instance.TryDepositItem(ItemName, ItemCount);
             Destroy(gameObject);
         }
     }

@@ -16,7 +16,13 @@ public class BasicChest : Inventory
     }
     public void OnMouseOver()
     {
-        if (Input.GetMouseButtonDown(0) && !UIManager.UIActive)
+        if (Input.GetMouseButtonDown(0))
+        {
+            if (SpellbookToggle.SpellbookActive) return;
+            if (UIManager.UIActive) return;
+            if (Vector3.Distance(transform.position, Camera.main.transform.position) > 5f) return;
+            
             ToggleInventory();
+        }
     }
 }

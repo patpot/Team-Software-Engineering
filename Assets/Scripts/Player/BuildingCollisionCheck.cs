@@ -5,11 +5,11 @@ using UnityEngine;
 public class BuildingCollisionCheck : MonoBehaviour
 {
     [SerializeField] private LayerMask _layers;
-    public static bool CannotBuild;
+    public static bool CanBuild;
 
     private void Awake()
     {
-        CannotBuild = false;
+        CanBuild = true;
     }
     public bool SomethingInWay()
     {
@@ -18,15 +18,6 @@ public class BuildingCollisionCheck : MonoBehaviour
 
     private void Update()
     {
-        if (SomethingInWay())
-        {
-            CannotBuild = true;
-            //Debug.Log(cannotBuild);
-        }
-        if (!SomethingInWay())
-        {
-            CannotBuild = false;
-            //Debug.Log(cannotBuild);
-        }
+        CanBuild = !SomethingInWay();
     }
 }

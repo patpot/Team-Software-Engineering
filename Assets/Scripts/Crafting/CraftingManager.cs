@@ -9,9 +9,6 @@ namespace Assets.Scripts
 {
     public class CraftingManager : MonoBehaviour
     {
-        // Denva added this because it was activating during buildmode
-        [SerializeField] private CameraSwitcher _cameraSwitcher;
-
         public GameObject CraftingUI;
         public Transform RecipeHolder;
         public GameObject SideMenu;
@@ -50,7 +47,7 @@ namespace Assets.Scripts
 
         public void Update()
         {
-            if (Input.GetKeyDown(KeyCode.C) && !_cameraSwitcher.buildMode)
+            if (Input.GetKeyDown(KeyCode.C) && !CameraSwitcher.BuildMode)
                 ToggleCraftingMenu();
         }
 
