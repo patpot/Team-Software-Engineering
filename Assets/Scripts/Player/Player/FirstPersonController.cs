@@ -159,8 +159,6 @@ public class FirstPersonController : MonoBehaviour
         defaultFOV = playerCamera.fieldOfView;
         currentHealth = maxHealth;
         currentStamina = maxStamina;
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
     }
 
     void Update()

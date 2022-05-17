@@ -14,6 +14,7 @@ public class Inventory : MonoBehaviour
     public int SlotCount;
     public List<InventorySlotData> InventorySlotData = new List<InventorySlotData>();
 
+    public bool Interactable = true;
     public const int MAX_COLUMNS = 10;
 
     public void Start()
@@ -130,11 +131,17 @@ public class Inventory : MonoBehaviour
         Inventory inv2 = data2.InventorySlot.GetInventory();
         int data1Index = inv1.InventorySlotData.IndexOf(data1);
         int data2Index = inv2.InventorySlotData.IndexOf(data2);
+        bool data1Locked = data1.Locked;
+        bool data2Locked = data2.Locked;
+        data1.Locked = data2Locked;
+        data2.Locked = data1Locked;
         inv1.InventorySlotData[data1Index] = data2;
         inv2.InventorySlotData[data2Index] = data1;
     }
 
     // Returns a dictionary mapping slots to how much needs to be removed from them and and int equal to how much leftover quantity there will be
+    public bool BoolContainsItems(string itemName, float itemCount)
+        => ContainsItems(ItemManager.GetItemData(itemName), itemCount).Item2 == 0;
     public (Dictionary<InventorySlotData, float>, int) ContainsItems(string itemName, float itemCount)
        => ContainsItems(new Dictionary<ItemData, float> { { ItemManager.GetItemData(itemName), itemCount } });
     public (Dictionary<InventorySlotData, float>, int) ContainsItems(ItemData data, float itemCount)
@@ -179,12 +186,24 @@ public class Inventory : MonoBehaviour
         return (slotsToChange, inputsLeft.Count);
     }
 
+    public float GetItemCount(string itemName)
+        => GetItemCount(ItemManager.GetItemData(itemName));
+    public float GetItemCount(ItemData data)
+    {
+        float count = 0;
+        foreach (var slot in InventorySlotData)
+            if (slot.ItemData == data)
+                count += slot.ItemCount;
+        return count;
+    }
+
     public void LockSlots()
         => InventorySlotData.ForEach(slot => slot.Locked = true);
 
     public void ToggleInventory()
     {
-        if (SpellbookToggle.SpellbookActive) return;
+        if (CameraSwitcher.BuildMode) return;
+        if (CraftingManager.Active) return;
         GameObject inventory = UIManager.Instance.InventoryUI;
         if (!inventory.activeSelf && UIManager.UIActive) return; // Don't draw any new UI if we have UI active
         inventory.SetActive(!inventory.activeSelf);
@@ -197,8 +216,8 @@ public class Inventory : MonoBehaviour
     private void _drawInventory()
     {
         UIManager.UIActive = true;
-        UIManager.Instance.LockCamera();
-        UIManager.Instance.UnlockCursor();
+        UIManager.LockCamera();
+        UIManager.UnlockCursor();
         GameObject inventory = UIManager.Instance.InventoryUI;
         // Change title text
         inventory.GetComponentInChildren<TextMeshProUGUI>().text = InventoryName + " Inventory";
@@ -230,7 +249,7 @@ public class Inventory : MonoBehaviour
         // Set correct height and width for our objects before we add any slots
         float inventoryBackgroundWidth = 100 + (columnCount * 105); // 100 is default size, we then add on 105 for each column
         float inventoryTopBarWidth = inventoryBackgroundWidth + 55 + (3f * columnCount);
-        float inventoryBackgroundHeight = 180 + ((rowCount-1) * 120) - (rowCount * 2); // 180 is default, 120 per 2 but -2 each extra row
+        float inventoryBackgroundHeight = 180 + ((rowCount - 1) * 120) - (rowCount * 2); // 180 is default, 120 per 2 but -2 each extra row
 
         float inventoryXAdjustment = (inventoryBackgroundWidth - 600) / 2f;
         inventory.transform.localPosition = new Vector3(-325f, 200f) - new Vector3(inventoryXAdjustment, 0);
@@ -276,8 +295,8 @@ public class Inventory : MonoBehaviour
     {
         UIManager.Instance.FakePlayerInventory.SetActive(false);
         UIManager.UIActive = false;
-        UIManager.Instance.UnlockCamera();
-        UIManager.Instance.LockCursor();
+        UIManager.UnlockCamera();
+        UIManager.LockCursor();
 
         GameObject inventory = UIManager.Instance.InventoryUI;
         GridLayoutGroup gl = inventory.GetComponentInChildren<GridLayoutGroup>();
@@ -289,5 +308,13 @@ public class Inventory : MonoBehaviour
 
         foreach (var slot in InventorySlotData)
             slot.InventorySlot = null;
+    }
+
+    public void OnMouseDown()
+    {
+        if (!Interactable) return;
+        if (Vector3.Distance(transform.position, Camera.main.transform.position) > 5f) return;
+
+        ToggleInventory();
     }
 }

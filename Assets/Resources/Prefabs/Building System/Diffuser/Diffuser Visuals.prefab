@@ -563,7 +563,6 @@ GameObject:
   m_Component:
   - component: {fileID: 9202244404327624860}
   - component: {fileID: 8664444073788393922}
-  - component: {fileID: 8664444073788393920}
   - component: {fileID: 7055107588446119373}
   m_Layer: 0
   m_Name: Diffuser Visuals
@@ -581,7 +580,7 @@ Transform:
   m_GameObject: {fileID: 8430492397103114790}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children:
   - {fileID: 5162689879002185634}
   - {fileID: 866434450553798967}
@@ -608,21 +607,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &8664444073788393920
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8430492397103114790}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50f91bc967d8f2f43b92489ff26efe98, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  InternalInputInventory: {fileID: 0}
-  InternalOutputInventory: {fileID: 0}
-  MachineConnections: []
 --- !u!114 &7055107588446119373
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -635,7 +619,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ff937953e4cfeb4c87a8a5b7d47780f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  layers:
+  _layers:
     serializedVersion: 2
     m_Bits: 0
 --- !u!1001 &1124669778500725003

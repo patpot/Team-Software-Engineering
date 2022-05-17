@@ -11,7 +11,7 @@ public class EarthenDiffuser : BasicMachine
         ItemData log = ItemManager.GetItemData("Wood Log");
         ItemData earthMana = ItemManager.GetItemData("Earth Mana");
 
-        Inputs.Add(log, 1f);
+        Inputs.Add(log, 0.5f);
 
         Outputs.Add(earthMana, 1f);
 

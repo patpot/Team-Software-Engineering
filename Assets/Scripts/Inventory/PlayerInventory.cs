@@ -20,19 +20,20 @@ public class PlayerInventory : Inventory
         foreach (var invSlot in UIManager.Instance.FakePlayerInventory.GetComponentsInChildren<InventorySlot>())
             invSlot.SetInventory(this);
     }
-    public void Start()/// GET RID OF
-    {
-        // TODO: Load inventory from some kind of save system
-        for (int i = 0; i < SlotCount; i++)
-            InventorySlotData.Add(new InventorySlotData());
-        TryDepositItem("Crusher", 1f);/// GET RID OF
-        TryDepositItem("Crusher", 1f);/// GET RID OF
-        TryDepositItem("Crystalliser", 1f);
-        TryDepositItem("Earthen Mana Synthesiser", 1f);
-        TryDepositItem("Replicator", 1f);
-        TryDepositItem("Diffuser", 1f);
-    }
-    public void Update()
+    //public void Start()/// GET RID OF
+    //{
+    //    // TODO: Load inventory from some kind of save system
+    //    for (int i = 0; i < SlotCount; i++)
+    //        InventorySlotData.Add(new InventorySlotData());
+    //    TryDepositItem("Crusher", 1f);/// GET RID OF
+    //    TryDepositItem("Crusher", 1f);/// GET RID OF
+    //    TryDepositItem("Crystalliser", 1f);
+    //    TryDepositItem("Earthen Mana Synthesiser", 1f);
+    //    TryDepositItem("Replicator", 1f);
+    //    TryDepositItem("Diffuser", 1f);
+    //}
+    
+    public void LateUpdate()
     {
         if (Input.GetKeyDown(KeyCode.E))
             ToggleInventory();

@@ -15,7 +15,5 @@ MonoBehaviour:
   Inputs:
   - {fileID: 11400000, guid: a1e78ae063c7e6c4c878f1e4de8fa827, type: 2}
   - {fileID: 11400000, guid: a1e78ae063c7e6c4c878f1e4de8fa827, type: 2}
-  - {fileID: 11400000, guid: a1e78ae063c7e6c4c878f1e4de8fa827, type: 2}
-  - {fileID: 11400000, guid: a1e78ae063c7e6c4c878f1e4de8fa827, type: 2}
   Output: {fileID: 11400000, guid: 5dd910b7b0a044646b3104aac9a4a1da, type: 2}
   OutputQuantity: 1

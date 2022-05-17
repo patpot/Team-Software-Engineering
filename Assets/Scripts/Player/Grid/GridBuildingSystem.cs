@@ -33,7 +33,7 @@ public class GridBuildingSystem : MonoBehaviour
 
         int gridWidth = 17;
         int gridHeight = 25;
-        float cellSize = 5f;
+        float cellSize = 3f;
         _grid = new GridSystem<GridObject>(gridWidth, gridHeight, cellSize, new Vector3(-40, 0, -70), (GridSystem<GridObject> g, int x, int z) => new GridObject(g, x, z));
 
         for (int i = 0; i < BuildingButtons.Count; i++)
@@ -134,7 +134,7 @@ public class GridBuildingSystem : MonoBehaviour
         }
 
         // Delete a placed object
-        if (Input.GetKeyDown(KeyCode.Return))
+        if (Input.GetMouseButtonDown(1))
         {
             // Get the object at our mouse position
             Vector3 mousePosition = Mouse3D.GetMouseWorldPosition();
@@ -181,6 +181,10 @@ public class GridBuildingSystem : MonoBehaviour
     public void DeselectObjectType()
     {
         _placedObjectTypeSO = null;
+        // Disable all confirm buttons
+        foreach (var btn in _buildingButtonConfirms)
+            btn.SetActive(false);
+        
         RefreshSelectedObjectType();
     }
 

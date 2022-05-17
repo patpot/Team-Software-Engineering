@@ -17,6 +17,7 @@ public class UIManager : MonoBehaviour
     public GameObject FakePlayerInventory;
     public Sprite BlankInventorySprite = null;
     public static bool UIActive = false;
+    public static bool MachineUIActive = false;
 
     void Awake()
     {
@@ -27,23 +28,23 @@ public class UIManager : MonoBehaviour
         foreach (var prefab in prefabs)
             _prefabs.Add(prefab.name, prefab as GameObject);
     }
-    public void LockCamera()
+    public static void LockCamera()
     {
-         FPSController.CanLook = false;
-         FPSController.CanMove = false;
+        Instance.FPSController.CanLook = false;
+        Instance.FPSController.CanMove = false;
     }
-    public void UnlockCamera()
-    { 
-        FPSController.CanLook = true;
-        FPSController.CanMove = true;
+    public static void UnlockCamera()
+    {
+        Instance.FPSController.CanLook = true;
+        Instance.FPSController.CanMove = true;
     }
 
-    public void UnlockCursor()
+    public static void UnlockCursor()
     {
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = true;
     }
-    public void LockCursor()
+    public static void LockCursor()
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;

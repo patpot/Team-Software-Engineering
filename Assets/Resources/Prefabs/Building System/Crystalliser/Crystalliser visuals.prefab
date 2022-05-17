@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4336975082612265867}
   - component: {fileID: 4303962016362303907}
-  - component: {fileID: 4303962016362303905}
   - component: {fileID: 8529818373310273485}
   m_Layer: 0
   m_Name: Crystalliser visuals
@@ -28,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 3998026002006755633}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children:
   - {fileID: 8896562957241728072}
   - {fileID: 7403730752956382960}
@@ -55,21 +54,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &4303962016362303905
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3998026002006755633}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 07fbe5b1d23abc747bc83eedab316f73, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  InternalInputInventory: {fileID: 0}
-  InternalOutputInventory: {fileID: 0}
-  MachineConnections: []
 --- !u!114 &8529818373310273485
 MonoBehaviour:
   m_ObjectHideFlags: 0

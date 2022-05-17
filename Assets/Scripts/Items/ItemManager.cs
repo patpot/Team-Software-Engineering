@@ -23,7 +23,7 @@ public class ItemManager : MonoBehaviour
             return _itemData[itemName];
         else
         {
-            Debug.Log("Error! Tried to get item data that doesn't exist! Check for typos in your script as this is a developer error!");
+            Debug.Log($"Error! Tried to get item data that doesn't exist! {itemName}. Check for typos in your script as this is a developer error!");
             throw new KeyNotFoundException();
         }
     }

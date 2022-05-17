@@ -9,6 +9,7 @@ public class MachinesInInventory : MonoBehaviour
     [SerializeField] private GameObject _synthesiserUI;
     [SerializeField] private GameObject _replicatorUI;
     [SerializeField] private GameObject _diffuserUI;
+    [SerializeField] private GameObject _chestUI;
     
     public void UpdateUI()
     {
@@ -17,6 +18,7 @@ public class MachinesInInventory : MonoBehaviour
         _synthesiserUI.SetActive(false);
         _replicatorUI.SetActive(false);
         _diffuserUI.SetActive(false);
+        _chestUI.SetActive(false);
 
         for (int i = 0; i < PlayerInventory.Instance.InventorySlotData.Count; i++)
         {
@@ -28,6 +30,7 @@ public class MachinesInInventory : MonoBehaviour
             else if (itemName == "Earthen Mana Synthesiser") _synthesiserUI.SetActive(true);
             else if (itemName == "Replicator") _replicatorUI.SetActive(true);
             else if (itemName == "Diffuser") _diffuserUI.SetActive(true);
+            else if (itemName == "Wooden Chest") _chestUI.SetActive(true);
         }
     }
 }

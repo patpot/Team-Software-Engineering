@@ -9,6 +9,8 @@ namespace Assets.Scripts
 {
     public class CraftingManager : MonoBehaviour
     {
+        public static CraftingManager Instance;
+        public static bool Active => Instance.CraftingUI.activeSelf;
         public GameObject CraftingUI;
         public Transform RecipeHolder;
         public GameObject SideMenu;
@@ -19,6 +21,22 @@ namespace Assets.Scripts
         public GameObjectPool InputItemPool;
         private static Dictionary<string, CraftingRecipe> _recipes = new Dictionary<string, CraftingRecipe>();
 
+        // XD
+        private Dictionary<string, string> _flavourTexts = new Dictionary<string, string>()
+        {
+            { "Crusher", "Converts 1 Earth Mana and 1 Wood Log into 1 Branch over 1 second." },
+            { "Crystalliser", "Converts 1 Earth Mana into 1 Earth Crystal over 1 second." },
+            { "Diffuser", "Converts 0.5 Wood Logs into 1 Earth Mana over 1 second." },
+            { "Earthen Amplification Crystal", "A powerful crystal capable of channeling aura into a machine." },
+            { "Earthen Mana Synthesiser", "Produces 1 Earth Mana every 10 seconds." },
+            { "Replicator", "Converts 1 Earth Crystal into 1 Wood Log over 1 second." },
+            { "Wooden Chest", "Contains 20 slots that each store 10 items." },
+        };
+
+        private void Awake()
+        {
+            Instance = this;
+        }
         void Start()
         {
             // Load in all our items from our Resources/Crafting folder
@@ -53,7 +71,7 @@ namespace Assets.Scripts
 
         public void ToggleCraftingMenu()
         {
-            if (!CraftingUI.activeSelf && UIManager.UIActive) return; // Don't draw any new UI if we have UI active
+            if (!CraftingUI.activeSelf && UIManager.UIActive || UIManager.Instance.InventoryUI.activeSelf) return; // Don't draw any new UI if we have UI active            
             CraftingUI.SetActive(!CraftingUI.activeSelf);
 
             // If the main crafting UI was deactivated, deactivate our side menu and fake player inventory as well
@@ -61,8 +79,8 @@ namespace Assets.Scripts
             {
                 SideMenu.SetActive(false);
                 UIManager.Instance.FakePlayerInventory.SetActive(false);
-                UIManager.Instance.UnlockCamera();
-                UIManager.Instance.LockCursor();
+                UIManager.UnlockCamera();
+                UIManager.LockCursor();
             }
 
             UIManager.UIActive = CraftingUI.activeSelf; // If the UI was activated tell our UI manager we can't render other UI, if deactivated vice versa
@@ -70,8 +88,8 @@ namespace Assets.Scripts
             if (CraftingUI.activeSelf)
             {
                 Utils.FadeInUI(CraftingUI);
-                UIManager.Instance.LockCamera();
-                UIManager.Instance.UnlockCursor();
+                UIManager.LockCamera();
+                UIManager.UnlockCursor();
 
                 // Draw the player's fake inventory
                 PlayerInventory.Instance.OpenFakeInventory();
@@ -99,8 +117,15 @@ namespace Assets.Scripts
                 inputItem.SetActive(true);
                 inputItem.transform.SetParent(SideMenuInputHolder);
                 // Get our UI elements
+                Image background = inputItem.GetComponentsInChildren<Image>()[0]; // 0 is background, 1 is icon
                 Image icon = inputItem.GetComponentsInChildren<Image>()[1]; // 0 is background, 1 is icon
                 TextMeshProUGUI quantity = inputItem.GetComponentInChildren<TextMeshProUGUI>();
+
+                // Check if the player has this quantity of items, if so set the icon to green, if not set it to red
+                if (PlayerInventory.Instance.BoolContainsItems(input.Key.Name, input.Value))
+                    background.color = Color.green;
+                else
+                    background.color = Color.red;
 
                 // Assign them values
                 icon.sprite = input.Key.Icon;
@@ -110,10 +135,12 @@ namespace Assets.Scripts
             // Next, draw our output
             Image outputIcon = CraftingOutput.GetComponentsInChildren<Image>()[1]; // 0 is background, 1 is icon
             TextMeshProUGUI outputQuantity = CraftingOutput.GetComponentInChildren<TextMeshProUGUI>();
+            TextMeshProUGUI flavourText = CraftingOutput.GetComponentsInChildren<TextMeshProUGUI>()[1];
 
             // Assign them values
             outputIcon.sprite = recipe.Output.Icon;
             outputQuantity.text = recipe.OutputQuantity.ToString();
+            flavourText.text = _flavourTexts[recipeName];
 
             // Assign our crafting button the correct recipe
             CraftButton.onClick.RemoveAllListeners();
@@ -150,6 +177,21 @@ namespace Assets.Scripts
             else if (errorType == CraftingErrorType.NoSpareSlots)
             {
                 Debug.Log("No inventory slots to put the output!");
+            }
+            else
+            {
+                CraftingRecipe recipe = _recipes[recipeName];
+                Dictionary<ItemData, float> requiredInputs = CraftingManager.RecipesToQuantities(recipe);
+                int i = 0;
+                foreach (var reqInp in requiredInputs)
+                {
+                    Image inputBackground = SideMenuInputHolder.GetChild(i).GetComponentsInChildren<Image>()[0]; // 0 is background, 1 is icon
+                    if (PlayerInventory.Instance.BoolContainsItems(reqInp.Key.Name, reqInp.Value))
+                        inputBackground.color = Color.green;
+                    else
+                        inputBackground.color = Color.red;
+                    i++;
+                }
             }
         }
 

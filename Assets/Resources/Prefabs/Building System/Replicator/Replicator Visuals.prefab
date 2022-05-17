@@ -90,7 +90,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1427454944575586132}
-  - component: {fileID: 1460837300694290765}
   - component: {fileID: 8392692507182879663}
   m_Layer: 0
   m_Name: Replicator Visuals
@@ -108,7 +107,7 @@ Transform:
   m_GameObject: {fileID: 1766684396086961646}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children:
   - {fileID: 4413377028023708523}
   - {fileID: 2923002180278908354}
@@ -116,21 +115,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1460837300694290765
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1766684396086961646}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 252c40b8730e68d42b2728d0abb419d2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  InternalInputInventory: {fileID: 0}
-  InternalOutputInventory: {fileID: 0}
-  MachineConnections: []
 --- !u!114 &8392692507182879663
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -143,7 +127,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ff937953e4cfeb4c87a8a5b7d47780f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  layers:
+  _layers:
     serializedVersion: 2
     m_Bits: 0
 --- !u!1 &2290516113264618203

@@ -15,7 +15,7 @@ public class EarthenCrusher : BasicMachine
         Inputs.Add(earthMana, 1f);
         Inputs.Add(woodLog, 1f);
 
-        Outputs.Add(branch, 1f);
+        Outputs.Add(branch, 4f);
 
         TimeToProduce = 1f;
     }

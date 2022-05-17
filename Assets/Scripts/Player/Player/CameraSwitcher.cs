@@ -1,3 +1,4 @@
+using Assets.Scripts;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,16 +20,14 @@ public class CameraSwitcher : MonoBehaviour
     {
         // Set our default values for the scene
         _topDownCam.SetActive(false);
-
-        // Lock the cursor as we are in first person mode
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
     }
 
     void Update()
     {
         if (Input.GetKeyUp(KeyCode.B))
         {
+            if (UIManager.Instance.InventoryUI.activeSelf || CraftingManager.Active || UIManager.UIActive) return;
+            
             if (BuildMode)
             {
                 // Switch to first person mode
@@ -45,8 +44,8 @@ public class CameraSwitcher : MonoBehaviour
                 _topDownCanvas.SetActive(false);
 
                 // Lock the cursor again
-                Cursor.lockState = CursorLockMode.Locked;
-                Cursor.visible = false;
+                UIManager.UnlockCamera();
+                UIManager.LockCursor();
             }
             else
             {
@@ -64,8 +63,7 @@ public class CameraSwitcher : MonoBehaviour
                 _topDownCanvas.SetActive(true);
 
                 // Unlock the cursor as we are in build mode
-                Cursor.lockState = CursorLockMode.Confined;
-                Cursor.visible = true;
+                UIManager.UnlockCursor();
 
                 // Refresh our UI for the "building inventory" which displays which machines are available to build
                 MachinesInv.UpdateUI();

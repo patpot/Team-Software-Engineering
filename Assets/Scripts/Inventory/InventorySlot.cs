@@ -72,7 +72,8 @@ public class InventorySlot : MonoBehaviour, IPointerUpHandler, IPointerDownHandl
                         {
                             // We can take all the items, so take them all and nullify the slot we just took from
                             targetInvSlotData.ItemCount += _slotData.ItemCount;
-                            _slotData.ItemData = null;
+                            if (!_slotData.Locked)
+                                _slotData.ItemData = null;
                             _slotData.ItemCount = 0;
                         }
                         else if (itemCountTotal > targetInventorySlotSize && targetInvSlotData.ItemCount != targetInventorySlotSize)
@@ -114,11 +115,16 @@ public class InventorySlot : MonoBehaviour, IPointerUpHandler, IPointerDownHandl
                             InventorySlotData tempData = this._slotData;
                             this.SetSlotData(targetInvSlotData);
                             targetInvSlot.SetSlotData(tempData);
+
+                            // If the new slot is now locked (we switched states entirely) we need to update its itemdata to be the locked item
+                            if (targetInvSlotData.Locked)
+                                targetInvSlotData.ItemData = tempData.ItemData;
                         }
                     }
                     // Finally force a UI refresh
                     this.UpdateSlotUI();
                     targetInvSlot.UpdateSlotUI();
+                    break;
                 }
             }
             // Destroy our temporary draggable preview

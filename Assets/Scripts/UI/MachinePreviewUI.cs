@@ -11,8 +11,9 @@ using Assets.Scripts;
 
 public class MachinePreviewUI : MonoBehaviour
 {
-    public List<Sprite> InputIcons;
-    public List<Sprite> OutputIcons;
+    // Our required inputs and outputs for this machine to function. If no inputs are required the machine will constantly be producing outputs
+    public List<(ItemData, float)> Inputs = new List<(ItemData, float)>();
+    public List<(ItemData, float)> Outputs = new List<(ItemData, float)>();
 
     public float TimeToProduce;
     public string MachineName;
@@ -22,10 +23,14 @@ public class MachinePreviewUI : MonoBehaviour
 
     private GameObject _previewUi;
 
-    public void SetValues(string machineName, float timeToProduce, List<Sprite> inputIcons, List<Sprite> outputIcons, Inventory inputInventory, Inventory outputInventory)
+    public void SetValues(string machineName, float timeToProduce, Dictionary<ItemData, float> inputs, Dictionary<ItemData, float> outputs, Inventory inputInventory, Inventory outputInventory)
     {
-        InputIcons = inputIcons;
-        OutputIcons = outputIcons;
+        foreach (var input in inputs)
+            Inputs.Add((input.Key, input.Value));
+
+        foreach (var output in outputs)
+            Outputs.Add((output.Key, output.Value));
+        
         TimeToProduce = timeToProduce;
         MachineName = machineName;
         InputInventory = inputInventory;
@@ -44,8 +49,9 @@ public class MachinePreviewUI : MonoBehaviour
         if (_previewUi == null && !CameraSwitcher.BuildMode)
         {
             UIManager.UIActive = true;
-            UIManager.Instance.LockCamera();
-            UIManager.Instance.UnlockCursor();
+            UIManager.LockCamera();
+            UIManager.UnlockCursor();
+            UIManager.MachineUIActive = true;
 
             // We construct our UI when we hover over the object and slightly fade it in for a bit more juice
             _previewUi = UIManager.CreatePrefab("MachinePreviewUI");
@@ -62,11 +68,13 @@ public class MachinePreviewUI : MonoBehaviour
             {
                 GameObject inputIcon = inputIconParent.transform.GetChild(i).gameObject;
                 // If we have an icon, set the icon to match and render it
-                if (i < InputIcons.Count)
+                if (i < Inputs.Count)
                 {
                     inputIcon.SetActive(true);
                     Image icon = inputIcon.GetComponentsInChildren<Image>()[1];
-                    icon.sprite = InputIcons[i];
+                    icon.sprite = Inputs[i].Item1.Icon;
+                    TextMeshProUGUI quantity = inputIcon.GetComponentInChildren<TextMeshProUGUI>();
+                    quantity.text = Inputs[i].Item2.ToString();
                 }
                 else // If not, don't render it
                     inputIcon.SetActive(false);
@@ -78,11 +86,13 @@ public class MachinePreviewUI : MonoBehaviour
             {
                 GameObject outputIcon = outputIconParent.transform.GetChild(i).gameObject;
                 // If we have an icon, set the icon to match and render it
-                if (i < OutputIcons.Count)
+                if (i < Outputs.Count)
                 {
                     outputIcon.SetActive(true);
                     Image icon = outputIcon.GetComponentsInChildren<Image>()[1];
-                    icon.sprite = OutputIcons[i];
+                    icon.sprite = Outputs[i].Item1.Icon;
+                    TextMeshProUGUI quantity = outputIcon.GetComponentInChildren<TextMeshProUGUI>();
+                    quantity.text = Outputs[i].Item2.ToString();
                 }
                 else // If not, don't render it
                     outputIcon.SetActive(false);
@@ -136,7 +146,7 @@ public class MachinePreviewUI : MonoBehaviour
         }
     }
 
-    public void Update()
+    public void LateUpdate()
     {
         // TEMP but closing UI is hard.
         if (Input.GetKeyDown(KeyCode.E))
@@ -144,8 +154,8 @@ public class MachinePreviewUI : MonoBehaviour
             if (_previewUi != null)
             {
                 UIManager.UIActive = false;
-                UIManager.Instance.UnlockCamera();
-                UIManager.Instance.LockCursor();
+                UIManager.UnlockCamera();
+                UIManager.LockCursor();
                 // Make sure we dispose of all of our tweens
                 foreach (var image in _previewUi.GetComponentsInChildren<Image>())
                     image.DOKill();
@@ -154,6 +164,7 @@ public class MachinePreviewUI : MonoBehaviour
                 Destroy(_previewUi);
                 // Close player's fake inventory
                 UIManager.Instance.FakePlayerInventory.SetActive(false);
+                UIManager.MachineUIActive = false;
             }
         }
     }

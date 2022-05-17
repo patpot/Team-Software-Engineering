@@ -12,5 +12,6 @@ namespace Assets.Scripts.Items
         public ItemData ItemData;
         public string Name => ItemData.name;
         public float ItemCount;
+        public bool Collectible = true;
     }
 }

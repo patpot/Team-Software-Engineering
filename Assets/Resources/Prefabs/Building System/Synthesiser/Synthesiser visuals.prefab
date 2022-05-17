@@ -259,6 +259,7 @@ GameObject:
   - component: {fileID: 5391642855269369392}
   - component: {fileID: 4726851274768309388}
   - component: {fileID: 3885353592197249709}
+  - component: {fileID: 5817070770447317814}
   m_Layer: 0
   m_Name: Synthesiser visuals
   m_TagString: Untagged
@@ -275,7 +276,7 @@ Transform:
   m_GameObject: {fileID: 4726851274768309386}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children:
   - {fileID: 4652822901449440892}
   - {fileID: 2369028208790492258}
@@ -313,6 +314,19 @@ MonoBehaviour:
   _layers:
     serializedVersion: 2
     m_Bits: 4096
+--- !u!65 &5817070770447317814
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4726851274768309386}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 5, y: 3.5, z: 5}
+  m_Center: {x: 2.5, y: 1.25, z: 2.5}
 --- !u!1 &4856154688140683722
 GameObject:
   m_ObjectHideFlags: 0

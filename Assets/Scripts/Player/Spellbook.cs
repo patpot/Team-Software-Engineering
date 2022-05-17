@@ -86,6 +86,7 @@ public class Spellbook : MonoBehaviour
                 go.transform.localScale = hit.transform.localScale;
                 // Change the clones material to be our glowing fade out material
                 go.GetComponent<MeshRenderer>().material = GlowingFade;
+                go.name = "Fake Glowing Tree";
                 // Add on script that controls the material fading
                 MagicFade mf = go.AddComponent<MagicFade>();
                 mf.ItemName = "Wood Log";
@@ -186,8 +187,9 @@ public class Spellbook : MonoBehaviour
         ItemStack itemStack = hit.transform.gameObject.GetComponent<ItemStack>();
         if (itemStack != null)
         {
-            if (itemStack.Name == "Wood Log")
+            if (itemStack.Name == "Wood Log" && hit.transform.name != "Fading Log")
             {
+                itemStack.Collectible = false;
                 hit.transform.name = "Fading Log";
                 hit.transform.gameObject.GetComponent<MeshRenderer>().material = GlowingFade;
                 //hit.transform.gameObject.AddComponent<DieAfterTime>()
@@ -204,7 +206,7 @@ public class Spellbook : MonoBehaviour
 
                 treeVFX.GetComponent<VisualEffect>().SetTexture("PointCachePosition", _pointCacheNameToPosition["Wood Log"]);
             }
-            else
+            else if (itemStack.Collectible)
             {
                 // We have no special interactions with this item stack, pick it back up
                 PlayerInventory.Instance.TryDepositItem(itemStack.ItemData, itemStack.ItemCount);

@@ -30,6 +30,7 @@ public class BasicMachine : MonoBehaviour
         InternalInputInventory.SlotSize = 20;
         InternalInputInventory.ForceLoadSlots();
         InternalInputInventory.LockSlots();
+        InternalInputInventory.Interactable = false;
         // Now that we've locked our slots we need to assign it item data by faking a deposit
         foreach (var item in Inputs)
             InternalInputInventory.TryDepositItem(item.Key, 0f, true);
@@ -39,19 +40,14 @@ public class BasicMachine : MonoBehaviour
         InternalOutputInventory.SlotSize = 20;
         InternalOutputInventory.ForceLoadSlots();
         InternalOutputInventory.LockSlots();
+        InternalOutputInventory.Interactable = false;
         // Now that we've locked our slots we need to assign it item data by faking a deposit
         foreach (var item in Outputs)
             InternalOutputInventory.TryDepositItem(item.Key, 0f, true);
 
-        List<Sprite> inputIcons = new List<Sprite>();
-        foreach (var input in Inputs)
-            inputIcons.Add(input.Key.Icon);
-        List<Sprite> outputIcons = new List<Sprite>();
-        foreach (var output in Outputs)
-            outputIcons.Add(output.Key.Icon);
-
-        foreach (var mesh in GetComponentsInChildren<MeshRenderer>())
-            mesh.gameObject.AddComponent<MachinePreviewUI>().SetValues(MachineName, TimeToProduce, inputIcons, outputIcons, InternalInputInventory, InternalOutputInventory);
+        GetComponent<BoxCollider>().gameObject.AddComponent<MachinePreviewUI>().SetValues(MachineName, TimeToProduce, Inputs, Outputs, InternalInputInventory, InternalOutputInventory);
+        //foreach (var mesh in GetComponentsInChildren<MeshRenderer>())
+        //    mesh.gameObject.AddComponent<MachinePreviewUI>().SetValues(MachineName, TimeToProduce, inputIcons, outputIcons, InternalInputInventory, InternalOutputInventory);
     }
 
     public bool CheckForProduction()
