@@ -32,7 +32,7 @@ public class DialogueManager : MonoBehaviour
     public void Start()
     {
         // Dialogue skip override for testing
-        _skipDialogue = true;
+        _skipDialogue = false;
         if (_skipDialogue)
         {
             UIManager.UnlockCamera();
