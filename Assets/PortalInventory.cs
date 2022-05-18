@@ -13,7 +13,7 @@ public class PortalInventory : Inventory
             invSlot.SetInventory(this);
     }
 
-    private void Start()
+    new private void Start()
     {
         for (int i = 0; i < SlotCount; i++)
             InventorySlotData.Add(new InventorySlotData());

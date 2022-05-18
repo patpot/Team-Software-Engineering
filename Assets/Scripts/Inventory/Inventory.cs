@@ -267,7 +267,7 @@ public class Inventory : MonoBehaviour
         foreach (var invSlotData in InventorySlotData)
         {
             GameObject slotObj = slotPool.GetObjectFromPool();
-
+            slotObj.GetComponentInChildren<Image>().color = Color.white;
             // Get a reference to our InventorySlot monobehaviour attached to the object and store it in our data class
             var invSlot = slotObj.GetComponent<InventorySlot>();
 
@@ -307,7 +307,11 @@ public class Inventory : MonoBehaviour
             slotPool.ReturnToPool(gl.transform.GetChild(i).gameObject);
 
         foreach (var slot in InventorySlotData)
+        {
+            if (slot.InventorySlot.DraggableObj)
+                Destroy(slot.InventorySlot.DraggableObj);
             slot.InventorySlot = null;
+        }
     }
 
     public void OnMouseDown()

@@ -19,7 +19,7 @@ public class CameraSwitcher : MonoBehaviour
     void Start()
     {
         // Set our default values for the scene
-        _topDownCam.SetActive(false);
+        //_topDownCam.SetActive(false);
     }
 
     void Update()

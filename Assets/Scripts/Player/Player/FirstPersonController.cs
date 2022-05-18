@@ -155,10 +155,12 @@ public class FirstPersonController : MonoBehaviour
         instance = this;
         playerCamera = GetComponentInChildren<Camera>();
         characterController = GetComponent<CharacterController>();
-        defaultYpos = playerCamera.transform.localPosition.y;
+        defaultYpos = 0.55f;
         defaultFOV = playerCamera.fieldOfView;
         currentHealth = maxHealth;
         currentStamina = maxStamina;
+
+        CanMove = false;
     }
 
     void Update()

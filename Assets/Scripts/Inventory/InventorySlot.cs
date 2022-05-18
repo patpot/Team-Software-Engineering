@@ -23,7 +23,7 @@ public class InventorySlot : MonoBehaviour, IPointerDownHandler
         _itemCountDisplay = GetComponentInChildren<TextMeshProUGUI>();
     }
 
-    private GameObject _draggableObj;
+    public GameObject DraggableObj;
     public void OnPointerDown(PointerEventData eventData)
     {
         if (eventData.button != PointerEventData.InputButton.Left &&
@@ -32,16 +32,16 @@ public class InventorySlot : MonoBehaviour, IPointerDownHandler
         if (_slotData.ItemCount == 0) return;
 
         // First click creates the draggable object
-        if (_draggableObj == null)
+        if (DraggableObj == null)
         {
             // Start dragging, highlight this object
             this.GetComponentInChildren<Image>().color = Color.yellow;
 
             // And spawn in our draggable preview
-            _draggableObj = UIManager.CreatePrefab("DraggableInventorySlot");
-            _draggableObj.GetComponent<DraggableInventorySlot>().SlotData = _slotData;
-            _draggableObj.transform.SetParent(transform.parent.parent.parent); // Parent to the canvas
-            _draggableObj.GetComponentsInChildren<Image>()[1].sprite = _icon.sprite;
+            DraggableObj = UIManager.CreatePrefab("DraggableInventorySlot");
+            DraggableObj.GetComponent<DraggableInventorySlot>().SlotData = _slotData;
+            DraggableObj.transform.SetParent(transform.parent.parent.parent); // Parent to the canvas
+            DraggableObj.GetComponentsInChildren<Image>()[1].sprite = _icon.sprite;
         }
         // Second click is handled on the draggable object, and calls TryDropITEM
     }
@@ -53,7 +53,7 @@ public class InventorySlot : MonoBehaviour, IPointerDownHandler
 
         // Create fake pointerdata with our draggable object's end position as the position
         PointerEventData pointerData = new PointerEventData(EventSystem.current);
-        pointerData.position = _draggableObj.transform.position;
+        pointerData.position = DraggableObj.transform.position;
 
         // Raycast on the end position of our drag and iterate through the results to find another inventory slot
         List<RaycastResult> results = new List<RaycastResult>();
@@ -141,7 +141,7 @@ public class InventorySlot : MonoBehaviour, IPointerDownHandler
 
                             // As there was a full switch we will destroy our draggable object
                             this.GetComponentInChildren<Image>().color = Color.white;
-                            Destroy(_draggableObj);
+                            Destroy(DraggableObj);
                         }
                         else if (targetInvSlot._slotData.ItemData == null && eventData.button == PointerEventData.InputButton.Right)
                         {
@@ -161,7 +161,7 @@ public class InventorySlot : MonoBehaviour, IPointerDownHandler
             {
                 // We hit our own inventory slot, stop the drag
                 this.GetComponentInChildren<Image>().color = Color.white;
-                Destroy(_draggableObj);
+                Destroy(DraggableObj);
                 dropObject = false; 
             }
         }
@@ -169,7 +169,7 @@ public class InventorySlot : MonoBehaviour, IPointerDownHandler
         if (_slotData.ItemCount == 0)
         {
             this.GetComponentInChildren<Image>().color = Color.white;
-            Destroy(_draggableObj);
+            Destroy(DraggableObj);
         }
 
         if (dropObject)

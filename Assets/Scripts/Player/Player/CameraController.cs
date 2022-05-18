@@ -46,8 +46,11 @@ public class CameraController : MonoBehaviour
     void LateUpdate()
     {
         _startPosition = _Player.transform.position;
-        HandleMouseInput();
-        HandleMovementInput();
+        if (CameraSwitcher.BuildMode)
+        {
+            HandleMouseInput();
+            HandleMovementInput();
+        }
     }
 
     void HandleMouseInput()

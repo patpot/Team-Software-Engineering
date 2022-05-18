@@ -46,7 +46,7 @@ public class TutorialManager : MonoBehaviour
         }},
         { "CrystalliserMade", new List<string>() {
             "Now that we're getting more into more machines it's time to learn how to automate them. Take out your Spellbook by pressing '1' and press 'Mouse1' while looking at a machine (you'll also need to be pretty close), this will start the output registering process, in order to finish this process you'll need to press 'Mouse1' again on a target inventory, such as a chest or in a more useful case another machine. For now you can craft a basic Wooden Chest if you want to try this!",
-            "That concludes basic work training, its up to you to set up your machines and get to work, you've got complete freedom over how you proceed, but be advised Wood Logs come in limited capacity, running out of those might render this island permanently uninhabitable! Now to complete this assignment and guarantee the Aura of this island remains stable I'm going to need you to produce 100 Earth Crystals and deposit them into the inactive portal to the left side of the island, with this portal stabilized we'll be able to move you onto your next assignment.",
+            "That concludes basic work training, its up to you to set up your machines and get to work, you've got complete freedom over how you proceed, but be advised Wood Logs come in limited capacity, running out of those might render this island permanently uninhabitable! Now to complete this assignment and guarantee the Aura of this island remains stable I'm going to need you to produce 100 Earth Crystals and deposit them into the inactive portal to the right side of the island, with this portal stabilized we'll be able to move you onto your next assignment.",
         }},
     };
 

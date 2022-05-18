@@ -33,19 +33,13 @@ public class DialogueManager : MonoBehaviour
     {
         // Dialogue skip override for testing
         _skipDialogue = false;
-        if (_skipDialogue)
-        {
-            UIManager.UnlockCamera();
-            UIManager.LockCursor();
-        }
         NextButton.onClick.AddListener(() => DisplayText(0));
 
         AddDialogue("Hello! Are you the new recruit? We have lots to discuss about your first assignment here.");
         AddDialogue("I'll be going through the basics with you to catch you up to speed, if you ever forget something I've said you can press \"T\" to open this dialogue box back up and press \"Q\" to go back through old dialogue.");
         AddDialogue("As you know the Aura Restoration Council are in charge of the maintenance and restoration of areas with particularly low magical aura. Restoring these areas up to their full potential is a vital part of the council's work, and if areas of low magical aura were to exist for too long things would become.. problematic.");
-        AddDialogue("As its just you we're going to need to build some additional infrastructure to support the restoration of this zone. We've got a set of machines that'll help you out, but you'll need to gather some resources to build them.");
+        AddDialogue("As it's just you we're going to need to build some additional infrastructure to support the restoration of this zone. We've got a set of machines that'll help you out, but you'll need to gather some resources to build them.");
         AddDialogue("Now, as part of the standard issue kit you have a Spellbook to help you channel your own aura, pressing \"1\" will equip it. Give it a go! You'll be using it a lot.");
-        ShowDialogue(800);
     }
     public void FadeInDialogue(int startOffset)
     {

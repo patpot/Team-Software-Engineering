@@ -1,3 +1,4 @@
+using Assets.Scripts;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -15,8 +16,10 @@ public class UIManager : MonoBehaviour
     public GameObjectPool InventorySlotPool;
     public GameObject InventoryUI;
     public GameObject FakePlayerInventory;
+    public GameObject MainMenuUI;
+    public GameObject PauseUI;
     public Sprite BlankInventorySprite = null;
-    public static bool UIActive = false;
+    public static bool UIActive = true;
     public static bool MachineUIActive = false;
 
     void Awake()
@@ -60,6 +63,24 @@ public class UIManager : MonoBehaviour
         {
             Debug.Log("Error! Tried to get prefab that doesn't exist! Check for typos in your script as this is a developer error!");
             throw new KeyNotFoundException();
+        }
+    }
+
+    public void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            PauseUI.SetActive(!MainMenuUI.activeSelf && !PauseUI.activeSelf); // Flip the visibility of the pause menu, if the main menu is open do nothing
+            if (PauseUI.activeSelf)
+            {
+                UnlockCursor();
+                LockCamera();
+            }
+            else if (!CameraSwitcher.BuildMode && !UIActive)
+            {
+                UnlockCamera();
+                LockCursor();
+            }
         }
     }
 }
