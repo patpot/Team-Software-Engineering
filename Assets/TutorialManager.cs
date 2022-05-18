@@ -21,7 +21,8 @@ public class TutorialManager : MonoBehaviour
         }},
         { "InventoryUsage", new List<string>() {
             "Great! This is where you'll find all your items that you've acquired, you'll be able to make some external inventories to store items in soon enough, but for now you'll need to use your inventory to do some things.",
-            "Wood Logs are useful for making machines, however for now we need to convert them into Earth Mana. To do this drag that Wood Log out of your inventory and onto the ground, once you've done this once again get out your Spellbook, aim at the Log and press 'Mouse1'.",
+            "To move items around your inventory first select the slot by pressing 'Mouse1', now that you are dragging the item around you can either hover over another inventory slot (in your own or any external inventory) and press 'Mouse1' again to move the entire stack, 'Mouse2' to move one item from the stack, or click out of the inventory and onto the floor to place the object in world.",
+            "Wood Logs are useful for making machines, however for now we need to convert them into Earth Mana. To do this drag that Wood Log out of your inventory and onto the ground, get out your Spellbook, aim at the Log and press 'Mouse1'.",
         }},
         { "ManaAcquired", new List<string>() {
             "Good work! You're well on your way to creating your first machine. Using the power of your spellbook you're able to combine these resources that you're collecting. To open up the crafting interface press the 'C' key. You can view your own inventory in the crafting menu, so make sure to close any inventories you have open to be able to open it.",

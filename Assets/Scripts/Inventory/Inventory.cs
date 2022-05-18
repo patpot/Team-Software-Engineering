@@ -314,6 +314,7 @@ public class Inventory : MonoBehaviour
     {
         if (!Interactable) return;
         if (Vector3.Distance(transform.position, Camera.main.transform.position) > 5f) return;
+        if (UIManager.Instance.InventoryUI.activeSelf) return;
 
         ToggleInventory();
     }

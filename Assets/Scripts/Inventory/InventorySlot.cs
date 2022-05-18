@@ -10,13 +10,13 @@ using UnityEngine.EventSystems;
 using Assets.Scripts.Items;
 using Unity.Mathematics;
 
-public class InventorySlot : MonoBehaviour, IPointerUpHandler, IPointerDownHandler
+public class InventorySlot : MonoBehaviour, IPointerDownHandler
 {
     private Inventory _inventory;
     private InventorySlotData _slotData;
     private Image _icon;
     private TextMeshProUGUI _itemCountDisplay;
-    
+
     public void Awake()
     {
         _icon = GetComponentsInChildren<Image>()[1]; // [0] is background, [1] is icon
@@ -26,88 +26,107 @@ public class InventorySlot : MonoBehaviour, IPointerUpHandler, IPointerDownHandl
     private GameObject _draggableObj;
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (eventData.button != PointerEventData.InputButton.Left) return;
+        if (eventData.button != PointerEventData.InputButton.Left &&
+            eventData.button != PointerEventData.InputButton.Right) return;
+
         if (_slotData.ItemCount == 0) return;
 
-        // Start dragging, highlight this object
-        this.GetComponentInChildren<Image>().color = Color.yellow;
-
-        // And spawn in our draggable preview
-        _draggableObj = UIManager.CreatePrefab("DraggableInventorySlot");
-        _draggableObj.transform.SetParent(transform.parent.parent);
-        _draggableObj.GetComponentsInChildren<Image>()[1].sprite = _icon.sprite;
-    }
-    public void OnPointerUp(PointerEventData eventData)
-    {
-        if (eventData.button != PointerEventData.InputButton.Left) return;
-
-        this.GetComponentInChildren<Image>().color = Color.white;
-
-        if (_draggableObj != null)
+        // First click creates the draggable object
+        if (_draggableObj == null)
         {
-            // Create fake pointerdata with our draggable object's end position as the position
-            PointerEventData pointerData = new PointerEventData(EventSystem.current);
-            pointerData.position = _draggableObj.transform.position;
+            // Start dragging, highlight this object
+            this.GetComponentInChildren<Image>().color = Color.yellow;
 
-            // Raycast on the end position of our drag and iterate through the results to find another inventory slot
-            List<RaycastResult> results = new List<RaycastResult>();
-            EventSystem.current.RaycastAll(pointerData, results);
-            bool dropObject = true;
-            foreach (var result in results)
+            // And spawn in our draggable preview
+            _draggableObj = UIManager.CreatePrefab("DraggableInventorySlot");
+            _draggableObj.GetComponent<DraggableInventorySlot>().SlotData = _slotData;
+            _draggableObj.transform.SetParent(transform.parent.parent.parent); // Parent to the canvas
+            _draggableObj.GetComponentsInChildren<Image>()[1].sprite = _icon.sprite;
+        }
+        // Second click is handled on the draggable object, and calls TryDropITEM
+    }
+
+    public void TryDropItem(PointerEventData eventData)
+    {
+        if (eventData.button != PointerEventData.InputButton.Left &&
+            eventData.button != PointerEventData.InputButton.Right) return;
+
+        // Create fake pointerdata with our draggable object's end position as the position
+        PointerEventData pointerData = new PointerEventData(EventSystem.current);
+        pointerData.position = _draggableObj.transform.position;
+
+        // Raycast on the end position of our drag and iterate through the results to find another inventory slot
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(pointerData, results);
+        bool dropObject = true;
+        foreach (var result in results)
+        {
+            var targetInvSlot = result.gameObject.GetComponent<InventorySlot>();
+            if (targetInvSlot != null && targetInvSlot != this)
             {
-                var targetInvSlot = result.gameObject.GetComponent<InventorySlot>();
-                if (targetInvSlot != null && targetInvSlot != this)
+                // We ended our drag over another inventory slot, figure out what to do next
+                // Assign local variables to ensure all calls are O(1) and have logical names
+                dropObject = false;
+                InventorySlotData targetInvSlotData = targetInvSlot.GetSlotData();
+                Inventory targetInventory = targetInvSlot.GetInventory();
+                float itemCountTotal;
+                float amtToDeposit;
+                if (eventData.button == PointerEventData.InputButton.Left)
                 {
-                    dropObject = false;
-                    // We ended our drag over another inventory slot, figure out what to do next
-                    InventorySlotData targetInvSlotData = targetInvSlot.GetSlotData();
-                    Inventory targetInventory = targetInvSlot.GetInventory();
-                    float itemCountTotal = _slotData.ItemCount + targetInvSlotData.ItemCount;
-                    float targetInventorySlotSize = targetInventory.SlotSize;
+                    amtToDeposit = _slotData.ItemCount;
+                    itemCountTotal = _slotData.ItemCount + targetInvSlotData.ItemCount;
+                }
+                else
+                {
+                    amtToDeposit = 1f;
+                    itemCountTotal = 1 + targetInvSlotData.ItemCount;
+                }
+                float targetInventorySlotSize = targetInventory.SlotSize;
 
-                    if (_slotData.ItemData == targetInvSlotData.ItemData)
+                if (_slotData.ItemData == targetInvSlotData.ItemData)
+                {
+                    // Our items match, let's try and add them together!
+                    if (itemCountTotal <= targetInventorySlotSize)
                     {
-                        // Our items match, let's try and add them together!
-                        if (itemCountTotal <= targetInventorySlotSize)
-                        {
-                            // We can take all the items, so take them all and nullify the slot we just took from
-                            targetInvSlotData.ItemCount += _slotData.ItemCount;
-                            if (!_slotData.Locked)
-                                _slotData.ItemData = null;
-                            _slotData.ItemCount = 0;
-                        }
-                        else if (itemCountTotal > targetInventorySlotSize && targetInvSlotData.ItemCount != targetInventorySlotSize)
-                        {
-                            // Too many items, fill in however many we can and then update both slots
-                            float diff = targetInventorySlotSize - targetInvSlotData.ItemCount;
-                            targetInvSlotData.ItemCount += diff;
-                            _slotData.ItemCount -= diff;
-                        }
-                        else if (targetInvSlotData.ItemCount == targetInventorySlotSize && _slotData.ItemCount < targetInventorySlotSize)
-                        {
-                            // One of the slots is full, but not both. Just swap their data.
-
-                            // Before we override any values make sure we change our positions in our respective inventories first
-                            _inventory.SwapInventorySlotData(_slotData, targetInvSlotData);
-                            // Swap our actually slot data
-                            InventorySlotData tempData = this._slotData;
-                            this.SetSlotData(targetInvSlotData);
-                            targetInvSlot.SetSlotData(tempData);
-                        }
+                        // We can take all the items, so take them all and nullify the slot we just took from
+                        targetInvSlotData.ItemCount += amtToDeposit;
+                        _slotData.ItemCount -= amtToDeposit;
                     }
-                    else
+                    else if (itemCountTotal > targetInventorySlotSize && targetInvSlotData.ItemCount != targetInventorySlotSize)
                     {
-                        // ItemData didn't match, try swap the items
-                        if (_slotData.ItemCount > targetInventorySlotSize)
-                        {
-                            // We can't fully swap, if the slot is blank override it if not do nothing
-                            if (targetInvSlot._slotData.ItemData != null) return;
+                        // Too many items, fill in however many we can and then update both slots
+                        float diff = targetInventorySlotSize - targetInvSlotData.ItemCount;
+                        targetInvSlotData.ItemCount += diff;
+                        _slotData.ItemCount -= diff;
+                    }
+                    else if (targetInvSlotData.ItemCount == targetInventorySlotSize && _slotData.ItemCount <= targetInventorySlotSize
+                        && eventData.button == PointerEventData.InputButton.Left)
+                    {
+                        // One of the slots is full, but not both. Just swap their data if we're left clicking.
 
-                            targetInvSlotData.ItemData = _slotData.ItemData;
-                            targetInvSlotData.ItemCount = targetInventorySlotSize;
-                            _slotData.ItemCount -= targetInventorySlotSize;
-                        }
-                        else
+                        // Before we override any values make sure we change our positions in our respective inventories first
+                        _inventory.SwapInventorySlotData(_slotData, targetInvSlotData);
+                        // Swap our actually slot data
+                        InventorySlotData tempData = this._slotData;
+                        this.SetSlotData(targetInvSlotData);
+                        targetInvSlot.SetSlotData(tempData);
+                    }
+                }
+                else
+                {
+                    // ItemData didn't match, try swap the items
+                    if (_slotData.ItemCount >= targetInventorySlotSize && targetInvSlot._slotData.ItemData == null)
+                    {
+                        // Our stack is larger than this slot can handle, if it was empty we can override its data
+
+                        targetInvSlotData.ItemData = _slotData.ItemData;
+                        targetInvSlotData.ItemCount = amtToDeposit;
+                        _slotData.ItemCount -= amtToDeposit;
+                    }
+                    else if (_slotData.ItemCount <= targetInventorySlotSize && targetInvSlotData.ItemCount <= _inventory.SlotSize)
+                    {
+                        // This slot contains items and we can validly put all of our items into it IF we swap, ensure we are left clicking then swap
+                        if (eventData.button == PointerEventData.InputButton.Left)
                         {
                             // Before we override any values make sure we change our positions in our respective inventories first
                             _inventory.SwapInventorySlotData(_slotData, targetInvSlotData);
@@ -119,40 +138,62 @@ public class InventorySlot : MonoBehaviour, IPointerUpHandler, IPointerDownHandl
                             // If the new slot is now locked (we switched states entirely) we need to update its itemdata to be the locked item
                             if (targetInvSlotData.Locked)
                                 targetInvSlotData.ItemData = tempData.ItemData;
+
+                            // As there was a full switch we will destroy our draggable object
+                            this.GetComponentInChildren<Image>().color = Color.white;
+                            Destroy(_draggableObj);
+                        }
+                        else if (targetInvSlot._slotData.ItemData == null && eventData.button == PointerEventData.InputButton.Right)
+                        {
+                            // We can't swap, but we can still put our items into the target slot
+                            targetInvSlotData.ItemData = _slotData.ItemData;
+                            targetInvSlotData.ItemCount += amtToDeposit;
+                            _slotData.ItemCount-= amtToDeposit;
                         }
                     }
-                    // Finally force a UI refresh
-                    this.UpdateSlotUI();
-                    targetInvSlot.UpdateSlotUI();
-                    break;
                 }
+                // Finally force a UI refresh
+                this.UpdateSlotUI();
+                targetInvSlot.UpdateSlotUI();
+                break;
             }
-            // Destroy our temporary draggable preview
-            Destroy(_draggableObj);
-
-            if (dropObject)
+            else if (targetInvSlot != null)
             {
-                if (_slotData.ItemData?.Model == null) return; // Item doesn't have a model so we can't place it in world
+                // We hit our own inventory slot, stop the drag
+                this.GetComponentInChildren<Image>().color = Color.white;
+                Destroy(_draggableObj);
+                dropObject = false; 
+            }
+        }
+        // Destroy our temporary draggable preview if we put down all our items
+        if (_slotData.ItemCount == 0)
+        {
+            this.GetComponentInChildren<Image>().color = Color.white;
+            Destroy(_draggableObj);
+        }
 
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                RaycastHit hit;
-                if (Physics.Raycast(ray, out hit, 6))
-                {
-                    if (hit.point.y > 1) return; // Don't want anything being put too high up
+        if (dropObject)
+        {
+            if (_slotData.ItemData?.Model == null) return; // Item doesn't have a model so we can't place it in world
 
-                    GameObject droppedObject = Instantiate(_slotData.ItemData.Model);
-                    droppedObject.name = _slotData.ItemData.Name;
-                    float yHeight = hit.point.y - hit.transform.position.y; // GroundPosition - mid point of object gets us half height, all objects pivot on 0,0,0 so we add this on
-                    droppedObject.transform.position = hit.point + new Vector3(0f, yHeight);
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit, 6))
+            {
+                if (hit.point.y > 1) return; // Don't want anything being put too high up
 
-                    // Drop the item in the world
-                    var itemStack = droppedObject.AddComponent<ItemStack>();
-                    itemStack.ItemData = _slotData.ItemData;
-                    itemStack.ItemCount = 1;
+                GameObject droppedObject = Instantiate(_slotData.ItemData.Model);
+                droppedObject.name = _slotData.ItemData.Name;
+                float yHeight = hit.point.y - hit.transform.position.y; // GroundPosition - mid point of object gets us half height, all objects pivot on 0,0,0 so we add this on
+                droppedObject.transform.position = hit.point + new Vector3(0f, yHeight);
 
-                    _slotData.ItemCount--;
-                    this.UpdateSlotUI();
-                }
+                // Drop the item in the world
+                var itemStack = droppedObject.AddComponent<ItemStack>();
+                itemStack.ItemData = _slotData.ItemData;
+                itemStack.ItemCount = 1;
+
+                _slotData.ItemCount--;
+                this.UpdateSlotUI();
             }
         }
     }
