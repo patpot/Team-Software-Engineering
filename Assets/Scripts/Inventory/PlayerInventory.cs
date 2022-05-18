@@ -25,14 +25,9 @@ public class PlayerInventory : Inventory
     //    // TODO: Load inventory from some kind of save system
     //    for (int i = 0; i < SlotCount; i++)
     //        InventorySlotData.Add(new InventorySlotData());
-    //    TryDepositItem("Crusher", 1f);/// GET RID OF
-    //    TryDepositItem("Crusher", 1f);/// GET RID OF
-    //    TryDepositItem("Crystalliser", 1f);
-    //    TryDepositItem("Earthen Mana Synthesiser", 1f);
-    //    TryDepositItem("Replicator", 1f);
-    //    TryDepositItem("Diffuser", 1f);
+    //    TryDepositItem("Earth Crystal", 11f);/// GET RID OF
     //}
-    
+
     public void LateUpdate()
     {
         if (Input.GetKeyDown(KeyCode.E))
