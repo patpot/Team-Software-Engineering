@@ -291,6 +291,7 @@ GameObject:
   - component: {fileID: 5391642855269369392}
   - component: {fileID: -3243132823806578417}
   - component: {fileID: 3716809198184561580}
+  - component: {fileID: 2690178513038972468}
   m_Layer: 0
   m_Name: Earthen Mana Synthesiser
   m_TagString: Untagged
@@ -340,6 +341,21 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 5, y: 3.5, z: 5}
   m_Center: {x: 2.5, y: 1.25, z: 2.5}
+--- !u!114 &2690178513038972468
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4726851274768309386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc8580838bc431c469e96c2143e147dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  InternalInputInventory: {fileID: 0}
+  InternalOutputInventory: {fileID: 0}
+  MachineConnections: []
 --- !u!1 &8732758286309662440
 GameObject:
   m_ObjectHideFlags: 0
