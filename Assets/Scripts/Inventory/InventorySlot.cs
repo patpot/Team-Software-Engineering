@@ -120,8 +120,8 @@ public class InventorySlot : MonoBehaviour, IPointerDownHandler
                         // Our stack is larger than this slot can handle, if it was empty we can override its data
 
                         targetInvSlotData.ItemData = _slotData.ItemData;
-                        targetInvSlotData.ItemCount = amtToDeposit;
-                        _slotData.ItemCount -= amtToDeposit;
+                        targetInvSlotData.ItemCount = targetInventorySlotSize;
+                        _slotData.ItemCount -= targetInventorySlotSize;
                     }
                     else if (_slotData.ItemCount <= targetInventorySlotSize && targetInvSlotData.ItemCount <= _inventory.SlotSize)
                     {
