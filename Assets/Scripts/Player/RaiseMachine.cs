@@ -9,10 +9,7 @@ public class RaiseMachine : MonoBehaviour
         RaycastHit hit;
         Physics.Raycast(transform.position, Vector3.down, out hit);
         if (hit.transform == null)
-        {
             return;
-        }
-        print("hit something");
 
         float yHeight = transform.position.y - hit.transform.position.y; // GroundPosition - mid point of object gets us half height, all objects pivot on 0,0,0 so we add this on
         transform.position = hit.point + new Vector3(0f, yHeight);

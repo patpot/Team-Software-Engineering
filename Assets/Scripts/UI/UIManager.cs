@@ -69,7 +69,6 @@ public class UIManager : MonoBehaviour
 
     public void Update()
     {
-        print(ActiveUICount);
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             PauseUI.SetActive(!MainMenuUI.activeSelf && !PauseUI.activeSelf); // Flip the visibility of the pause menu, if the main menu is open do nothing
