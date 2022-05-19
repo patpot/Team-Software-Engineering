@@ -16,6 +16,7 @@ public class Spellbook : MonoBehaviour
 
     private Dictionary<string, Texture2D> _pointCacheNameToPosition = new Dictionary<string, Texture2D>();
     private BasicMachine _selectedMachine;
+    public bool ConnectionActive => _connection;
     private MachineConnection _connection;
     private void Start()
     {

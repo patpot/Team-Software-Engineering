@@ -19,9 +19,9 @@ public class UIManager : MonoBehaviour
     public GameObject MainMenuUI;
     public GameObject PauseUI;
     public Sprite BlankInventorySprite = null;
-    private int _uiActive = 1;
     public static int ActiveUICount = 1;
     public static bool MachineUIActive = false; // Used for the tutorial
+    public Spellbook Spellbook;
 
     void Awake()
     {
