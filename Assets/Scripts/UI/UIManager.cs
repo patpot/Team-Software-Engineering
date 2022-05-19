@@ -73,6 +73,10 @@ public class UIManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             PauseUI.SetActive(!MainMenuUI.activeSelf && !PauseUI.activeSelf); // Flip the visibility of the pause menu, if the main menu is open do nothing
+            if (PauseUI.activeSelf)
+                ActiveUICount++;
+            else
+                ActiveUICount--;
             UpdateCameraAndCursor();
         }
     }
