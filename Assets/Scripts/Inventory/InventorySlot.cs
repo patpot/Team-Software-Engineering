@@ -110,12 +110,15 @@ public class InventorySlot : MonoBehaviour, IPointerDownHandler
                         InventorySlotData tempData = this._slotData;
                         this.SetSlotData(targetInvSlotData);
                         targetInvSlot.SetSlotData(tempData);
+
+                        this.GetComponentInChildren<Image>().color = Color.white;
+                        Destroy(DraggableObj);
                     }
                 }
                 else
                 {
                     // ItemData didn't match, try swap the items
-                    if (_slotData.ItemCount >= targetInventorySlotSize && targetInvSlot._slotData.ItemData == null)
+                    if (_slotData.ItemCount >= targetInventorySlotSize && targetInvSlot._slotData.ItemData == null && eventData.button == PointerEventData.InputButton.Left)
                     {
                         // Our stack is larger than this slot can handle, if it was empty we can override its data
 
