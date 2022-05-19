@@ -19,8 +19,9 @@ public class UIManager : MonoBehaviour
     public GameObject MainMenuUI;
     public GameObject PauseUI;
     public Sprite BlankInventorySprite = null;
-    public static bool UIActive = true;
-    public static bool MachineUIActive = false;
+    private int _uiActive = 1;
+    public static int ActiveUICount = 1;
+    public static bool MachineUIActive = false; // Used for the tutorial
 
     void Awake()
     {
@@ -68,19 +69,30 @@ public class UIManager : MonoBehaviour
 
     public void Update()
     {
+        print(ActiveUICount);
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             PauseUI.SetActive(!MainMenuUI.activeSelf && !PauseUI.activeSelf); // Flip the visibility of the pause menu, if the main menu is open do nothing
-            if (PauseUI.activeSelf)
-            {
-                UnlockCursor();
-                LockCamera();
-            }
-            else if (!CameraSwitcher.BuildMode && !UIActive)
-            {
-                UnlockCamera();
-                LockCursor();
-            }
+            UpdateCameraAndCursor();
+        }
+    }
+
+    public static void UpdateCameraAndCursor()
+    {   
+        if (ActiveUICount > 0)
+        {
+            LockCamera();
+            UnlockCursor();
+        }
+        else if (!CameraSwitcher.BuildMode)
+        {
+            UnlockCamera();
+            LockCursor();
+        }
+        else if (CameraSwitcher.BuildMode)
+        {
+            //UnlockCamera();
+            UnlockCursor();
         }
     }
 }

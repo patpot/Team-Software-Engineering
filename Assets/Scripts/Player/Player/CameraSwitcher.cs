@@ -26,7 +26,7 @@ public class CameraSwitcher : MonoBehaviour
     {
         if (Input.GetKeyUp(KeyCode.B))
         {
-            if (UIManager.Instance.InventoryUI.activeSelf || CraftingManager.Active || UIManager.UIActive) return;
+            if (UIManager.ActiveUICount > 0) return;
             
             if (BuildMode)
             {
@@ -43,9 +43,9 @@ public class CameraSwitcher : MonoBehaviour
                 _topDownCam.SetActive(false);
                 _topDownCanvas.SetActive(false);
 
-                // Lock the cursor again
-                UIManager.UnlockCamera();
-                UIManager.LockCursor();
+                //// Lock the cursor again
+                //UIManager.UnlockCamera();
+                //UIManager.LockCursor();
             }
             else
             {
@@ -62,13 +62,14 @@ public class CameraSwitcher : MonoBehaviour
                 _topDownCam.SetActive(true);
                 _topDownCanvas.SetActive(true);
 
-                // Unlock the cursor as we are in build mode
-                UIManager.UnlockCursor();
+                //// Unlock the cursor as we are in build mode
+                //UIManager.UnlockCursor();
 
                 // Refresh our UI for the "building inventory" which displays which machines are available to build
                 MachinesInv.UpdateUI();
             }
             BuildMode = !BuildMode;
+            UIManager.UpdateCameraAndCursor();
         }
     }
 }

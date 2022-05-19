@@ -25,7 +25,7 @@ public class Spellbook : MonoBehaviour
     }
     void Update()
     {
-        if (UIManager.UIActive) return; // If we're rendering any UI we don't want to accidentally break a tree down
+        if (UIManager.ActiveUICount > 0) return; // If we're rendering any UI we don't want to accidentally break a tree down
 
         if (Input.GetMouseButtonDown(0))
         {

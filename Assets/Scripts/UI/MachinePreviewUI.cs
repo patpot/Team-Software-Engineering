@@ -43,16 +43,15 @@ public class MachinePreviewUI : MonoBehaviour
     public void OnMouseDown()
     {
         if (SpellbookToggle.SpellbookActive) return;
-        if (UIManager.UIActive) return;
+        if (UIManager.ActiveUICount > 0) return;
         if (Vector3.Distance(transform.position, Camera.main.transform.position) > 5f) return;
 
         if (_previewUi == null && !CameraSwitcher.BuildMode)
         {
-            UIManager.UIActive = true;
-            UIManager.LockCamera();
-            UIManager.UnlockCursor();
+            UIManager.ActiveUICount++;
             UIManager.MachineUIActive = true;
-
+            UIManager.UpdateCameraAndCursor();
+            
             // We construct our UI when we hover over the object and slightly fade it in for a bit more juice
             _previewUi = UIManager.CreatePrefab("MachinePreviewUI");
             // Assign this object to the canvas
@@ -153,9 +152,10 @@ public class MachinePreviewUI : MonoBehaviour
         {
             if (_previewUi != null)
             {
-                UIManager.UIActive = false;
-                UIManager.UnlockCamera();
-                UIManager.LockCursor();
+                UIManager.ActiveUICount--;
+                UIManager.MachineUIActive = false;
+                UIManager.UpdateCameraAndCursor();
+
                 // Make sure we dispose of all of our tweens
                 foreach (var image in _previewUi.GetComponentsInChildren<Image>())
                     image.DOKill();
@@ -164,7 +164,6 @@ public class MachinePreviewUI : MonoBehaviour
                 Destroy(_previewUi);
                 // Close player's fake inventory
                 UIManager.Instance.FakePlayerInventory.SetActive(false);
-                UIManager.MachineUIActive = false;
             }
         }
     }

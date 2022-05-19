@@ -22,9 +22,8 @@ public class NewMainMenu : MonoBehaviour
 
     public void ActivateFPSControls()
     {
-        UIManager.UIActive = false;
-        UIManager.UnlockCamera();
-        UIManager.LockCursor();
+        UIManager.ActiveUICount--;
+        UIManager.UpdateCameraAndCursor();
 
         DialogueManager.ShowDialogue(1000);
     }

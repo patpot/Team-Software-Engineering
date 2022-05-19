@@ -71,29 +71,25 @@ namespace Assets.Scripts
 
         public void ToggleCraftingMenu()
         {
-            if (!CraftingUI.activeSelf && UIManager.UIActive || UIManager.Instance.InventoryUI.activeSelf) return; // Don't draw any new UI if we have UI active            
+            if (!CraftingUI.activeSelf && UIManager.ActiveUICount > 0) return; // Don't draw any new UI if we have UI active that's not us          
+            
             CraftingUI.SetActive(!CraftingUI.activeSelf);
-
-            // If the main crafting UI was deactivated, deactivate our side menu and fake player inventory as well
-            if (!CraftingUI.activeSelf)
-            {
-                SideMenu.SetActive(false);
-                UIManager.Instance.FakePlayerInventory.SetActive(false);
-                UIManager.UnlockCamera();
-                UIManager.LockCursor();
-            }
-
-            UIManager.UIActive = CraftingUI.activeSelf; // If the UI was activated tell our UI manager we can't render other UI, if deactivated vice versa
 
             if (CraftingUI.activeSelf)
             {
+                UIManager.ActiveUICount++;
                 Utils.FadeInUI(CraftingUI);
-                UIManager.LockCamera();
-                UIManager.UnlockCursor();
-
                 // Draw the player's fake inventory
                 PlayerInventory.Instance.OpenFakeInventory();
             }
+            else
+            {
+                UIManager.ActiveUICount--;
+                SideMenu.SetActive(false);
+                UIManager.Instance.FakePlayerInventory.SetActive(false);
+            }
+
+            UIManager.UpdateCameraAndCursor();
         }
 
         public void ShowRecipe(string recipeName)

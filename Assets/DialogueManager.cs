@@ -11,12 +11,11 @@ using Assets.Scripts;
 public class DialogueManager : MonoBehaviour
 {
     public GameObject DialogueObj;
+    private CanvasGroup _dialogueCG;
     public TextMeshProUGUI TextArea;
     public Button NextButton;
 
     private bool _skipDialogue;
-    private bool _fadingIn;
-    //private bool _displayingText;
     private string _currentDialogue;
     private int _dialogueIndex = -1;
     private List<string> _dialogue = new List<string>();
@@ -40,19 +39,18 @@ public class DialogueManager : MonoBehaviour
         AddDialogue("As you know the Aura Restoration Council are in charge of the maintenance and restoration of areas with particularly low magical aura. Restoring these areas up to their full potential is a vital part of the council's work, and if areas of low magical aura were to exist for too long things would become.. problematic.");
         AddDialogue("As it's just you we're going to need to build some additional infrastructure to support the restoration of this zone. We've got a set of machines that'll help you out, but you'll need to gather some resources to build them.");
         AddDialogue("Now, as part of the standard issue kit you have a Spellbook to help you channel your own aura, pressing \"1\" will equip it. Give it a go! You'll be using it a lot.");
+        _dialogueCG = DialogueObj.GetComponent<CanvasGroup>();
     }
+    private Tween _fadeTween;
     public void FadeInDialogue(int startOffset)
     {
         if (_skipDialogue) return;
         
-        UIManager.UIActive = true;
-        UIManager.LockCamera();
-        UIManager.UnlockCursor();
+        UIManager.ActiveUICount++;
+        UIManager.UpdateCameraAndCursor();
 
-        DialogueObj.SetActive(true);
-        DialogueObj.GetComponent<CanvasGroup>().alpha = 0f;
-        DialogueObj.GetComponent<CanvasGroup>().DOFade(1f, startOffset / 1000f); // seconds to ms
-        _fadingIn = true;
+        _fadeTween.Kill();
+        _fadeTween = _dialogueCG.DOFade(1f, startOffset / 1000f); // seconds to ms
     }
 
     public void AddDialogue(string dialogue)
@@ -62,12 +60,13 @@ public class DialogueManager : MonoBehaviour
 
     public void ShowDialogue(int startOffset = 800, DialogueTransition transitionType = DialogueTransition.Forward)
     {
-        if (_skipDialogue) return;
-        
-        FadeInDialogue(startOffset);
+        if (UIManager.Instance.MainMenuUI.activeSelf || _skipDialogue) return;
+
+        if (_dialogueCG.alpha < 1f)
+            FadeInDialogue(startOffset);
         DisplayText(startOffset, transitionType);
     }
-    
+
     public async Task DisplayText(int startOffset = 800, DialogueTransition transitionType = DialogueTransition.Forward)
     {
         string dialogue;
@@ -80,19 +79,11 @@ public class DialogueManager : MonoBehaviour
         // Decide what to do if this dialogue is the same as the last one shown
         if (dialogue == _currentDialogue)
         {
-            if (transitionType == DialogueTransition.Forward)
+            if (transitionType == DialogueTransition.Forward && _dialogueCG.alpha == 1f)
             {
-                UIManager.UIActive = false;
-                // If we were in first person go back to that
-                if (!(UIManager.Instance.InventoryUI.activeSelf || CraftingManager.Active) && !CameraSwitcher.BuildMode)
-                {
-                    UIManager.UnlockCamera();
-                    UIManager.LockCursor();
-                } 
-                
-                DialogueObj.GetComponent<CanvasGroup>().DOFade(0f, 0.8f);
-                await Task.Delay(800);
-                DialogueObj.SetActive(_fadingIn);
+                UIManager.ActiveUICount--;
+                UIManager.UpdateCameraAndCursor();
+                _fadeTween = _dialogueCG.DOFade(0f, 0.8f);
                 return;
             }
             else
@@ -103,7 +94,6 @@ public class DialogueManager : MonoBehaviour
         TextArea.text = "";
         _currentDialogue = dialogue;
         await Task.Delay(startOffset);
-        _fadingIn = false;
 
         // Slowly fill up the text field
         char[] characters = dialogue.ToCharArray();
@@ -111,15 +101,20 @@ public class DialogueManager : MonoBehaviour
         {
             if (dialogue != _currentDialogue) return;
             TextArea.text += captionChar;
-            await Task.Delay(_punctuationDelay.ContainsKey(captionChar) ? _punctuationDelay[captionChar] : 20);
+            await Task.Delay(_punctuationDelay.ContainsKey(captionChar) ? _punctuationDelay[captionChar] : 10);
         }
     }
 
     public void Update()
     {
         // Show the last piece of dialogue
-        if (Input.GetKeyDown(KeyCode.Q) && DialogueObj.activeSelf)
-            ShowDialogue(0, DialogueTransition.Backward);
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            if (_dialogueCG.alpha >= 0f)
+                ShowDialogue(0, DialogueTransition.Backward);
+            else
+                ShowDialogue(0, DialogueTransition.OpenDialogue);
+        }
 
         // Opens the box back up
         if (Input.GetKeyDown(KeyCode.T))

@@ -205,7 +205,7 @@ public class Inventory : MonoBehaviour
         if (CameraSwitcher.BuildMode) return;
         if (CraftingManager.Active) return;
         GameObject inventory = UIManager.Instance.InventoryUI;
-        if (!inventory.activeSelf && UIManager.UIActive) return; // Don't draw any new UI if we have UI active
+        if (!inventory.activeSelf && UIManager.ActiveUICount > 0) return; // Don't draw any new UI if we have UI active
         inventory.SetActive(!inventory.activeSelf);
         if (inventory.activeSelf)
             _drawInventory();
@@ -215,9 +215,8 @@ public class Inventory : MonoBehaviour
 
     private void _drawInventory()
     {
-        UIManager.UIActive = true;
-        UIManager.LockCamera();
-        UIManager.UnlockCursor();
+        UIManager.ActiveUICount++;
+        UIManager.UpdateCameraAndCursor();
         GameObject inventory = UIManager.Instance.InventoryUI;
         // Change title text
         inventory.GetComponentInChildren<TextMeshProUGUI>().text = InventoryName + " Inventory";
@@ -294,9 +293,8 @@ public class Inventory : MonoBehaviour
     private void _closeInventory()
     {
         UIManager.Instance.FakePlayerInventory.SetActive(false);
-        UIManager.UIActive = false;
-        UIManager.UnlockCamera();
-        UIManager.LockCursor();
+        UIManager.ActiveUICount--;
+        UIManager.UpdateCameraAndCursor();
 
         GameObject inventory = UIManager.Instance.InventoryUI;
         GridLayoutGroup gl = inventory.GetComponentInChildren<GridLayoutGroup>();

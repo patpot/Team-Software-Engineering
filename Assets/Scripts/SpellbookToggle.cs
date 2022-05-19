@@ -20,7 +20,7 @@ public class SpellbookToggle : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Alpha1) && !CameraSwitcher.BuildMode)
         {
-            if (UIManager.UIActive) return;
+            if (UIManager.ActiveUICount > 0) return;
 
             _mRenderer.enabled = !_mRenderer.enabled;
             _spellbook.enabled = !_spellbook.enabled;
