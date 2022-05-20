@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
@@ -8,6 +6,8 @@ public class NewMainMenu : MonoBehaviour
     public Camera FPSCamera;
     public GameObject MainMenu;
     public DialogueManager DialogueManager;
+
+    public GameObject TaskDisplay;
     public void Play()
     {
         MainMenu.SetActive(false);
@@ -24,6 +24,7 @@ public class NewMainMenu : MonoBehaviour
     {
         UIManager.ActiveUICount--;
         UIManager.UpdateCameraAndCursor();
+        TaskDisplay.SetActive(true);
 
         DialogueManager.ShowDialogue(1000);
     }

@@ -2,6 +2,7 @@ using Assets.Scripts;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using static DialogueManager;
 
@@ -49,10 +50,30 @@ public class TutorialManager : MonoBehaviour
             "That concludes basic work training, its up to you to set up your machines and get to work, you've got complete freedom over how you proceed, but be advised Wood Logs come in limited capacity, running out of those might render this island permanently uninhabitable! Now to complete this assignment and guarantee the Aura of this island remains stable I'm going to need you to produce 100 Earth Crystals and deposit them into the inactive portal to the right side of the island, with this portal stabilized we'll be able to move you onto your next assignment.",
         }},
     };
+    public Dictionary<string, string> TutorialTasks = new Dictionary<string, string>()
+    {
+        { "FirstTask", "Open your spellbook with \"1\""},
+        { "SpellbookOpen", "Click on a small tree to gather a Wood Log"},
+        { "WoodLogAcquired", "Press \"E\" to open your Inventory"},
+        { "InventoryUsage", "Drag a Wood Log out of your Inventory and press \"Mouse1\" while looking at it"},
+        { "ManaAcquired", "Press \"E\" to open the Crafting UI"},
+        { "CraftingUIOpen", "Craft a Crusher"},
+        { "CrusherMade", "Press \"E\" to enter Building Mode"},
+        { "BuildingMode", "Place a Crusher in Building Mode"},
+        { "CrusherPlaced", "Open a Machine's UI by pressing \"Mouse1\" on it without your Spellbook equipped"},
+        { "MachineUI", "Craft a Crystalliser"},
+        { "CrystalliserMade", "Fill the Portal Chest on the right of the island with 100 Earth Crystals"},
+    };
 
+    public TextMeshProUGUI Task;
 
     private float _crusherCount;
     private TutorialState _currentState;
+
+    private void Start()
+    {
+        Task.text = TutorialTasks["FirstTask"];
+    }
 
     public void Update()
     {
@@ -63,6 +84,7 @@ public class TutorialManager : MonoBehaviour
                 {
                     foreach (var dialogue in TutorialDialogue["SpellbookOpen"])
                         DialogueManager.AddDialogue(dialogue);
+                    Task.text = TutorialTasks["SpellbookOpen"];
 
                     DialogueManager.ShowDialogue();
                     _currentState = TutorialState.OpenInventory;
@@ -73,6 +95,7 @@ public class TutorialManager : MonoBehaviour
                 {
                     foreach (var dialogue in TutorialDialogue["WoodLogAcquired"])
                         DialogueManager.AddDialogue(dialogue);
+                    Task.text = TutorialTasks["WoodLogAcquired"];
 
                     DialogueManager.ShowDialogue();
                     _currentState = TutorialState.InventoryUsage;
@@ -83,6 +106,7 @@ public class TutorialManager : MonoBehaviour
                 {
                     foreach (var dialogue in TutorialDialogue["InventoryUsage"])
                         DialogueManager.AddDialogue(dialogue);
+                    Task.text = TutorialTasks["InventoryUsage"];
 
                     DialogueManager.ShowDialogue();
                     _currentState = TutorialState.ManaAcquired;
@@ -93,6 +117,7 @@ public class TutorialManager : MonoBehaviour
                 {
                     foreach (var dialogue in TutorialDialogue["ManaAcquired"])
                         DialogueManager.AddDialogue(dialogue);
+                    Task.text = TutorialTasks["ManaAcquired"];
 
                     DialogueManager.ShowDialogue();
                     _currentState = TutorialState.CraftingMenu;
@@ -103,6 +128,7 @@ public class TutorialManager : MonoBehaviour
                 {
                     foreach (var dialogue in TutorialDialogue["CraftingUIOpen"])
                         DialogueManager.AddDialogue(dialogue);
+                    Task.text = TutorialTasks["CraftingUIOpen"];
 
                     DialogueManager.ShowDialogue();
                     _currentState = TutorialState.CrusherMade;
@@ -113,6 +139,7 @@ public class TutorialManager : MonoBehaviour
                 {
                     foreach (var dialogue in TutorialDialogue["CrusherMade"])
                         DialogueManager.AddDialogue(dialogue);
+                    Task.text = TutorialTasks["CrusherMade"];
 
                     DialogueManager.ShowDialogue();
                     _currentState = TutorialState.BuildingMode;
@@ -123,6 +150,7 @@ public class TutorialManager : MonoBehaviour
                 {
                     foreach (var dialogue in TutorialDialogue["BuildingMode"])
                         DialogueManager.AddDialogue(dialogue);
+                    Task.text = TutorialTasks["BuildingMode"];
 
                     DialogueManager.ShowDialogue(400);
                     // We can't really check if a player doesn't have any crushers to check if they placed one, as they technically could've crafted multiple
@@ -136,6 +164,7 @@ public class TutorialManager : MonoBehaviour
                 {
                     foreach (var dialogue in TutorialDialogue["CrusherPlaced"])
                         DialogueManager.AddDialogue(dialogue);
+                    Task.text = TutorialTasks["CrusherPlaced"];
 
                     DialogueManager.ShowDialogue(400);
                     _currentState = TutorialState.MachineUI;
@@ -146,6 +175,7 @@ public class TutorialManager : MonoBehaviour
                 {
                     foreach (var dialogue in TutorialDialogue["MachineUI"])
                         DialogueManager.AddDialogue(dialogue);
+                    Task.text = TutorialTasks["MachineUI"];
 
                     DialogueManager.ShowDialogue(400);
                     _currentState = TutorialState.CrystalliserMade;
@@ -156,6 +186,7 @@ public class TutorialManager : MonoBehaviour
                 {
                     foreach (var dialogue in TutorialDialogue["CrystalliserMade"])
                         DialogueManager.AddDialogue(dialogue);
+                    Task.text = TutorialTasks["CrystalliserMade"];
 
                     DialogueManager.ShowDialogue(400);
                     _currentState = TutorialState.None;
