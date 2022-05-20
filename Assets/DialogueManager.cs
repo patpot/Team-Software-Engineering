@@ -15,6 +15,7 @@ public class DialogueManager : MonoBehaviour
     public TextMeshProUGUI TextArea;
     public Button NextButton;
 
+    private bool _instantLoadDialogueNextTick;
     private bool _skipDialogue;
     private string _currentDialogue;
     private int _dialogueIndex = -1;
@@ -35,7 +36,7 @@ public class DialogueManager : MonoBehaviour
         NextButton.onClick.AddListener(() => DisplayText(0));
 
         AddDialogue("Hello! Are you the new recruit? We have lots to discuss about your first assignment here.");
-        AddDialogue("I'll be going through the basics with you to catch you up to speed, if you ever forget something I've said you can press \"T\" to open this dialogue box back up and press \"Q\" to go back through old dialogue.");
+        AddDialogue("I'll be going through the basics with you to catch you up to speed, if you ever forget something I've said you can press \"T\" to open this dialogue box back up and press \"Q\" to go back through old dialogue, if you find I'm speaking too slowly you can press \"Mouse1\" anywhere on the screen to instantly show my dialogue.");
         AddDialogue("As you know the Aura Restoration Council are in charge of the maintenance and restoration of areas with particularly low magical aura. Restoring these areas up to their full potential is a vital part of the council's work, and if areas of low magical aura were to exist for too long things would become.. problematic.");
         AddDialogue("As it's just you we're going to need to build some additional infrastructure to support the restoration of this zone. We've got a set of machines that'll help you out, but you'll need to gather some resources to build them.");
         AddDialogue("Now, as part of the standard issue kit you have a Spellbook to help you channel your own aura, pressing \"1\" will equip it. Give it a go! You'll be using it a lot.");
@@ -96,12 +97,18 @@ public class DialogueManager : MonoBehaviour
         await Task.Delay(startOffset);
 
         // Slowly fill up the text field
+        _instantLoadDialogueNextTick = false;
         char[] characters = dialogue.ToCharArray();
         foreach (var captionChar in characters)
         {
             if (dialogue != _currentDialogue) return;
             TextArea.text += captionChar;
             await Task.Delay(_punctuationDelay.ContainsKey(captionChar) ? _punctuationDelay[captionChar] : 10);
+            if (_instantLoadDialogueNextTick)
+            {
+                TextArea.text = dialogue;
+                break;
+            }
         }
     }
 
@@ -119,6 +126,9 @@ public class DialogueManager : MonoBehaviour
         // Opens the box back up
         if (Input.GetKeyDown(KeyCode.T))
             ShowDialogue(0, DialogueTransition.OpenDialogue);
+
+        if (Input.GetMouseButtonDown(0))
+            _instantLoadDialogueNextTick = true;
     }
 
     public enum DialogueTransition
