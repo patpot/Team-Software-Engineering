@@ -31,6 +31,10 @@ public class MachineConnection : MonoBehaviour
         var mesh = new Mesh();
         _lr.BakeMesh(mesh, true);
         meshCollider.sharedMesh = mesh;
+        
+        // We want a collider for click events, but not to block the player so set this collider to be a trigger
+        meshCollider.convex = true;
+        meshCollider.isTrigger = true;
     }
     public void SendItemStack(ItemData data, float stackSize)
     {
