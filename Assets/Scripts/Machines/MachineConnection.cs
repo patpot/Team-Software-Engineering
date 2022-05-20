@@ -83,5 +83,8 @@ public class MachineConnection : MonoBehaviour
             if (Vector2.Distance(pointPos, _playerTransform.position) > 5f)
                 _lr.SetPosition(1, _lr.GetPosition(0));
         }
+
+        if (!_followCursor && (!ConnectedMachine || !ConnectedInventory))
+            RemoveConnection();
     }
 }
