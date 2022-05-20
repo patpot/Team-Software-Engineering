@@ -52,13 +52,13 @@ public class TutorialManager : MonoBehaviour
     };
     public Dictionary<string, string> TutorialTasks = new Dictionary<string, string>()
     {
-        { "FirstTask", "Open your spellbook with \"1\""},
+        { "FirstTask", "Open your Spellbook with \"1\""},
         { "SpellbookOpen", "Click on a small tree to gather a Wood Log"},
         { "WoodLogAcquired", "Press \"E\" to open your Inventory"},
-        { "InventoryUsage", "Drag a Wood Log out of your Inventory and press \"Mouse1\" while looking at it"},
-        { "ManaAcquired", "Press \"E\" to open the Crafting UI"},
+        { "InventoryUsage", "Drag a Wood Log out of your Inventory and with the Spellbook press \"Mouse1\" while looking at it"},
+        { "ManaAcquired", "Press \"C\" to open the Crafting UI"},
         { "CraftingUIOpen", "Craft a Crusher"},
-        { "CrusherMade", "Press \"E\" to enter Building Mode"},
+        { "CrusherMade", "Press \"B\" to enter Building Mode"},
         { "BuildingMode", "Place a Crusher in Building Mode"},
         { "CrusherPlaced", "Open a Machine's UI by pressing \"Mouse1\" on it without your Spellbook equipped"},
         { "MachineUI", "Craft a Crystalliser"},
