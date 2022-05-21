@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
@@ -22,6 +23,7 @@ public class UIManager : MonoBehaviour
     public static int ActiveUICount = 1;
     public static bool MachineUIActive = false; // Used for the tutorial
     public Spellbook Spellbook;
+    public Image CursorImage;
 
     void Awake()
     {
@@ -47,11 +49,13 @@ public class UIManager : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = true;
+        Instance.CursorImage.gameObject.SetActive(false); // Stop rendering the fake cursor
     }
     public static void LockCursor()
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        Instance.CursorImage.gameObject.SetActive(true); // Render the fake cursor
     }
 
     public static GameObject CreatePrefab(string prefabName)

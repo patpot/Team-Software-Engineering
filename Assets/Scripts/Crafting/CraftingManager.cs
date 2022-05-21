@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using DG.Tweening;
+using UnityEngine.EventSystems;
 
 namespace Assets.Scripts
 {
@@ -17,6 +18,7 @@ namespace Assets.Scripts
         public Transform SideMenuInputHolder;
         public GameObject CraftingOutput;
         public Button CraftButton;
+        public AudioSource ClickSound;
 
         public GameObjectPool InputItemPool;
         private static Dictionary<string, CraftingRecipe> _recipes = new Dictionary<string, CraftingRecipe>();
@@ -59,7 +61,12 @@ namespace Assets.Scripts
 
                 // Assign our event for when we get clicked on
                 Button btn = recipeHolder.GetComponentInChildren<Button>();
-                btn.onClick.AddListener(() => ShowRecipe(recipe.Key));
+                btn.onClick.AddListener(() =>
+                {
+                    ShowRecipe(recipe.Key);
+                    ClickSound.Play();
+                    EventSystem.current.SetSelectedGameObject(null);
+                });
             }
         }
 

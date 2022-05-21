@@ -62,7 +62,11 @@ AudioMixerController:
   m_SuspendThreshold: -80
   m_EnableSuspend: 1
   m_UpdateMode: 0
-  m_ExposedParameters: []
+  m_ExposedParameters:
+  - guid: b6e421fd949d1164588d3992e0d09f8d
+    name: MasterVolume
+  - guid: 7c363f3d821102243af07b78b0372082
+    name: SFXPitch
   m_AudioMixerGroupViews:
   - guids:
     - a4aaed7224ec34346ae3aea51d9e2e58
@@ -90,7 +94,7 @@ AudioMixerGroupController:
   m_Send: 00000000000000000000000000000000
   m_Effects:
   - {fileID: 24400004}
-  m_UserColorIndex: 0
+  m_UserColorIndex: 5
   m_Mute: 0
   m_Solo: 0
   m_BypassEffects: 0
@@ -118,8 +122,9 @@ AudioMixerSnapshotController:
   m_AudioMixer: {fileID: 24100000}
   m_SnapshotID: 2c2632b84ea8fef46b80f35922b907af
   m_FloatValues:
-    feeabf53125709640be7ba7c53684746: -35.30951
+    feeabf53125709640be7ba7c53684746: -35.309517
     abb4ab450d467ca40b5351ca5c1cf654: -19.928473
+    7c363f3d821102243af07b78b0372082: 1
     b6e421fd949d1164588d3992e0d09f8d: -9.833286
     6cba4a7e4dc0aec45933ac6135937a88: -24.900745
   m_TransitionOverrides: {}

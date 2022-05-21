@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.VFX;
 using UnityEngine.Events;
+using UnityEngine.Audio;
 
 public class Spellbook : MonoBehaviour
 {
@@ -15,7 +16,7 @@ public class Spellbook : MonoBehaviour
     public List<string> PointCachePositionNames;
     public MachineConnectionFader Fader;
     public UnityEvent OnLaser; //used for toggling laser sound
-
+    public AudioMixer Mixer;
 
     private Dictionary<string, Texture2D> _pointCacheNameToPosition = new Dictionary<string, Texture2D>();
     private BasicMachine _selectedMachine;
@@ -106,6 +107,8 @@ public class Spellbook : MonoBehaviour
                 treeVFX.name = "Fake Fading Tree";
 
                 treeVFX.GetComponent<VisualEffect>().SetTexture("PointCachePosition", chosenPosition);
+
+                Mixer.SetFloat("SFXPitch", 0.9f + (Random.value * 0.2f));
                 OnLaser?.Invoke();
                 return true;
             }

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System;
 using DG.Tweening;
 using Assets.Scripts;
+using UnityEngine.EventSystems;
 
 public class DialogueManager : MonoBehaviour
 {
@@ -33,7 +34,10 @@ public class DialogueManager : MonoBehaviour
     {
         // Dialogue skip override for testing
         _skipDialogue = false;
-        NextButton.onClick.AddListener(() => DisplayText(0));
+        NextButton.onClick.AddListener(() => {
+            DisplayText(0);
+            EventSystem.current.SetSelectedGameObject(null);
+        });
 
         AddDialogue("Hello! Are you the new recruit? We have lots to discuss about your first assignment here.");
         AddDialogue("I'll be going through the basics with you to catch you up to speed, if you ever forget something I've said you can press \"T\" to open this dialogue box back up and press \"Q\" to go back through old dialogue, if you find I'm speaking too slowly you can press \"Mouse1\" anywhere on the screen to instantly show my dialogue. You can also view your current task in the top left corner.");
@@ -115,13 +119,8 @@ public class DialogueManager : MonoBehaviour
     public void Update()
     {
         // Show the last piece of dialogue
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            if (_dialogueCG.alpha >= 0f)
-                ShowDialogue(0, DialogueTransition.Backward);
-            else
-                ShowDialogue(0, DialogueTransition.OpenDialogue);
-        }
+        if (Input.GetKeyDown(KeyCode.Q) && _dialogueCG.alpha >= 0f)
+            ShowDialogue(0, DialogueTransition.Backward);
 
         // Opens the box back up
         if (Input.GetKeyDown(KeyCode.T))
