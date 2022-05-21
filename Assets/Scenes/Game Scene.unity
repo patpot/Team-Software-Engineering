@@ -12656,21 +12656,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa73a8139afb5394981552fe3128b8a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onLaser:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 205352717}
-        m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
-        m_MethodName: Play
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
   GlowingFade: {fileID: 2100000, guid: 1eaec69bfdde2e34bb3e163653951420, type: 2}
   TreeBreakVFX: {fileID: 254675459127800698, guid: 222855af67a3b0c4898fa775ae52e8f0, type: 3}
   MachineConnectionPrefab: {fileID: 1652638039749371987, guid: c7acebc98db1497478798111f5b4d4cc, type: 3}
@@ -12689,6 +12674,21 @@ MonoBehaviour:
   - SM_Env_Tree_03
   - Wood Log
   Fader: {fileID: 827176848}
+  OnLaser:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 205352717}
+        m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
+        m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!64 &668299620
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -40653,8 +40653,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3446fb2005886404791e4fb09a3b6c50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  start: 0
-  curve:
+  Start: 0
+  Curve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
@@ -40678,7 +40678,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  duration: 0.5
+  Duration: 0.5
 --- !u!1 &1976865897
 GameObject:
   m_ObjectHideFlags: 0
@@ -42514,7 +42514,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c21e5eb1431ef4149b51fb1c16c846c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onPlace:
+  OnPlace:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1757963571}
@@ -42529,7 +42529,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  onBreak:
+  OnBreak:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1368379615}
@@ -42544,7 +42544,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  shake: {fileID: 1972472424}
+  Shake: {fileID: 1972472424}
   BuildingButtons:
   - {fileID: 1903349977}
   - {fileID: 1989994336}

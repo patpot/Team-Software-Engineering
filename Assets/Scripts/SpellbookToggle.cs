@@ -5,11 +5,11 @@ using UnityEngine.Events;
 
 public class SpellbookToggle : MonoBehaviour
 {
+    public UnityEvent onToggle;
+    public static bool SpellbookActive;
+    
     private MeshRenderer _mRenderer;
     private Spellbook _spellbook;
-    public UnityEvent onToggle;
-
-    public static bool SpellbookActive;
     // Start is called before the first frame update
     void Start()
     {

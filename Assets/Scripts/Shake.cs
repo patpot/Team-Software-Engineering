@@ -3,15 +3,15 @@ using UnityEngine;
 
 public class Shake : MonoBehaviour
 {
-    public bool start = false;
-    public AnimationCurve curve;
-    public float duration = 1f;
+    public bool Start = false;
+    public AnimationCurve Curve;
+    public float Duration = 1f;
 
     void Update()
     {
-        if (start)
+        if (Start)
         {
-            start = false;
+            Start = false;
             StartCoroutine(Shaking());
         }
     }
@@ -21,10 +21,10 @@ public class Shake : MonoBehaviour
         Vector3 startPosition = transform.position;
         float elapsedTime = 0f;
 
-        while (elapsedTime < duration)
+        while (elapsedTime < Duration)
         {
             elapsedTime += Time.deltaTime;
-            float strength = curve.Evaluate(elapsedTime / duration);
+            float strength = Curve.Evaluate(elapsedTime / Duration);
             transform.position = startPosition + Random.insideUnitSphere * strength;
             yield return null;
         }
