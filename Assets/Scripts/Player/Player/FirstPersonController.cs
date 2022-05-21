@@ -352,10 +352,10 @@ public class FirstPersonController : MonoBehaviour
                     case "Footsteps/WOOD":
                         footstepAudioSource.PlayOneShot(woodClips[UnityEngine.Random.Range(0, woodClips.Length - 1)]);
                         break;
-                    case "Footsteps/METAL":
+                    case "NotGround":
                         footstepAudioSource.PlayOneShot(metalClips[UnityEngine.Random.Range(0, metalClips.Length - 1)]);
                         break;
-                    case "Footsteps/GRASS":
+                    case "Ground":
                         footstepAudioSource.PlayOneShot(grassClips[UnityEngine.Random.Range(0, grassClips.Length - 1)]);
                         break;
                     default:

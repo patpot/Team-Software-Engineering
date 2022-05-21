@@ -4,9 +4,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.VFX;
+using UnityEngine.Events;
 
 public class Spellbook : MonoBehaviour
 {
+    //used for toggling laser sound
+    public UnityEvent onLaser;
+
     public Material GlowingFade;
     public GameObject TreeBreakVFX;
     public GameObject MachineConnectionPrefab;
@@ -103,6 +107,7 @@ public class Spellbook : MonoBehaviour
                 treeVFX.name = "Fake Fading Tree";
 
                 treeVFX.GetComponent<VisualEffect>().SetTexture("PointCachePosition", chosenPosition);
+                onLaser?.Invoke();
                 return true;
             }
         }
@@ -204,6 +209,8 @@ public class Spellbook : MonoBehaviour
                 treeVFX.transform.rotation = hit.transform.rotation;
                 treeVFX.transform.localScale = hit.transform.localScale;
                 treeVFX.name = "Fake Fading Log";
+
+                onLaser?.Invoke();
 
                 treeVFX.GetComponent<VisualEffect>().SetTexture("PointCachePosition", _pointCacheNameToPosition["Wood Log"]);
             }

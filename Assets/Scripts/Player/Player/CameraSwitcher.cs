@@ -14,6 +14,7 @@ public class CameraSwitcher : MonoBehaviour
     [SerializeField] private GameObject _gridBuildingSystem;
     [SerializeField] private GameObject _buildingGhost;
     [SerializeField] private GameObject _topDownCanvas;
+    [SerializeField] private GameObject _playerCanvas;
     [SerializeField] private FirstPersonController _fpsController;
     
     void Start()
@@ -34,6 +35,7 @@ public class CameraSwitcher : MonoBehaviour
                 // Re-enable our FPS camera
                 _fpsCam.SetActive(true);
                 _fpsController.enabled = true;
+                _playerCanvas.SetActive(true);
 
                 // Disable the grid building system
                 _gridBuildingSystem.SetActive(false);
@@ -53,6 +55,7 @@ public class CameraSwitcher : MonoBehaviour
                 // Disable our FPS camera
                 _fpsCam.SetActive(false);
                 _fpsController.enabled = false;
+                _playerCanvas.SetActive(false);
 
                 // Enable our grid building system
                 _gridBuildingSystem.SetActive(true);

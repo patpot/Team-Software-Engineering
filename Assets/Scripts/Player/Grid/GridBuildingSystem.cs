@@ -4,11 +4,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.Events;
 using CodeMonkey.Utils;
 
 public class GridBuildingSystem : MonoBehaviour
 {
     public static GridBuildingSystem Instance { get; private set; }
+
+    public UnityEvent onPlace;
+    public UnityEvent onBreak;
+    public Shake shake;
 
     public List<Button> BuildingButtons;
     private List<GameObject> _buildingButtonConfirms = new List<GameObject>();
@@ -121,6 +126,9 @@ public class GridBuildingSystem : MonoBehaviour
                 _grid.GetGridObject(gridPosition.x, gridPosition.y).SetPlacedObject(placedObject);
                 placedObject.transform.position = placedObject.transform.position + new Vector3(0f, _objectsToOffsets[_placedObjectTypeSO.name]);
 
+                onPlace?.Invoke();
+                shake.start = true;
+
                 // Remove this machine from our inventory and update our toolbar UI
                 PlayerInventory.Instance.TryRemoveFromInventory(_placedObjectTypeSO.name, 1f);
                 if (PlayerInventory.Instance.ContainsItems(_placedObjectTypeSO.name, 1f).Item2 == 1f) // If we don't have any more of this machine deselect it
@@ -151,7 +159,8 @@ public class GridBuildingSystem : MonoBehaviour
                     // Destroy the object and clear it from our grid
                     placedObject.DestroySelf();
                     gridObject.ClearPlacedObject();
-                }
+                    onBreak?.Invoke();
+}
             }
 
         }

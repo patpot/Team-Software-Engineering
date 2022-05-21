@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class SpellbookToggle : MonoBehaviour
 {
     private MeshRenderer _mRenderer;
     private Spellbook _spellbook;
+    public UnityEvent onToggle;
 
     public static bool SpellbookActive;
     // Start is called before the first frame update
@@ -27,6 +29,7 @@ public class SpellbookToggle : MonoBehaviour
             SpellbookActive = _spellbook.enabled;
             if (SpellbookActive)
                 _spellbook.Fader.StartFade();
+            onToggle?.Invoke();
         }
     }
 }
