@@ -167,8 +167,7 @@ public class Inventory : MonoBehaviour
                         slotsToChange.Add(slot, requiredQuantity);
                         inputsLeft.Remove(itemData);
                         // We're done without needing to fully iterate, break out
-                        if (inputsLeft.Count == 0)
-                            break;
+                        break;
                     }
                     else
                     {
